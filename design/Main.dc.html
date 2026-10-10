@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Claude Projects Hub</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/cornerstone/tokens.css">
+<link rel="stylesheet" href="ds/cornerstone/components/bundle.css">
+<script src="ds/cornerstone/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--cs-color-surface-default);color:var(--cs-color-text-normal);font-family:var(--font-body)}
+a{color:var(--cs-color-text-link)}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible{outline:3px solid var(--cs-color-focus);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;height:100%;overflow:hidden;box-sizing:border-box;text-align:center}
+.drop.editable{cursor:pointer}
+.drop:focus-within{outline:3px solid var(--cs-color-focus);outline-offset:2px}
+.drop img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top}
+.card-wrap{position:relative;border-radius:6px;transition:box-shadow 150ms ease,transform 150ms ease}
+.card-wrap.is-link:hover,.card-wrap.is-link:focus-within{box-shadow:0 0 0 3px var(--cs-color-brand-fill-loud);transform:translateY(-2px)}
+.stretch{position:absolute;inset:0;z-index:2;border-radius:6px}
+.stretch:focus-visible{outline:3px solid var(--cs-color-focus);outline-offset:3px}
+.urlline{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+</style>
+</helmet>
+<div style="width: 100%; box-sizing: border-box; min-height: 100vh; display: flex; flex-direction: column; font-family: var(--font-body); background: var(--cs-color-surface-default); color: var(--cs-color-text-normal)">
+
+<!-- Edit mode bar (owner only) -->
+<sc-if value="{{editing}}" hint-placeholder-val="{{ false }}">
+<div style="position: sticky; top: 0; z-index: 20; background: var(--cs-color-brand-fill-loud); color: var(--cs-color-brand-on-loud)">
+<div style="max-width: 1120px; margin: 0 auto; box-sizing: border-box; padding: 10px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<span style="font-size: 14px; font-weight: 600">Edit mode is on. Drop screenshots onto any screen and change the text. Changes save in this browser.</span>
+<cs-button variant="neutral" appearance="filled" size="s" onClick="{{stopEditing}}">Done editing</cs-button>
+</div>
+</div>
+</sc-if>
+
+<!-- Hero: navy with a Cru color stripe -->
+<div style="background: var(--cs-color-navy); color: #ffffff">
+<header style="max-width: 1120px; margin: 0 auto; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 14px 32px">
+<div style="display: flex; align-items: center; gap: 12px">
+<span style="display: block; width: 12px; height: 32px; background: var(--cs-color-brand-fill-loud)"></span>
+<span style="font-family: var(--font-heading); font-weight: 600; font-size: 20px; line-height: 1.2">Claude Projects Hub</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px">
+<nav aria-label="Sections" style="display: flex; flex-wrap: wrap; gap: 24px; font-size: 14px">
+<a href="#main" style="color: #ffffff; text-decoration: none; font-weight: 600">Main projects</a>
+<a href="#small" style="color: #ffffff; text-decoration: none; font-weight: 600">Smaller projects</a>
+</nav>
+<div style="width: 260px; max-width: 100%">
+<cs-input type="search" size="s" placeholder="Search projects" with-clear value="{{query}}" onInput="{{onSearch}}">
+<span slot="label" class="sr">Search projects</span>
+<cs-icon slot="start" name="search"></cs-icon>
+</cs-input>
+</div>
+</div>
+</header>
+<section style="max-width: 1120px; margin: 0 auto; box-sizing: border-box; padding: 24px 32px 48px; display: flex; flex-direction: column; gap: 20px">
+<h1 style="margin: 0; font-family: var(--font-heading); font-weight: 600; font-size: 52px; line-height: 1.2; max-width: 780px">Everything we have built, <span style="color: var(--cs-color-brand-fill-loud)">in one place.</span></h1>
+<p style="margin: 0; font-size: 20px; line-height: 1.6; color: #e5e6e5; max-width: 680px">A running record of the sites, tools and apps Mark has made with Claude. Each one has a link, a short note on what it is, and why it exists.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 24px; padding-top: 4px">
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 150px; padding: 16px 24px; background: var(--cs-color-brand-fill-loud); color: var(--cs-color-brand-on-loud)">
+<span style="font-family: var(--font-heading); font-weight: 600; font-size: 41px; line-height: 1.2">{{mainCount}}</span>
+<span style="font-size: 14px">main projects</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 150px; padding: 16px 24px; background: var(--cs-color-warning-fill-loud); color: var(--cs-color-warning-on-loud)">
+<span style="font-family: var(--font-heading); font-weight: 600; font-size: 41px; line-height: 1.2">{{smallCount}}</span>
+<span style="font-size: 14px">smaller projects</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 150px; padding: 16px 24px; background: var(--cs-color-cyan); color: var(--cs-color-link-on)">
+<span style="font-family: var(--font-heading); font-weight: 600; font-size: 41px; line-height: 1.2">{{liveCount}}</span>
+<span style="font-size: 14px">live on the web</span>
+</div>
+</div>
+</section>
+<div style="display: flex; height: 12px" aria-hidden="true">
+<span style="flex: 1; background: var(--cs-color-brand-fill-loud)"></span>
+<span style="flex: 1; background: var(--cs-color-orange)"></span>
+<span style="flex: 1; background: var(--cs-color-cerise)"></span>
+<span style="flex: 1; background: var(--cs-color-purple)"></span>
+<span style="flex: 1; background: var(--cs-color-turquoise)"></span>
+<span style="flex: 1; background: var(--cs-color-cyan)"></span>
+<span style="flex: 1; background: var(--cs-color-green)"></span>
+</div>
+</div>
+
+<!-- Main projects -->
+<sc-if value="{{showMain}}" hint-placeholder-val="{{ true }}">
+<div style="background: var(--cs-color-brand-fill-quiet)">
+<section id="main" style="max-width: 1120px; width: 100%; margin: 0 auto; box-sizing: border-box; padding: 48px 32px; display: flex; flex-direction: column; gap: 28px">
+<h2 style="margin: 0; font-family: var(--font-heading); font-weight: 600; font-size: 32px; line-height: 1.2">Main projects</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px">
+<sc-for list="{{mainProjects}}" as="p" hint-placeholder-count="5">
+<div class="card-wrap {{p.wrapClass}}">
+<cs-card appearance="filled-outlined" has-media style="display: block; background: var(--cs-color-surface-raised); height: 100%">
+<div slot="media" style="height: 340px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; padding: 32px; background: {{p.accent}}">
+<sc-if value="{{p.isPhone}}" hint-placeholder-val="{{ true }}">
+<div style="width: 156px; height: 312px; box-sizing: border-box; padding: 9px; background: #0a0a0a; border-radius: 12px; display: flex; flex-shrink: 0">
+<div style="flex: 1; min-width: 0; background: #1d1d1d; border-radius: 6px; overflow: hidden; display: flex; position: relative">
+<label class="drop {{p.dropClass}}" onDragOver="{{p.onOver}}" onDrop="{{p.onDrop}}" style="color: #cacaca; font-size: 12px; line-height: 1.4; padding: 12px">
+<sc-if value="{{editing}}" hint-placeholder-val="{{ false }}"><input class="sr" type="file" accept="image/*" onChange="{{p.onFile}}" aria-label="Choose a screenshot of {{p.title}}"></sc-if>
+<sc-if value="{{p.hasShot}}" hint-placeholder-val="{{ false }}"><img src="{{p.shot}}" alt="Screenshot of {{p.title}}"></sc-if>
+<sc-if value="{{p.emptyEdit}}" hint-placeholder-val="{{ false }}"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 20V8M9 13l5-5 5 5M5 22h18"/></svg><span>Drop a screenshot here</span></sc-if>
+</label>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{p.isLaptop}}" hint-placeholder-val="{{ false }}">
+<div style="width: 100%; max-width: 330px; display: flex; flex-direction: column; align-items: center">
+<div style="width: 100%; aspect-ratio: 16 / 10; box-sizing: border-box; padding: 8px 8px 10px; background: #0a0a0a; border-radius: 12px 12px 0 0; display: flex">
+<div style="flex: 1; min-width: 0; background: #1d1d1d; border-radius: 3px; overflow: hidden; display: flex; position: relative">
+<label class="drop {{p.dropClass}}" onDragOver="{{p.onOver}}" onDrop="{{p.onDrop}}" style="color: #cacaca; font-size: 12px; line-height: 1.4; padding: 12px">
+<sc-if value="{{editing}}" hint-placeholder-val="{{ false }}"><input class="sr" type="file" accept="image/*" onChange="{{p.onFile}}" aria-label="Choose a screenshot of {{p.title}}"></sc-if>
+<sc-if value="{{p.hasShot}}" hint-placeholder-val="{{ false }}"><img src="{{p.shot}}" alt="Screenshot of {{p.title}}"></sc-if>
+<sc-if value="{{p.emptyEdit}}" hint-placeholder-val="{{ false }}"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 20V8M9 13l5-5 5 5M5 22h18"/></svg><span>Drop a screenshot here</span></sc-if>
+</label>
+</div>
+</div>
+<div style="width: 112%; height: 10px; background: #323232; border-radius: 0 0 12px 12px"></div>
+</div>
+</sc-if>
+</div>
+
+<!-- View mode text -->
+<sc-if value="{{viewing}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 14px; height: 100%; box-sizing: border-box">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px">
+<h3 style="margin: 0; font-family: var(--font-heading); font-weight: 600; font-size: 25px; line-height: 1.2">{{p.title}}</h3>
+<cs-badge variant="{{p.statusVariant}}" appearance="filled" pill>{{p.status}}</cs-badge>
+</div>
+<p style="margin: 0; font-size: 16px; line-height: 1.6">{{p.what}}</p>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; color: var(--cs-color-text-quiet); flex-grow: 1">{{p.why}}</p>
+<div style="display: flex; align-items: center; gap: 8px; padding-top: 14px; border-top: 1px solid var(--cs-color-surface-border); min-width: 0">
+<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--cs-color-text-link)" stroke-width="2" style="flex-shrink: 0"><path d="M5 11 11 5M6 5h5v5"/></svg>
+<span class="urlline" style="font-size: 16px; font-weight: 600; color: {{p.urlColor}}">{{p.urlText}}</span>
+</div>
+</div>
+</sc-if>
+
+<!-- Edit mode fields -->
+<sc-if value="{{editing}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<cs-input size="s" label="Title" value="{{p.title}}" onInput="{{p.onTitle}}"></cs-input>
+<cs-input size="s" label="Link (web address)" placeholder="https://" value="{{p.url}}" onInput="{{p.onUrl}}"></cs-input>
+<cs-textarea size="s" rows="3" label="What is it?" value="{{p.what}}" onInput="{{p.onWhat}}"></cs-textarea>
+<cs-textarea size="s" rows="3" label="Why does it exist?" value="{{p.why}}" onInput="{{p.onWhy}}"></cs-textarea>
+</div>
+</sc-if>
+</cs-card>
+<sc-if value="{{p.linkable}}" hint-placeholder-val="{{ true }}"><a class="stretch" href="{{p.href}}" target="_blank" rel="noopener" aria-label="Open {{p.title}} at {{p.urlText}}"></a></sc-if>
+</div>
+</sc-for>
+</div>
+</section>
+</div>
+</sc-if>
+
+<!-- Smaller projects -->
+<sc-if value="{{showSmall}}" hint-placeholder-val="{{ true }}">
+<div style="background: var(--cs-color-information-fill-quiet)">
+<section id="small" style="max-width: 1120px; width: 100%; margin: 0 auto; box-sizing: border-box; padding: 48px 32px; display: flex; flex-direction: column; gap: 24px">
+<h2 style="margin: 0; font-family: var(--font-heading); font-weight: 600; font-size: 25px; line-height: 1.2">Smaller projects</h2>
+<div style="display: flex; flex-direction: column; gap: 16px">
+<sc-for list="{{smallProjects}}" as="s" hint-placeholder-count="3">
+<div class="card-wrap {{s.wrapClass}}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; padding: 20px; background: var(--cs-color-surface-raised); border: 1px solid var(--cs-color-information-border-quiet); border-radius: 6px">
+<div style="flex: 0 0 200px; box-sizing: border-box; padding: 16px; background: {{s.accent}}; border-radius: 3px; display: flex; flex-direction: column; align-items: center">
+<div style="width: 100%; aspect-ratio: 16 / 10; box-sizing: border-box; padding: 5px 5px 6px; background: #0a0a0a; border-radius: 6px 6px 0 0; display: flex">
+<div style="flex: 1; min-width: 0; background: #1d1d1d; overflow: hidden; display: flex; position: relative">
+<label class="drop {{s.dropClass}}" onDragOver="{{s.onOver}}" onDrop="{{s.onDrop}}" style="color: #cacaca; font-size: 10px; line-height: 1.3; padding: 4px">
+<sc-if value="{{editing}}" hint-placeholder-val="{{ false }}"><input class="sr" type="file" accept="image/*" onChange="{{s.onFile}}" aria-label="Choose a screenshot of {{s.title}}"></sc-if>
+<sc-if value="{{s.hasShot}}" hint-placeholder-val="{{ false }}"><img src="{{s.shot}}" alt="Screenshot of {{s.title}}"></sc-if>
+<sc-if value="{{s.emptyEdit}}" hint-placeholder-val="{{ false }}"><span>Drop a screenshot</span></sc-if>
+</label>
+</div>
+</div>
+<div style="width: 110%; height: 6px; background: #323232; border-radius: 0 0 6px 6px"></div>
+</div>
+
+<sc-if value="{{viewing}}" hint-placeholder-val="{{ true }}">
+<div style="flex: 999 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: var(--font-heading); font-weight: 600; font-size: 20px; line-height: 1.2">{{s.title}}</span>
+<span style="font-size: 16px; line-height: 1.6">{{s.what}}</span>
+<span style="font-size: 16px; line-height: 1.6; color: var(--cs-color-text-quiet)">{{s.why}}</span>
+<span class="urlline" style="font-size: 16px; font-weight: 600; color: {{s.urlColor}}">{{s.urlText}}</span>
+</div>
+</sc-if>
+
+<sc-if value="{{editing}}" hint-placeholder-val="{{ false }}">
+<div style="flex: 999 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+<cs-input size="s" label="Title" value="{{s.title}}" onInput="{{s.onTitle}}"></cs-input>
+<cs-input size="s" label="Link (web address)" placeholder="https://" value="{{s.url}}" onInput="{{s.onUrl}}"></cs-input>
+<cs-textarea size="s" rows="2" label="What is it?" value="{{s.what}}" onInput="{{s.onWhat}}"></cs-textarea>
+<cs-textarea size="s" rows="2" label="Why does it exist?" value="{{s.why}}" onInput="{{s.onWhy}}"></cs-textarea>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{s.linkable}}" hint-placeholder-val="{{ true }}"><a class="stretch" href="{{s.href}}" target="_blank" rel="noopener" aria-label="Open {{s.title}} at {{s.urlText}}"></a></sc-if>
+</div>
+</sc-for>
+</div>
+</section>
+</div>
+</sc-if>
+
+<sc-if value="{{noResults}}" hint-placeholder-val="{{ false }}">
+<section style="max-width: 1120px; width: 100%; margin: 0 auto; box-sizing: border-box; padding: 64px 32px; font-size: 20px; color: var(--cs-color-text-quiet)">No projects match that search. Try a different word.</section>
+</sc-if>
+
+<!-- Edit mode help (owner only) -->
+<sc-if value="{{editing}}" hint-placeholder-val="{{ false }}">
+<section style="max-width: 1120px; width: 100%; margin: 0 auto; box-sizing: border-box; padding: 48px 32px 0">
+<cs-callout variant="highlight">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<strong style="font-family: var(--font-heading); font-weight: 600">Adding a new project</strong>
+<span style="font-size: 14px; line-height: 1.6">Tell Claude Code "add this to the projects hub." It only needs a title, a link, what it is, why it exists, and whether it goes in main or smaller.</span>
+</div>
+</cs-callout>
+</section>
+</sc-if>
+
+<div style="flex-grow: 1; min-height: 48px"></div>
+
+<footer style="background: var(--cs-color-navy); color: #e5e6e5; font-size: 14px">
+<div style="max-width: 1120px; margin: 0 auto; box-sizing: border-box; padding: 20px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px">
+<span>Made by Mark Michal with Claude. Updated October 2026.</span>
+</div>
+</footer>
+
+<!-- Owner login: a quiet gray dot in the bottom left corner -->
+<sc-if value="{{showLoginButton}}" hint-placeholder-val="{{ true }}">
+<button type="button" aria-label="Owner login" onClick="{{openLogin}}" style="position: fixed; left: 16px; bottom: 16px; z-index: 30; width: 14px; height: 14px; padding: 0; border: 0; border-radius: 50%; background: #949595; opacity: 0.7; cursor: pointer"></button>
+</sc-if>
+<sc-if value="{{loginOpen}}" hint-placeholder-val="{{ false }}">
+<div style="position: fixed; left: 16px; bottom: 16px; z-index: 30; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px; padding: 12px; background: var(--cs-color-surface-raised); border: 1px solid var(--cs-color-surface-border); border-radius: 6px; max-width: calc(100% - 32px); box-sizing: border-box">
+<div style="width: 200px">
+<cs-input type="password" size="s" placeholder="Passcode" onInput="{{onPass}}" onKeyDown="{{onPassKey}}">
+<span slot="label" class="sr">Owner passcode</span>
+</cs-input>
+</div>
+<cs-button variant="brand" appearance="filled" size="s" onClick="{{tryLogin}}">Unlock</cs-button>
+<cs-button variant="neutral" appearance="outlined" size="s" onClick="{{closeLogin}}">Cancel</cs-button>
+<sc-if value="{{loginErr}}" hint-placeholder-val="{{ false }}"><span style="width: 100%; font-size: 14px; font-weight: 600; color: var(--cs-color-danger-on-quiet)">That code did not work.</span></sc-if>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":3300}}'>
+// Demo passcode is "hub-demo". Only its fingerprint (SHA-256) is stored here.
+const OWNER_HASH = 'f79dc5fb2c5d14e29a7d78d10de1bf25574f9b0788ab9f5d8ce7d045b8aa1a51';
+
+class Component extends DCLogic {
+  st() { return this.state || {}; }
+
+  componentDidMount() {
+    try {
+      const s = window.localStorage.getItem('hubShots');
+      const e = window.localStorage.getItem('hubEdits');
+      this.setState({ shots: s ? JSON.parse(s) : {}, edits: e ? JSON.parse(e) : {} });
+    } catch (err) {}
+  }
+
+  save(key, value) {
+    try { window.localStorage.setItem(key, JSON.stringify(value)); } catch (err) {}
+  }
+
+  setShot(id, url) {
+    const shots = { ...(this.st().shots || {}), [id]: url };
+    this.setState({ shots });
+    this.save('hubShots', shots);
+  }
+
+  setEdit(id, field, value) {
+    const edits = { ...(this.st().edits || {}) };
+    edits[id] = { ...(edits[id] || {}), [field]: value };
+    this.setState({ edits });
+    this.save('hubEdits', edits);
+  }
+
+  loadFile(id, file) {
+    if (!this.st().editing) return;
+    if (!file || !file.type || file.type.indexOf('image/') !== 0) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, 900 / img.width);
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        this.setShot(id, canvas.toDataURL('image/jpeg', 0.85));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async tryLogin() {
+    try {
+      const bytes = new TextEncoder().encode(this.st().pass || '');
+      const digest = await crypto.subtle.digest('SHA-256', bytes);
+      const hex = Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+      if (hex === OWNER_HASH) this.setState({ editing: true, loginOpen: false, loginErr: false, pass: '' });
+      else this.setState({ loginErr: true });
+    } catch (err) {
+      this.setState({ loginErr: true });
+    }
+  }
+
+  build(item) {
+    const s = this.st();
+    const edit = !!s.editing;
+    const o = { ...item, ...((s.edits || {})[item.id] || {}) };
+    const shot = (s.shots || {})[item.id] || '';
+    const url = (o.url || '').trim();
+    const linkable = !edit && !!url;
+    return {
+      ...o,
+      shot,
+      hasShot: !!shot,
+      emptyEdit: edit && !shot,
+      isPhone: o.device === 'phone',
+      isLaptop: o.device !== 'phone',
+      dropClass: edit ? 'editable' : '',
+      wrapClass: linkable ? 'is-link' : '',
+      linkable,
+      href: /^https?:\/\//.test(url) ? url : 'https://' + url,
+      urlText: url ? url.replace(/^https?:\/\//, '').replace(/\/$/, '') : 'Link coming soon',
+      urlColor: url ? 'var(--cs-color-text-link)' : 'var(--cs-color-text-quiet)',
+      onOver: (e) => e.preventDefault(),
+      onDrop: (e) => { e.preventDefault(); this.loadFile(item.id, e.dataTransfer && e.dataTransfer.files[0]); },
+      onFile: (e) => { this.loadFile(item.id, e.target.files && e.target.files[0]); e.target.value = ''; },
+      onTitle: (e) => this.setEdit(item.id, 'title', e.target.value),
+      onUrl: (e) => this.setEdit(item.id, 'url', e.target.value),
+      onWhat: (e) => this.setEdit(item.id, 'what', e.target.value),
+      onWhy: (e) => this.setEdit(item.id, 'why', e.target.value)
+    };
+  }
+
+  renderVals() {
+    const s = this.st();
+    const main = [
+      { id: 'legacy', title: 'Cru HS Legacy site', what: 'A website celebrating 60 years of Cru High School ministry, with stories and a timeline.', why: 'So alumni and staff have one place to remember the history and add their own story.', status: 'Live', statusVariant: 'success', url: '', device: 'laptop', accent: 'var(--cs-color-orange)' },
+      { id: 'launchweek', title: 'LaunchWeek site', what: 'The home page for LaunchWeek, with how to take part and where to get materials.', why: 'So students and leaders can find everything for the week without digging through emails.', status: 'Live', statusVariant: 'success', url: 'https://launchweek.crutastic.com', device: 'laptop', accent: 'var(--cs-color-turquoise)' },
+      { id: 'gttc-cw', title: 'GoToTheCampus Content Workflow', what: 'A script that moves GoToTheCampus content from draft to published.', why: 'It saves hours of copying and pasting and cuts down on mistakes.', status: 'In use', statusVariant: 'information', url: '', device: 'laptop', accent: 'var(--cs-color-purple)' },
+      { id: 'gttc-revamp', title: 'GTTC revamp', what: 'A wireframe of a redesigned GoToTheCampus, built from the real site’s content.', why: 'To test a cleaner layout before anyone spends time building it for real.', status: 'Prototype', statusVariant: 'warning', url: '', device: 'laptop', accent: 'var(--cs-color-cerise)' },
+      { id: 'flashcards', title: 'Flashcards app', what: 'A study app that sorts cards into Leitner boxes.', why: 'Cards you know well come back less often, so study time goes to what you are missing.', status: 'Live', statusVariant: 'success', url: '', device: 'phone', accent: 'var(--cs-color-brand-fill-loud)' }
+    ];
+    const small = [
+      { id: 'captions', title: 'Caption Cleanup', what: 'A page that fixes "Crew" to "Cru" and removes um and uh from caption files.', why: 'It saves cleaning up every caption file by hand. Runs offline in the browser.', url: '', device: 'laptop', accent: 'var(--cs-color-cyan)' },
+      { id: 'small-2', title: '[Project name]', what: '[What is it, in one sentence.]', why: '[Why does it exist, in one sentence.]', url: '', device: 'laptop', accent: 'var(--cs-color-green)' },
+      { id: 'small-3', title: '[Project name]', what: '[What is it, in one sentence.]', why: '[Why does it exist, in one sentence.]', url: '', device: 'laptop', accent: 'var(--cs-color-brand-fill-normal)' }
+    ];
+    const q = (s.query || '').trim().toLowerCase();
+    const match = (p) => !q || [p.title, p.what, p.why, p.url].join(' ').toLowerCase().indexOf(q) !== -1;
+    const mainAll = main.map(p => this.build(p));
+    const smallAll = small.map(p => this.build(p));
+    const mainProjects = mainAll.filter(match);
+    const smallProjects = smallAll.filter(match);
+    const editing = !!s.editing;
+    return {
+      query: s.query || '',
+      editing,
+      viewing: !editing,
+      mainProjects,
+      smallProjects,
+      showMain: mainProjects.length > 0,
+      showSmall: smallProjects.length > 0,
+      noResults: mainProjects.length + smallProjects.length === 0,
+      mainCount: String(main.length),
+      smallCount: String(small.length),
+      liveCount: String(main.filter(p => p.status === 'Live').length),
+      showLoginButton: !editing && !s.loginOpen,
+      loginOpen: !!s.loginOpen && !editing,
+      loginErr: !!s.loginErr,
+      onSearch: (e) => this.setState({ query: e.target.value || '' }),
+      openLogin: () => this.setState({ loginOpen: true, loginErr: false }),
+      closeLogin: () => this.setState({ loginOpen: false, loginErr: false, pass: '' }),
+      onPass: (e) => this.setState({ pass: e.target.value || '' }),
+      onPassKey: (e) => { if (e.key === 'Enter') this.tryLogin(); },
+      tryLogin: () => this.tryLogin(),
+      stopEditing: () => this.setState({ editing: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

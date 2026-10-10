@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Projects Hub</title>
+<meta name="description" content="Everything Mark Michal has built with Claude, in one place.">
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="cornerstone/bundle.css">
+<link rel="stylesheet" href="styles.css">
+<script src="cornerstone/bundle.js"></script>
+</head>
+<body>
+
+<!-- Yellow bar, only visible once you sign in -->
+<div id="editbar" class="editbar" hidden>
+  <div class="wrap editbar-inner">
+    <span class="editbar-text">Edit mode is on. Drop screenshots onto any screen and change the text.</span>
+    <span class="editbar-actions">
+      <span id="savestate" class="savestate" aria-live="polite"></span>
+      <cs-button id="done-editing" variant="neutral" appearance="filled" size="s">Done editing</cs-button>
+    </span>
+  </div>
+</div>
+
+<!-- Navy top -->
+<div class="navy">
+  <header class="wrap topbar">
+    <div class="brand">
+      <span class="brand-tick" aria-hidden="true"></span>
+      <span class="brand-name">Claude Projects Hub</span>
+    </div>
+    <div class="topbar-right">
+      <nav aria-label="Sections" class="sections">
+        <a href="#main">Main projects</a>
+        <a href="#small">Smaller projects</a>
+      </nav>
+      <div class="searchbox">
+        <cs-input id="search" type="search" size="s" placeholder="Search projects" with-clear>
+          <span slot="label" class="sr">Search projects</span>
+          <cs-icon slot="start" name="search"></cs-icon>
+        </cs-input>
+      </div>
+    </div>
+  </header>
+
+  <section class="wrap hero">
+    <h1>Everything we have built, <span class="hero-accent">in one place.</span></h1>
+    <p class="hero-sub">A running record of the sites, tools and apps Mark has made with Claude. Each one has a link, a short note on what it is, and why it exists.</p>
+    <div class="counts">
+      <div class="count count-brand"><span class="count-num" id="count-main">0</span><span class="count-label">main projects</span></div>
+      <div class="count count-warning"><span class="count-num" id="count-small">0</span><span class="count-label">smaller projects</span></div>
+      <div class="count count-cyan"><span class="count-num" id="count-live">0</span><span class="count-label">live on the web</span></div>
+    </div>
+  </section>
+
+  <div class="stripe" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+</div>
+
+<main>
+  <div class="band band-main" id="band-main">
+    <section id="main" class="wrap section">
+      <h2 class="section-title">Main projects</h2>
+      <div class="grid" id="main-grid"></div>
+    </section>
+  </div>
+
+  <div class="band band-small" id="band-small">
+    <section id="small" class="wrap section">
+      <h2 class="section-title section-title-sm">Smaller projects</h2>
+      <div class="rows" id="small-rows"></div>
+    </section>
+  </div>
+
+  <section class="wrap noresults" id="noresults" hidden>No projects match that search. Try a different word.</section>
+
+  <section class="wrap edithelp" id="edithelp" hidden>
+    <cs-callout variant="highlight">
+      <div class="edithelp-inner">
+        <strong>Adding a new project</strong>
+        <span>Tell Claude Code "add this to the projects hub." It only needs a title, a link, what it is, why it exists, and whether it goes in main or smaller.</span>
+      </div>
+    </cs-callout>
+  </section>
+</main>
+
+<div class="spacer"></div>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <span>Made by Mark Michal with Claude. Updated October 2026.</span>
+  </div>
+</footer>
+
+<!-- The quiet gray dot -->
+<button type="button" id="owner-dot" class="owner-dot" aria-label="Owner sign in" aria-expanded="false"></button>
+
+<div class="signin" id="signin" hidden>
+  <div class="signin-fields">
+    <cs-input id="signin-email" type="email" size="s" placeholder="Email" autocomplete="username">
+      <span slot="label" class="sr">Email</span>
+    </cs-input>
+    <cs-input id="signin-pass" type="password" size="s" placeholder="Password" autocomplete="current-password">
+      <span slot="label" class="sr">Password</span>
+    </cs-input>
+  </div>
+  <div class="signin-buttons">
+    <cs-button id="signin-go" variant="brand" appearance="filled" size="s">Sign in</cs-button>
+    <cs-button id="signin-cancel" variant="neutral" appearance="outlined" size="s">Cancel</cs-button>
+  </div>
+  <span class="signin-msg" id="signin-msg" role="alert" hidden></span>
+</div>
+
+<script src="config.js"></script>
+<script src="projects.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
