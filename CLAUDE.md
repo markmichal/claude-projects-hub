@@ -1,34 +1,64 @@
 # Claude Projects Hub
 
-Mark's personal site: one place that lists every project he and Claude have built. Mark is not a coder. Explain every technical term the first time and go step by step.
+Mark's personal site: one place that lists every project he and Claude have built.
+Mark is not a coder. Explain every technical term the first time and go step by step.
 
-## The design (already approved)
-- Design file: `design/Main.dc.html` (a design-tool file, not the final site). Live design: https://claude.ai/artifact/SdEyAkCNo1qmriT51Birus
-- Rebuild it as a normal website (plain HTML/CSS/JS or a small Vite build) that can be published on GitHub Pages.
-- Use the Cru Cornerstone design system: npm package `@cruglobal/cornerstone-components` (load `cornerstone.css` plus the `cs-*` components). Docs: https://cruglobal.github.io/cornerstone-design-system/ . Fonts: Sora (headings), Inter (body). Colors: navy `--cs-color-navy`, Cru yellow, orange, cerise, purple, turquoise, cyan, green.
+Built and committed on 10 October 2026. Not yet pushed or published.
+Read `README.md` for how the files fit together and the setup steps.
 
-## What the page has
-- Navy header with the title, section links and a search box (filters projects as you type).
-- Hero: headline "Everything we have built, in one place." plus three count boxes (main, smaller, live).
-- Cru color stripe under the hero.
-- **Main projects**: cards in a grid on a pale yellow background. Each card has a colored panel holding a laptop or phone frame with a screenshot, then the title, a status badge, two plain sentences (what it is, why it exists, NO labels), and the real URL. The whole card is the link.
-- **Smaller projects**: wide rows on a pale blue background, same info with a small laptop frame.
-- Footer, navy.
+## What it is now
 
-## Owner edit mode (Mark only)
-- A small gray dot fixed in the bottom-left corner opens a passcode box. No visible "login" button anywhere.
-- Edit mode: drop screenshots into the device frames, edit title / link / what / why. A yellow bar says "Edit mode is on" with a Done button. Cards stop being links while editing.
-- The design only saves to the browser. REAL version needs a real login and shared saving. Mark already uses Supabase, so recommend Supabase Auth (only Mark can sign in) plus a table for projects and storage for screenshots. Do not rely on a passcode in the page source.
+A plain HTML, CSS and JS site. No build step, no npm install, no framework.
+Open `index.html` through a local server and it runs.
 
-## Project content (starter data, Mark must confirm)
-1. Cru HS Legacy site (orange, laptop) - link TBD
-2. LaunchWeek site (turquoise, laptop) - https://launchweek.crutastic.com
-3. GoToTheCampus Content Workflow (purple, laptop) - link TBD
-4. GTTC revamp (cerise, laptop) - link TBD
-5. Flashcards app (yellow, PHONE) - link TBD
-Smaller: Caption Cleanup (cyan), plus two empty placeholders.
-The what/why sentences in the design are drafts. Pull better details from Mark's other project folders and memory, then ask him to approve.
+- `index.html` the shape of the page
+- `styles.css` all the looks
+- `app.js` all the behavior
+- `projects.js` the project list that ships with the site
+- `config.js` which Supabase project to talk to, and which email may edit
+- `supabase/hub_setup.sql` run once to create the table and the rules
+
+Everything it needs is vendored into this folder: Cornerstone
+(`cornerstone/`), the Sora and Inter fonts (`assets/fonts.css`) and the
+Supabase library (`vendor/supabase.js`). Keep it that way. Mark's Mac runs a
+content filter that silently blocks domains it has not seen, so a site that
+pulls from a CDN can break for him while working for everyone else.
+
+`design/Main.dc.html` is the original approved design. Reference only.
+
+## The two layers of content, and why
+
+`projects.js` is drawn immediately on load. Then Supabase is asked for a saved
+list, and if one comes back it replaces what is on screen.
+
+Do not remove the `projects.js` layer. It is what makes the page work with an
+empty database, a slow network, or Supabase blocked. The page should never be
+blank and should never show a spinner.
+
+## Owner edit mode
+
+The gray dot in the bottom left corner opens an email and password sign in.
+Signing in as `ownerEmail` turns on edit mode: drop screenshots into the device
+frames, edit title, link, what and why. Changes save to Supabase, so everyone
+sees them.
+
+Security lives in `supabase/hub_setup.sql`, not in the page. Anyone may read,
+only Mark's email may write. The anon key in `config.js` is meant to be public.
+Changing `ownerEmail` in `config.js` grants nobody anything, because the
+database checks the email on its own side too.
+
+## Known, needs Mark at a dashboard
+
+- **Email sign in is off** in the Supabase project (the Flashcards app only uses
+  Google). Edit mode cannot work until he turns on the Email provider under
+  Authentication, Sign In / Providers. README step 2.
+- **The database table does not exist yet.** Until he runs
+  `supabase/hub_setup.sql`, the site runs on `projects.js` alone, which is the
+  designed fallback and looks completely normal.
+- **Do not use Google sign in here.** His content filter blocks Google auth in
+  every browser on his Mac.
 
 ## Rules
+
 - Never push to GitHub without Mark saying so. `git push` is his checkpoint.
 - No em dashes in any text. Plain, 6th grade wording.
