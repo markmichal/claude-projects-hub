@@ -32,6 +32,20 @@ window.HUB_PROJECTS = {
       shot: 'pdf-framework.jpg'
     },
     {
+      id: 'flashcards-deck',
+      title: 'Building the Flashcard App (slides)',
+      created: '2026-10-06',
+      what: 'A nine slide deck walking through how the Flashcards app got built, the tools behind it and what surprised me.',
+      why: 'So the team could see how it came together, not just that it exists.',
+      learned: 'That I can make a whole slide deck just by talking it through with Claude. I do not think I will ever build one by hand again.',
+      status: 'Live',
+      statusVariant: 'success',
+      url: 'https://claude.ai/artifact/5yVVz1FD3KZJ8uizuS2oBs',
+      device: 'laptop',
+      accent: 'var(--cs-color-mint-50)',
+      shot: ''
+    },
+    {
       id: 'gttc-revamp',
       title: 'GTTC revamp',
       created: '2026-09-10',
