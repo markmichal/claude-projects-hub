@@ -452,7 +452,26 @@
       .filter(function (r) { return r.section === section && !known[r.id]; })
       .forEach(function (r) { out.push(fromRow(r)); });
 
-    return out;
+    return byNewest(out);
+  }
+
+  // Newest first, worked out from the dates rather than the order things
+  // happen to sit in. The built in list and the database each carry their own
+  // idea of order, and merging them let the two disagree: a project whose date
+  // moved kept its old slot. Sorting on the date itself cannot drift, because
+  // the date is the rule. Anything without one keeps its place at the end.
+  function byNewest(list) {
+    return list
+      .map(function (p, i) { return { p: p, i: i }; })
+      .sort(function (a, b) {
+        var da = a.p.created || '', db = b.p.created || '';
+        if (!da && !db) return a.i - b.i;
+        if (!da) return 1;
+        if (!db) return -1;
+        if (da === db) return a.i - b.i;
+        return da < db ? 1 : -1;
+      })
+      .map(function (x) { return x.p; });
   }
 
   // Once editing starts, write the whole list so the database holds every

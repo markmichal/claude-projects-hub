@@ -30,10 +30,11 @@ pulls from a CDN can break for him while working for everyone else.
 
 Everything lives in `projects.js`. The fields are documented at the top of it.
 
-- **Order is newest first**, by `created`. A new project goes at the TOP of its
-  list. Keep `created` and the position in step. `created` is the date Mark
-  wants shown, usually when he started something; where he overrules that, his
-  date wins.
+- **Order is newest first, worked out from `created` at render time.** Set the
+  date correctly and the position follows; the array order in the file does not
+  decide anything. `created` is the date Mark wants shown, usually when he
+  started something; where he overrules that, his date wins. A project with no
+  date sits at the end.
 - **Once a project exists in the database, editing `projects.js` alone changes
   nothing on the live site.** The database wins by design. Change both, or the
   page and the file will disagree and it will look like a bug.
