@@ -339,8 +339,11 @@
     });
 
     // The event above can fire before this code runs, so check the address
-    // bar too rather than relying on the timing.
-    if (/type=recovery/.test(window.location.hash)) showSetPass(true);
+    // bar too rather than relying on the timing. Supabase puts the token in
+    // the hash on one flow and the query string on another, so look at both.
+    if (/type=recovery/.test(window.location.hash + window.location.search)) {
+      showSetPass(true);
+    }
 
     loadProjects();
   }
@@ -365,15 +368,6 @@
     return user.email.toLowerCase() === CFG.ownerEmail.toLowerCase();
   }
 
-  // Supabase lists every way an account can sign in. A password shows up as
-  // an 'email' identity, so its absence means one was never set.
-  function hasPassword(user) {
-    var ids = (user && user.identities) || [];
-    for (var i = 0; i < ids.length; i++) {
-      if (ids[i].provider === 'email') return true;
-    }
-    return false;
-  }
 
   function setUser(user) {
     state.user = user;
@@ -381,11 +375,6 @@
     // this too, so a changed line in config.js gains nobody anything.
     if (!isOwner(user)) state.editing = false;
     render();
-
-    // Arriving on a reset link leaves the owner signed in with no password
-    // set. Offer the box rather than depending on the exact shape of the
-    // token in the address bar, which differs between Supabase flows.
-    if (isOwner(user) && !hasPassword(user)) showSetPass(true);
   }
 
   // ---- setting a password -------------------------------------------------
@@ -427,7 +416,7 @@
       if (isOwner(res.data.user)) {
         state.editing = true;
         render();
-        note('Password saved. You are signed in.');
+        note('Password saved');
       }
     });
   }
@@ -539,6 +528,7 @@
     });
     $('done-editing').addEventListener('click', stopEditing);
 
+    $('change-pass').addEventListener('click', function () { showSetPass(true); });
     $('pass-save').addEventListener('click', savePassword);
     $('setpass').addEventListener('keydown', function (e) {
       if (e.key === 'Enter') savePassword();
