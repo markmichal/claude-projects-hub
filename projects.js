@@ -23,6 +23,20 @@
 window.HUB_PROJECTS = {
   main: [
     {
+      id: 'hub',
+      title: 'Claude Projects Hub',
+      created: '2026-10-10',
+      what: 'This site. Every project in one place, with a link, a short note on each, and what I learned building it.',
+      why: 'So I can find the things I have made, and show someone without digging back through old messages.',
+      learned: 'That a site can have a real login, so I can edit it from the site itself instead of asking Claude for every small change.',
+      status: 'Live',
+      statusVariant: 'success',
+      url: 'https://projects.crutastic.com',
+      device: 'laptop',
+      accent: 'var(--cs-color-lemon-50)',
+      shot: 'hub.jpg'
+    },
+    {
       id: 'pdf-framework',
       title: 'Product Development Framework',
       created: '2026-10-09',
