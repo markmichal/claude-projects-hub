@@ -357,9 +357,45 @@
       }
       var rows = res.data || [];
       if (!rows.length) return;   // nothing saved yet, keep the built in list
-      state.main = rows.filter(function (r) { return r.section === 'main'; }).map(fromRow);
-      state.small = rows.filter(function (r) { return r.section === 'small'; }).map(fromRow);
+      state.main = mergeSection('main', rows);
+      state.small = mergeSection('small', rows);
       render();
+    });
+  }
+
+  // Combine the built in list with whatever the database holds.
+  //
+  // The database never replaces the built in list wholesale. Saving one
+  // project writes one row, and letting one row stand for the whole site
+  // would wipe every other project off the page. So: start from what shipped
+  // with the site, let a matching database row override it, then append any
+  // project the database knows about that the shipped list does not.
+  function mergeSection(section, rows) {
+    var byId = {};
+    rows.forEach(function (r) { byId[r.id] = r; });
+
+    var seeded = clone(SEED[section] || []);
+    var known = {};
+    var out = seeded.map(function (p) {
+      known[p.id] = true;
+      var row = byId[p.id];
+      return row ? Object.assign({}, p, fromRow(row)) : p;
+    });
+
+    rows
+      .filter(function (r) { return r.section === section && !known[r.id]; })
+      .forEach(function (r) { out.push(fromRow(r)); });
+
+    return out;
+  }
+
+  // Once editing starts, write the whole list so the database holds every
+  // project rather than only the ones that happen to have been touched.
+  function seedDatabase() {
+    if (!sb) return;
+    var rows = state.main.map(toRow).concat(state.small.map(toRow));
+    sb.from(TABLE).upsert(rows, { onConflict: 'id' }).then(function (res) {
+      if (res.error) console.warn('[hub] Could not save the starting list.', res.error);
     });
   }
 
@@ -416,6 +452,7 @@
       if (isOwner(res.data.user)) {
         state.editing = true;
         render();
+        seedDatabase();
         note('Password saved');
       }
     });
@@ -485,6 +522,7 @@
       state.editing = true;
       showSignin(false);
       render();
+      seedDatabase();
       note('Signed in');
     });
   }
@@ -515,6 +553,7 @@
       if (isOwner(state.user)) {
         state.editing = true;
         render();
+        seedDatabase();
         note('Signed in');
         return;
       }
