@@ -30,9 +30,13 @@ pulls from a CDN can break for him while working for everyone else.
 
 Everything lives in `projects.js`. The fields are documented at the top of it.
 
-- **Order is newest first**, by `created` (when Mark started it, not when he
-  last touched it). A new project goes at the TOP of its list. Keep `created`
-  and the position in step.
+- **Order is newest first**, by `created`. A new project goes at the TOP of its
+  list. Keep `created` and the position in step. `created` is the date Mark
+  wants shown, usually when he started something; where he overrules that, his
+  date wins.
+- **Once a project exists in the database, editing `projects.js` alone changes
+  nothing on the live site.** The database wins by design. Change both, or the
+  page and the file will disagree and it will look like a bug.
 - **`learned`** is Mark's own words about what building it taught him. His
   voice, not a summary. Leave it empty rather than inventing one; the block is
   skipped when there is nothing to say.
@@ -51,6 +55,11 @@ Screenshots: capture at 1440x900 with headless Chrome, then
 `sips -s format jpeg -s formatOptions 82 -Z 900`. Chrome never exits on its
 own, so poll for the file and kill it. Anything needing a login has to come
 from Mark, either as a file or dropped in through edit mode.
+
+Mark wants **everything he builds listed here**, so offer it whenever a project
+reaches something worth showing. Never write the `learned` note for him; ask.
+He has floated a "projects I'm working on" section for unfinished work and
+deferred it on 2026-10-10, so raise it, do not build it.
 
 ## The two layers of content, and why
 

@@ -7,6 +7,11 @@
    everything else slides down. The `created` date is what that order is based
    on, so keep the two in step.
 
+   `created` is the date Mark wants shown, which is usually when he started a
+   project. The Flashcards app is the exception: he worked on it from August to
+   October and October is the date that feels right to him, so that is what it
+   says. His call, not a rule to correct.
+
    id       a short name that never changes. Screenshots and saved edits are
             matched to a project by this id, so do not rename one after launch.
    created  YYYY-MM-DD, taken from when the GitHub repo was made.
@@ -32,6 +37,20 @@ window.HUB_PROJECTS = {
       shot: 'pdf-framework.jpg'
     },
     {
+      id: 'flashcards',
+      title: 'Flashcards app',
+      created: '2026-10-08',
+      what: 'A study app that sorts cards into Leitner boxes.',
+      why: 'Cards you know well come back less often, so study time goes to what you are missing.',
+      learned: 'That I can build a web app fairly easily. I learned to use Supabase to hold the content, and that Claude Design can make characters, sounds and animations.',
+      status: 'Live',
+      statusVariant: 'success',
+      url: 'https://flashcards.crutastic.com',
+      device: 'phone',
+      accent: 'var(--cs-color-brand-fill-loud)',
+      shot: 'flashcards.jpg'
+    },
+    {
       id: 'flashcards-deck',
       title: 'Building the Flashcard App (slides)',
       created: '2026-10-06',
@@ -45,7 +64,7 @@ window.HUB_PROJECTS = {
       altUrl: 'https://claude.ai/artifact/5yVVz1FD3KZJ8uizuS2oBs',
       altLabel: 'Open the live deck (Cru sign in)',
       device: 'laptop',
-      accent: 'var(--cs-color-mint-50)',
+      accent: 'var(--cs-color-navy)',
       shot: 'flashcards-deck.jpg'
     },
     {
@@ -61,20 +80,6 @@ window.HUB_PROJECTS = {
       device: 'laptop',
       accent: 'var(--cs-color-cerise)',
       shot: 'gttc-revamp.jpg'
-    },
-    {
-      id: 'flashcards',
-      title: 'Flashcards app',
-      created: '2026-08-10',
-      what: 'A study app that sorts cards into Leitner boxes.',
-      why: 'Cards you know well come back less often, so study time goes to what you are missing.',
-      learned: 'That I can build a web app fairly easily. I learned to use Supabase to hold the content, and that Claude Design can make characters, sounds and animations.',
-      status: 'Live',
-      statusVariant: 'success',
-      url: 'https://flashcards.crutastic.com',
-      device: 'phone',
-      accent: 'var(--cs-color-brand-fill-loud)',
-      shot: 'flashcards.jpg'
     },
     {
       id: 'gttc-cw',
