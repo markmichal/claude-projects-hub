@@ -17,6 +17,8 @@ create table if not exists public.hub_projects (
   title           text not null default '',
   what            text not null default '',
   why             text not null default '',
+  learned         text not null default '',
+  created         date,
   url             text not null default '',
   status          text not null default '',
   status_variant  text not null default 'neutral',

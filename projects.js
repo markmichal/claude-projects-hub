@@ -3,43 +3,27 @@
    falls back to if Supabase is unreachable. Keeping it here means the page is
    never blank, even with no internet.
 
-   id      a short name that never changes. Screenshots and saved edits are
-           matched to a project by this id, so do not rename one after launch.
-   device  "laptop" or "phone". Picks which frame the screenshot sits in.
-   accent  the Cru color behind the frame.
-   shot    file in screenshots/, or "" for an empty frame.
+   ORDER MATTERS: newest first. A new project goes at the TOP of its list and
+   everything else slides down. The `created` date is what that order is based
+   on, so keep the two in step.
+
+   id       a short name that never changes. Screenshots and saved edits are
+            matched to a project by this id, so do not rename one after launch.
+   created  YYYY-MM-DD, taken from when the GitHub repo was made.
+   device   "laptop" or "phone". Picks which frame the screenshot sits in.
+   accent   the Cru color behind the frame.
+   shot     file in screenshots/, or "" for an empty frame.
+   learned  what Mark took away from building it. His words.
 */
 window.HUB_PROJECTS = {
   main: [
     {
-      id: 'legacy',
-      title: 'Cru HS Legacy site',
-      what: 'A website celebrating 60 years of Cru High School ministry, with stories and a timeline.',
-      why: 'So alumni and staff have one place to remember the history and add their own story.',
-      status: 'Live',
-      statusVariant: 'success',
-      url: 'https://highschoollegacy.crutastic.com',
-      device: 'laptop',
-      accent: 'var(--cs-color-orange)',
-      shot: 'legacy.jpg'
-    },
-    {
-      id: 'launchweek',
-      title: 'LaunchWeek site',
-      what: 'The home page for LaunchWeek, with how to take part and where to get materials.',
-      why: 'So students and leaders can find everything for the week without digging through emails.',
-      status: 'Live',
-      statusVariant: 'success',
-      url: 'https://launchweek.crutastic.com',
-      device: 'laptop',
-      accent: 'var(--cs-color-turquoise)',
-      shot: 'launchweek.jpg'
-    },
-    {
       id: 'pdf-framework',
       title: 'Product Development Framework',
+      created: '2026-10-09',
       what: 'A one page guide to how Cru Campus Ministry builds products, with the roles and the steps.',
       why: 'So a team can see the whole process at once instead of hunting through slide decks.',
+      learned: 'Connected Claude to ChatGPT to make better images, and built a chat bot that answers questions straight from the document.',
       status: 'Live',
       statusVariant: 'success',
       url: 'https://productdevelopment.crutastic.com',
@@ -48,22 +32,12 @@ window.HUB_PROJECTS = {
       shot: 'pdf-framework.jpg'
     },
     {
-      id: 'gttc-cw',
-      title: 'GoToTheCampus Content Workflow',
-      what: 'A script that moves GoToTheCampus content from draft to published.',
-      why: 'It saves hours of copying and pasting and cuts down on mistakes.',
-      status: 'In use',
-      statusVariant: 'information',
-      url: '',
-      device: 'laptop',
-      accent: 'var(--cs-color-purple)',
-      shot: ''
-    },
-    {
       id: 'gttc-revamp',
       title: 'GTTC revamp',
+      created: '2026-09-10',
       what: 'A wireframe of a redesigned GoToTheCampus, built from the real site content.',
       why: 'To test a cleaner layout before anyone spends time building it for real.',
+      learned: 'That I can clone a website pretty easily.',
       status: 'Prototype',
       statusVariant: 'warning',
       url: 'https://markmichal.github.io/gttc-revamp/',
@@ -72,36 +46,84 @@ window.HUB_PROJECTS = {
       shot: 'gttc-revamp.jpg'
     },
     {
-      id: 'ai-hub',
-      title: 'Cru Innovation AI Hub',
-      what: 'A guide to using Claude and Gemini at work, with a side by side comparison, tips and training.',
-      why: 'So the Innovation team can get going with AI without needing a computer science degree first.',
-      status: 'Live',
-      statusVariant: 'success',
-      url: 'https://markmichal.github.io/Cruinnovation-ai-hub/',
-      device: 'laptop',
-      accent: 'var(--cs-color-cyan)',
-      shot: 'ai-hub.jpg'
-    },
-    {
       id: 'flashcards',
       title: 'Flashcards app',
+      created: '2026-08-10',
       what: 'A study app that sorts cards into Leitner boxes.',
       why: 'Cards you know well come back less often, so study time goes to what you are missing.',
+      learned: 'Hooked it up to Supabase. I can build a real web app from my phone, and Claude Design can do sound, animation and badges.',
       status: 'Live',
       statusVariant: 'success',
       url: 'https://flashcards.crutastic.com',
       device: 'phone',
       accent: 'var(--cs-color-brand-fill-loud)',
       shot: 'flashcards.jpg'
+    },
+    {
+      id: 'gttc-cw',
+      title: 'GoToTheCampus Content Workflow',
+      created: '2026-07-17',
+      what: 'A script that moves GoToTheCampus content from draft to published.',
+      why: 'It saves hours of copying and pasting and cuts down on mistakes.',
+      learned: '',
+      status: 'In use',
+      statusVariant: 'information',
+      url: '',
+      device: 'laptop',
+      accent: 'var(--cs-color-purple)',
+      shot: ''
+    },
+    {
+      id: 'launchweek',
+      title: 'LaunchWeek site',
+      created: '2026-07-13',
+      what: 'The home page for LaunchWeek, with how to take part and where to get materials.',
+      why: 'So students and leaders can find everything for the week without digging through emails.',
+      learned: 'That I can build a whole site from my phone. I took a picture of a flyer and Claude turned it into this.',
+      status: 'Live',
+      statusVariant: 'success',
+      url: 'https://launchweek.crutastic.com',
+      device: 'laptop',
+      accent: 'var(--cs-color-turquoise)',
+      shot: 'launchweek.jpg'
+    },
+    {
+      id: 'legacy',
+      title: 'Cru HS Legacy site',
+      created: '2026-06-10',
+      what: 'A website celebrating 60 years of Cru High School ministry, with stories and a timeline.',
+      why: 'So alumni and staff have one place to remember the history and add their own story.',
+      learned: 'My introduction to GitHub. The content lives in a spreadsheet and Apps Script moves it onto the site, and I learned to use the API for the entry forms.',
+      status: 'Live',
+      statusVariant: 'success',
+      url: 'https://highschoollegacy.crutastic.com',
+      device: 'laptop',
+      accent: 'var(--cs-color-orange)',
+      shot: 'legacy.jpg'
+    },
+    {
+      id: 'ai-hub',
+      title: 'Cru Innovation AI Hub',
+      created: '2026-05-04',
+      what: 'A guide to using Claude and Gemini at work, with a side by side comparison, tips and training.',
+      why: 'So the Innovation team can get going with AI without needing a computer science degree first.',
+      learned: 'My first website build. I learned I could make a whole site, and change it later, just by talking to Claude instead of editing it myself.',
+      status: 'Live',
+      statusVariant: 'success',
+      url: 'https://markmichal.github.io/Cruinnovation-ai-hub/',
+      device: 'laptop',
+      accent: 'var(--cs-color-cyan)',
+      shot: 'ai-hub.jpg'
     }
   ],
   small: [
     {
       id: 'captions',
       title: 'Caption Cleanup',
+      created: '2026-09-25',
       what: 'A page that fixes "Crew" to "Cru" and removes um and uh from caption files.',
       why: 'It saves cleaning up every caption file by hand. Runs offline in the browser.',
+      learned: 'That I can make simple web tools that solve a real problem for people.',
       status: 'Live',
       statusVariant: 'success',
       url: 'https://markmichal.github.io/caption-cleanup/',

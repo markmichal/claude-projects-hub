@@ -346,3 +346,35 @@ h1, h2, h3 {
 .setpass-buttons { display: flex; gap: 8px; padding-top: 4px; }
 .setpass-msg { font-size: 14px; font-weight: 600; color: var(--cs-color-danger-on-quiet); }
 .setpass-msg[hidden] { display: none; }
+
+/* ---------- Date and what I learned ---------- */
+
+.card-heading { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+.card-date {
+  font-size: 14px;
+  color: var(--cs-color-text-quiet);
+}
+
+/* Set apart from the two description sentences, because it is a different
+   kind of thing: a note from Mark rather than a description of the project. */
+.learned {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--cs-color-brand-fill-loud);
+  background: var(--cs-color-brand-fill-quiet);
+  border-radius: 0 3px 3px 0;
+}
+.learned-label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cs-color-text-quiet);
+}
+.learned-text { font-size: 15px; line-height: 1.55; }
+
+/* On the pale yellow band the quiet brand fill would vanish, so the smaller
+   rows get the plain surface instead. */
+.row .learned { background: var(--cs-color-information-fill-quiet); }

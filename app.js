@@ -104,6 +104,26 @@
       '<cs-input size="s" label="Link (web address)" placeholder="https://" value="' + esc(p.url) + '" data-edit="url" data-id="' + esc(p.id) + '"></cs-input>' +
       '<cs-textarea size="s" rows="' + rows + '" label="What is it?" value="' + esc(p.what) + '" data-edit="what" data-id="' + esc(p.id) + '"></cs-textarea>' +
       '<cs-textarea size="s" rows="' + rows + '" label="Why does it exist?" value="' + esc(p.why) + '" data-edit="why" data-id="' + esc(p.id) + '"></cs-textarea>' +
+      '<cs-textarea size="s" rows="' + rows + '" label="What I learned" value="' + esc(p.learned || '') + '" data-edit="learned" data-id="' + esc(p.id) + '"></cs-textarea>' +
+    '</div>';
+  }
+
+  var MONTHS = ['January','February','March','April','May','June',
+                'July','August','September','October','November','December'];
+
+  function niceDate(iso) {
+    var m = /^(\d{4})-(\d{2})/.exec(iso || '');
+    if (!m) return '';
+    return MONTHS[parseInt(m[2], 10) - 1] + ' ' + m[1];
+  }
+
+  // "What I learned" block. Skipped entirely when there is nothing to say,
+  // so a project without a note just does not show one.
+  function learnedHtml(p) {
+    if (!p.learned) return '';
+    return '<div class="learned">' +
+      '<span class="learned-label">What I learned</span>' +
+      '<span class="learned-text">' + esc(p.learned) + '</span>' +
     '</div>';
   }
 
@@ -135,11 +155,15 @@
         (state.editing ? fieldsHtml(p, 3) :
           '<div class="card-body">' +
             '<div class="card-head">' +
-              '<h3 class="card-title">' + esc(p.title) + '</h3>' +
+              '<div class="card-heading">' +
+                '<h3 class="card-title">' + esc(p.title) + '</h3>' +
+                '<span class="card-date">' + esc(niceDate(p.created)) + '</span>' +
+              '</div>' +
               '<cs-badge variant="' + esc(p.statusVariant || 'neutral') + '" appearance="filled" pill>' + esc(p.status) + '</cs-badge>' +
             '</div>' +
             '<p class="card-what">' + esc(p.what) + '</p>' +
             '<p class="card-why">' + esc(p.why) + '</p>' +
+            learnedHtml(p) +
             linkHtml(p) +
           '</div>') +
       '</cs-card>' +
@@ -155,8 +179,10 @@
         (state.editing ? fieldsHtml(p, 2) :
           '<div class="row-body">' +
             '<span class="row-title">' + esc(p.title) + '</span>' +
+            '<span class="card-date">' + esc(niceDate(p.created)) + '</span>' +
             '<span>' + esc(p.what) + '</span>' +
             '<span class="row-why">' + esc(p.why) + '</span>' +
+            learnedHtml(p) +
             '<span class="urlline ' + (linkable ? 'url-live' : 'url-none') + '">' + esc(shownUrl(p.url)) + '</span>' +
           '</div>') +
       '</div>' +
@@ -231,6 +257,8 @@
       title: p.title,
       what: p.what,
       why: p.why,
+      learned: p.learned || '',
+      created: p.created || null,
       url: p.url,
       status: p.status,
       status_variant: p.statusVariant,
@@ -246,11 +274,17 @@
   }
 
   function fromRow(r) {
-    return {
+    var o = {
       id: r.id, title: r.title, what: r.what, why: r.why, url: r.url || '',
       status: r.status, statusVariant: r.status_variant, device: r.device,
       accent: r.accent, shot: r.shot || ''
     };
+    // Only carry across columns the database actually has. If a column is
+    // missing, the value that shipped with the site must survive rather than
+    // being overwritten with a blank.
+    if (r.learned !== undefined) o.learned = r.learned || '';
+    if (r.created !== undefined) o.created = r.created || '';
+    return o;
   }
 
   // ---- screenshots --------------------------------------------------------
