@@ -365,12 +365,27 @@
     return user.email.toLowerCase() === CFG.ownerEmail.toLowerCase();
   }
 
+  // Supabase lists every way an account can sign in. A password shows up as
+  // an 'email' identity, so its absence means one was never set.
+  function hasPassword(user) {
+    var ids = (user && user.identities) || [];
+    for (var i = 0; i < ids.length; i++) {
+      if (ids[i].provider === 'email') return true;
+    }
+    return false;
+  }
+
   function setUser(user) {
     state.user = user;
     // Being signed in is not the same as being allowed. The database enforces
     // this too, so a changed line in config.js gains nobody anything.
     if (!isOwner(user)) state.editing = false;
     render();
+
+    // Arriving on a reset link leaves the owner signed in with no password
+    // set. Offer the box rather than depending on the exact shape of the
+    // token in the address bar, which differs between Supabase flows.
+    if (isOwner(user) && !hasPassword(user)) showSetPass(true);
   }
 
   // ---- setting a password -------------------------------------------------
@@ -506,7 +521,16 @@
       render();
     });
 
-    $('owner-dot').addEventListener('click', function () { showSignin(true); });
+    $('owner-dot').addEventListener('click', function () {
+      // Already signed in from a previous visit, so skip asking again.
+      if (isOwner(state.user)) {
+        state.editing = true;
+        render();
+        note('Signed in');
+        return;
+      }
+      showSignin(true);
+    });
     $('signin-cancel').addEventListener('click', function () { showSignin(false); });
     $('signin-go').addEventListener('click', doSignin);
     $('signin').addEventListener('keydown', function (e) {
