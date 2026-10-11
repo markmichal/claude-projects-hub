@@ -43,7 +43,7 @@ window.HUB_PROJECTS = {
       url: 'https://claude.ai/artifact/5yVVz1FD3KZJ8uizuS2oBs',
       device: 'laptop',
       accent: 'var(--cs-color-mint-50)',
-      shot: ''
+      shot: 'flashcards-deck.jpg'
     },
     {
       id: 'gttc-revamp',
