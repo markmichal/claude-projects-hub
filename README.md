@@ -37,6 +37,9 @@ empty, slow or unreachable. The page is never blank.
 
 ## First time setup
 
+**All of this is done as of 10 October 2026.** Kept here for reference, and in
+case the site ever needs rebuilding from scratch.
+
 ### 1. Set up the database (once)
 
 1. Open your Supabase dashboard and pick the project the Flashcards app uses.
@@ -48,23 +51,33 @@ That creates a table called `hub_projects`, a picture folder called
 
 ### 2. Turn on email sign in
 
-Checked on 10 October 2026: email sign in is currently **off** in that Supabase
-project, because the Flashcards app only uses Google. The hub needs it on.
+Email sign in starts **off** in a project that only ever used Google, as this
+one did. The hub needs it on.
 
 1. Supabase dashboard, **Authentication**, then **Sign In / Providers**.
 2. Find **Email** in the list and switch it on. Save.
 
 ### 3. Give yourself a password
 
-Your account probably has no password yet, since you have been signing in with
-Google.
+To **change** the password later: sign in, then click **Change password** in the
+yellow edit bar. That is the easy path and it is built into the site.
 
-1. Supabase dashboard, **Authentication**, **Users**.
-2. Find `mark.michal@cru.org`, click the three dots at the end of the row, choose
-   **Reset password**, and follow the email that arrives.
+To set one when you are locked out entirely, the dashboard cannot help you. Its
+**Send password recovery** button emails a link pointed at the project's Site
+URL, which is the Flashcards app, and that app has no password form, so the link
+signs you in there and offers nothing. Instead generate a reset link aimed at the
+hub:
 
-If no account with that email exists yet, use **Add user** on that same page and
-create one with a password.
+```
+POST <supabase-url>/auth/v1/admin/generate_link
+  type:        recovery
+  email:       mark.michal@cru.org
+  redirect_to: https://projects.crutastic.com/
+```
+
+That needs the service role key, and `https://projects.crutastic.com/**` must be
+listed under **Authentication, URL Configuration, Redirect URLs**. Opening the
+link lands you on the hub with the password box showing.
 
 ### 4. Turn on GitHub Pages
 

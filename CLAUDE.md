@@ -47,16 +47,24 @@ only Mark's email may write. The anon key in `config.js` is meant to be public.
 Changing `ownerEmail` in `config.js` grants nobody anything, because the
 database checks the email on its own side too.
 
-## Known, needs Mark at a dashboard
+## Setup: all done as of 2026-10-10
 
-- **Email sign in is off** in the Supabase project (the Flashcards app only uses
-  Google). Edit mode cannot work until he turns on the Email provider under
-  Authentication, Sign In / Providers. README step 2.
-- **The database table does not exist yet.** Until he runs
-  `supabase/hub_setup.sql`, the site runs on `projects.js` alone, which is the
-  designed fallback and looks completely normal.
+Email sign in is on, `hub_projects` and `hub-screenshots` exist, Mark has a
+password, and edit mode has been tested end to end (signed in, dropped a
+screenshot, it uploaded and survived a reload).
+
+Still true and worth keeping in mind:
+
 - **Do not use Google sign in here.** His content filter blocks Google auth in
-  every browser on his Mac.
+  every browser on his Mac. Email and password goes over fetch, which works.
+- **Supabase does not add an 'email' identity** when an account that started
+  with Google gains a password. His account still reports only `google` even
+  though the password works. Never use the identity list to decide whether a
+  password exists.
+- **Setting a password** happens on the hub itself, via the Change password
+  button in the edit bar, or by arriving on a reset link. The Supabase
+  dashboard's "Send password recovery" is a dead end: it points at the Site
+  URL, which is the Flashcards app, and that app has no password form.
 
 ## Rules
 
