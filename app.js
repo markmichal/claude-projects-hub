@@ -49,13 +49,32 @@
   function tidyUrl(url) {
     var u = (url || '').trim();
     if (!u) return '';
-    return /^https?:\/\//i.test(u) ? u : 'https://' + u;
+    if (/^[a-z][a-z0-9+.-]*:/i.test(u) || u.indexOf('//') === 0) return u;
+    // A path on this site, like files/slides.pdf, must stay a path. Only a
+    // bare domain gets https:// put in front, and a domain has a dot before
+    // its first slash.
+    var firstSegment = u.split('/')[0];
+    if (firstSegment.indexOf('.') === -1) return u;
+    return 'https://' + u;
   }
 
   function shownUrl(url) {
     var u = (url || '').trim();
     if (!u) return 'Link coming soon';
     return u.replace(/^https?:\/\//i, '').replace(/\/$/, '');
+  }
+
+  // A second link, for when the main one does not suit everybody. Used by the
+  // slide deck: the card opens a PDF anyone can read, and this opens the live
+  // deck for people signed in at Cru. It sits above the whole-card link, or
+  // the card would swallow the click.
+  function altLinkHtml(p) {
+    if (!p.altUrl) return '';
+    return '<a class="alt-link" href="' + esc(tidyUrl(p.altUrl)) + '" target="_blank" rel="noopener">' +
+      '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none"' +
+      ' stroke="currentColor" stroke-width="2"><path d="M5 11 11 5M6 5h5v5"/></svg>' +
+      esc(p.altLabel || 'Another way in') +
+    '</a>';
   }
 
   function matches(p, q) {
@@ -129,24 +148,31 @@
 
   function linkHtml(p) {
     var live = !!(p.url || '').trim();
+    var label = esc(p.urlLabel || shownUrl(p.url));
+    // Cards with a second link are not clickable as a whole, so this one has
+    // to be a real link rather than a label the card sits under.
+    var inner = (live && p.altUrl)
+      ? '<a class="urlline url-live real-link" href="' + esc(tidyUrl(p.url)) + '"' +
+        ' target="_blank" rel="noopener">' + label + '</a>'
+      : '<span class="urlline ' + (live ? 'url-live' : 'url-none') + '">' + label + '</span>';
     return '<div class="card-link">' +
       '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none"' +
       ' stroke="var(--cs-color-text-link)" stroke-width="2"><path d="M5 11 11 5M6 5h5v5"/></svg>' +
-      '<span class="urlline ' + (live ? 'url-live' : 'url-none') + '">' + esc(shownUrl(p.url)) + '</span>' +
-    '</div>';
+      inner +
+    '</div>' + altLinkHtml(p);
   }
 
   // The whole card is a link, unless we are editing. Editing a card you cannot
   // click into would be impossible.
   function stretchHtml(p) {
     var url = tidyUrl(p.url);
-    if (state.editing || !url) return '';
+    if (state.editing || !url || p.altUrl) return '';
     return '<a class="stretch" href="' + esc(url) + '" target="_blank" rel="noopener"' +
            ' aria-label="Open ' + esc(p.title) + ' at ' + esc(shownUrl(p.url)) + '"></a>';
   }
 
   function mainCard(p) {
-    var linkable = !state.editing && !!(p.url || '').trim();
+    var linkable = !state.editing && !!(p.url || '').trim() && !p.altUrl;
     return '<div class="card-wrap' + (linkable ? ' is-link' : '') + '">' +
       '<cs-card class="card" appearance="filled-outlined" has-media>' +
         '<div slot="media" class="card-media" style="background: ' + esc(p.accent) + '">' +
@@ -259,6 +285,9 @@
       why: p.why,
       learned: p.learned || '',
       created: p.created || null,
+      url_label: p.urlLabel || '',
+      alt_url: p.altUrl || '',
+      alt_label: p.altLabel || '',
       url: p.url,
       status: p.status,
       status_variant: p.statusVariant,
@@ -284,6 +313,9 @@
     // being overwritten with a blank.
     if (r.learned !== undefined) o.learned = r.learned || '';
     if (r.created !== undefined) o.created = r.created || '';
+    if (r.url_label !== undefined) o.urlLabel = r.url_label || '';
+    if (r.alt_url !== undefined) o.altUrl = r.alt_url || '';
+    if (r.alt_label !== undefined) o.altLabel = r.alt_label || '';
     return o;
   }
 

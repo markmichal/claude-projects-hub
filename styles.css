@@ -378,3 +378,25 @@ h1, h2, h3 {
 /* On the pale yellow band the quiet brand fill would vanish, so the smaller
    rows get the plain surface instead. */
 .row .learned { background: var(--cs-color-information-fill-quiet); }
+
+/* A second link on a card. Must sit above .stretch (z-index 2) or the
+   whole-card link covers it and the click never arrives. */
+.alt-link {
+  position: relative;
+  z-index: 3;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cs-color-text-quiet);
+  text-decoration: none;
+}
+.alt-link:hover { color: var(--cs-color-text-link); text-decoration: underline; }
+.alt-link svg { flex-shrink: 0; }
+
+/* The main link on a card that is not clickable as a whole. */
+.real-link { position: relative; z-index: 3; text-decoration: none; }
+.real-link:hover { text-decoration: underline; }

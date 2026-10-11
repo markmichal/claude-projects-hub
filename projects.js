@@ -40,7 +40,10 @@ window.HUB_PROJECTS = {
       learned: 'That I can make a whole slide deck just by talking it through with Claude. I do not think I will ever build one by hand again.',
       status: 'Live',
       statusVariant: 'success',
-      url: 'https://claude.ai/artifact/5yVVz1FD3KZJ8uizuS2oBs',
+      url: 'files/building-the-flashcard-app.pdf',
+      urlLabel: 'Read the slides (PDF)',
+      altUrl: 'https://claude.ai/artifact/5yVVz1FD3KZJ8uizuS2oBs',
+      altLabel: 'Open the live deck (Cru sign in)',
       device: 'laptop',
       accent: 'var(--cs-color-mint-50)',
       shot: 'flashcards-deck.jpg'
