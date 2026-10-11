@@ -72,6 +72,18 @@ window.HUB_PROJECTS = {
       shot: 'gttc-revamp.jpg'
     },
     {
+      id: 'ai-hub',
+      title: 'Cru Innovation AI Hub',
+      what: 'A guide to using Claude and Gemini at work, with a side by side comparison, tips and training.',
+      why: 'So the Innovation team can get going with AI without needing a computer science degree first.',
+      status: 'Live',
+      statusVariant: 'success',
+      url: 'https://markmichal.github.io/Cruinnovation-ai-hub/',
+      device: 'laptop',
+      accent: 'var(--cs-color-cyan)',
+      shot: 'ai-hub.jpg'
+    },
+    {
       id: 'flashcards',
       title: 'Flashcards app',
       what: 'A study app that sorts cards into Leitner boxes.',
