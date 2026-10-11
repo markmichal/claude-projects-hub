@@ -323,3 +323,26 @@ h1, h2, h3 {
   /* A 200px picture next to text leaves the text no room on a phone. */
   .row-media { flex: 1 1 100%; }
 }
+
+/* ---------- Set a password ----------
+   Only shown after arriving on a one-time password reset link. */
+
+.setpass {
+  position: fixed; inset: 0; z-index: 40;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+  background: rgba(31, 31, 71, 0.75);
+}
+.setpass[hidden] { display: none; }
+.setpass-card {
+  width: 100%; max-width: 420px;
+  display: flex; flex-direction: column; gap: 14px;
+  padding: 24px;
+  background: var(--cs-color-surface-raised);
+  border-radius: 6px;
+}
+.setpass-card h2 { font-size: 25px; }
+.setpass-note { margin: 0; font-size: 14px; color: var(--cs-color-text-quiet); }
+.setpass-buttons { display: flex; gap: 8px; padding-top: 4px; }
+.setpass-msg { font-size: 14px; font-weight: 600; color: var(--cs-color-danger-on-quiet); }
+.setpass-msg[hidden] { display: none; }

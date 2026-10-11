@@ -113,6 +113,20 @@
   <span class="signin-msg" id="signin-msg" role="alert" hidden></span>
 </div>
 
+<!-- Set a password. Only appears when you arrive on a one-time reset link. -->
+<div class="setpass" id="setpass" hidden>
+  <div class="setpass-card" role="dialog" aria-modal="true" aria-labelledby="setpass-title">
+    <h2 id="setpass-title">Set your password</h2>
+    <p class="setpass-note">This password only unlocks editing this site. It is not your Cru password and not your Google password.</p>
+    <cs-input id="pass1" type="password" size="s" label="New password" autocomplete="new-password"></cs-input>
+    <cs-input id="pass2" type="password" size="s" label="Type it again" autocomplete="new-password"></cs-input>
+    <div class="setpass-buttons">
+      <cs-button id="pass-save" variant="brand" appearance="filled" size="s">Save password</cs-button>
+    </div>
+    <span class="setpass-msg" id="setpass-msg" role="alert" hidden></span>
+  </div>
+</div>
+
 <script src="config.js"></script>
 <script src="projects.js"></script>
 <script src="vendor/supabase.js"></script>

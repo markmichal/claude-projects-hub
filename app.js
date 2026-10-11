@@ -330,9 +330,17 @@
     sb.auth.getSession().then(function (res) {
       setUser(res.data && res.data.session ? res.data.session.user : null);
     });
-    sb.auth.onAuthStateChange(function (_event, session) {
+    sb.auth.onAuthStateChange(function (event, session) {
+      // Arriving on a one-time reset link. Supabase has already turned the
+      // token in the address bar into a short lived session; all that is left
+      // is choosing the password.
+      if (event === 'PASSWORD_RECOVERY') showSetPass(true);
       setUser(session ? session.user : null);
     });
+
+    // The event above can fire before this code runs, so check the address
+    // bar too rather than relying on the timing.
+    if (/type=recovery/.test(window.location.hash)) showSetPass(true);
 
     loadProjects();
   }
@@ -363,6 +371,50 @@
     // this too, so a changed line in config.js gains nobody anything.
     if (!isOwner(user)) state.editing = false;
     render();
+  }
+
+  // ---- setting a password -------------------------------------------------
+
+  function showSetPass(show) {
+    var box = $('setpass');
+    if (!box) return;
+    box.hidden = !show;
+    $('setpass-msg').hidden = true;
+    if (show) {
+      $('signin').hidden = true;
+      var first = $('pass1');
+      if (first && first.focus) first.focus();
+    }
+  }
+
+  function setPassMsg(text) {
+    var el = $('setpass-msg');
+    el.textContent = text;
+    el.hidden = false;
+  }
+
+  function savePassword() {
+    var a = csValue($('pass1'));
+    var b = csValue($('pass2'));
+    if (a.length < 8) { setPassMsg('Use at least 8 characters.'); return; }
+    if (a !== b) { setPassMsg('The two passwords do not match.'); return; }
+    if (!sb) { setPassMsg('The database is not reachable right now.'); return; }
+
+    setPassMsg('Saving...');
+    sb.auth.updateUser({ password: a }).then(function (res) {
+      if (res.error) { setPassMsg(plainError(res.error.message)); return; }
+      // Take the one time token out of the address bar so it is not left
+      // sitting in history or copied into a message by accident.
+      try {
+        window.history.replaceState(null, '', window.location.pathname);
+      } catch (err) {}
+      showSetPass(false);
+      if (isOwner(res.data.user)) {
+        state.editing = true;
+        render();
+        note('Password saved. You are signed in.');
+      }
+    });
   }
 
   // ---- sign in box --------------------------------------------------------
@@ -462,6 +514,11 @@
       if (e.key === 'Escape') showSignin(false);
     });
     $('done-editing').addEventListener('click', stopEditing);
+
+    $('pass-save').addEventListener('click', savePassword);
+    $('setpass').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') savePassword();
+    });
 
     // One listener on the page handles every card, including cards drawn later.
     document.addEventListener('input', onEditInput);
