@@ -46,9 +46,9 @@ Everything lives in `projects.js`. The fields are documented at the top of it.
 
 ## Do not edit the old design artifact
 
-https://claude.ai/artifact/SdEyAkCNo1qmriT51Birus is the original mockup, and
-it is still called "Claude Projects Hub". It froze with five starter projects
-and publishes nowhere.
+https://claude.ai/artifact/SdEyAkCNo1qmriT51Birus is the original mockup. It
+froze with five starter projects and publishes nowhere. Renamed on 2026-10-11
+to "Projects Hub: original mockup (not the live site)" so the name says so.
 
 On 2026-10-11 another session added a project to it instead of to this repo,
 and Mark saw a hub with five projects and wondered why his change was missing.

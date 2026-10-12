@@ -159,7 +159,7 @@ window.HUB_PROJECTS = {
       created: '2026-10-11',
       what: 'A live dashboard of CHS sales, reorders, spending and profit from the Cru Store reports, with sections for Soularium cards and THE FOUR bands.',
       why: 'So we can see how sales are going, what to reorder, and what we actually make on each product.',
-      learned: '',
+      learned: 'That I can put together a dashboard that keeps me on top of what we sell, and tells me what to do next.',
       status: 'Live',
       statusVariant: 'success',
       url: 'https://claude.ai/artifact/Ns5y5n5Z9wULRQmTYdWmwQ',
