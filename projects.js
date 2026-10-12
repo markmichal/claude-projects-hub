@@ -154,6 +154,21 @@ window.HUB_PROJECTS = {
   ],
   small: [
     {
+      id: 'chs-store',
+      title: 'CHS Cru Store sales dashboard',
+      created: '2026-10-11',
+      what: 'A live dashboard of CHS sales, reorders, spending and profit from the Cru Store reports, with sections for Soularium cards and THE FOUR bands.',
+      why: 'So we can see how sales are going, what to reorder, and what we actually make on each product.',
+      learned: '',
+      status: 'Live',
+      statusVariant: 'success',
+      url: 'https://claude.ai/artifact/Ns5y5n5Z9wULRQmTYdWmwQ',
+      urlLabel: 'Open the dashboard (Cru sign in)',
+      device: 'laptop',
+      accent: 'var(--cs-color-green)',
+      shot: ''
+    },
+    {
       id: 'captions',
       title: 'Caption Cleanup',
       created: '2026-09-25',

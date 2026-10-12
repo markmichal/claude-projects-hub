@@ -38,6 +38,21 @@ Everything lives in `projects.js`. The fields are documented at the top of it.
 - **Once a project exists in the database, editing `projects.js` alone changes
   nothing on the live site.** The database wins by design. Change both, or the
   page and the file will disagree and it will look like a bug.
+- **`node sync.js`** says whether the file and the database differ;
+  **`node sync.js --write`** rewrites `projects.js` from the database. Needs no
+  keys, reads only what any visitor can. Use it after editing on the site, and
+  any time the two might have drifted. Writing to the database still needs the
+  service role key, so that direction stays a Claude job.
+
+## Do not edit the old design artifact
+
+https://claude.ai/artifact/SdEyAkCNo1qmriT51Birus is the original mockup, and
+it is still called "Claude Projects Hub". It froze with five starter projects
+and publishes nowhere.
+
+On 2026-10-11 another session added a project to it instead of to this repo,
+and Mark saw a hub with five projects and wondered why his change was missing.
+The live site is this repo plus the Supabase table. Nothing else.
 - **`learned`** is Mark's own words about what building it taught him. His
   voice, not a summary. Leave it empty rather than inventing one; the block is
   skipped when there is nothing to say.
