@@ -166,7 +166,7 @@ window.HUB_PROJECTS = {
       urlLabel: 'Open the dashboard (Cru sign in)',
       device: 'laptop',
       accent: 'var(--cs-color-green)',
-      shot: ''
+      shot: 'chs-store.jpg'
     },
     {
       id: 'captions',
