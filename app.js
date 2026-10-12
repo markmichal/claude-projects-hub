@@ -209,7 +209,8 @@
             '<span>' + esc(p.what) + '</span>' +
             '<span class="row-why">' + esc(p.why) + '</span>' +
             learnedHtml(p) +
-            '<span class="urlline ' + (linkable ? 'url-live' : 'url-none') + '">' + esc(shownUrl(p.url)) + '</span>' +
+            '<span class="urlline ' + (linkable ? 'url-live' : 'url-none') + '">' +
+              esc(p.urlLabel || shownUrl(p.url)) + '</span>' +
           '</div>') +
       '</div>' +
       stretchHtml(p) +
