@@ -11,6 +11,8 @@ Live at **https://projects.crutastic.com**
 | `styles.css` | All the looks: colors, spacing, the laptop and phone frames. |
 | `app.js` | All the behavior: drawing the cards, search, sign in, saving. |
 | `projects.js` | **The project list.** Edit this to change what shows up with no database involved. |
+| `tools.js` | **The Tools I use list.** Edit this to change the tools at the foot of the page. |
+| `logos/` | One logo per tool, as a plain shape the page paints in that company's color. |
 | `config.js` | Which Supabase project to talk to, and which email may edit. |
 | `screenshots/` | The pictures inside the laptop and phone frames. |
 | `cornerstone/` | The Cru Cornerstone design system, saved as plain files. |

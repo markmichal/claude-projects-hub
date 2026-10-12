@@ -17,6 +17,7 @@
 
   var CFG = window.HUB_CONFIG || {};
   var SEED = window.HUB_PROJECTS || { main: [], small: [] };
+  var TOOLS = window.HUB_TOOLS || [];
   var TABLE = 'hub_projects';
   var BUCKET = 'hub-screenshots';
 
@@ -217,17 +218,57 @@
     '</div>';
   }
 
+  // ---- tools --------------------------------------------------------------
+
+  // Unlike projects, the tools list is not in the database. It changes rarely
+  // and only ever by editing tools.js, so there is nothing to sign in for.
+  function toolMatches(t, q) {
+    if (!q) return true;
+    return [t.name, t.what, t.how, (t.used || []).join(' ')]
+      .join(' ').toLowerCase().indexOf(q) !== -1;
+  }
+
+  function toolCard(t) {
+    var used = (t.used || []).map(function (u) {
+      return '<span>' + esc(u) + '</span>';
+    }).join('');
+    var mask = "url('logos/" + esc(t.logo) + "')";
+    return '<div class="tool" style="--tool-color: ' + esc(t.color) + '">' +
+      '<div class="tool-logo">' +
+        '<span class="tool-mark" aria-hidden="true" style="-webkit-mask-image: ' + mask +
+          '; mask-image: ' + mask + '"></span>' +
+      '</div>' +
+      '<div class="tool-body">' +
+        '<span class="tool-name">' + esc(t.name) + '</span>' +
+        '<span class="tool-what">' + esc(t.what) + '</span>' +
+        '<span class="tool-how">' + esc(t.how) + '</span>' +
+        (used ? '<div class="tool-used">' + used + '</div>' : '') +
+      '</div>' +
+      (t.url
+        ? '<a class="stretch" href="' + esc(t.url) + '" target="_blank" rel="noopener"' +
+          ' aria-label="' + esc(t.name) + ' website"></a>'
+        : '') +
+    '</div>';
+  }
+
   function render() {
     var q = state.query.trim().toLowerCase();
     var main = state.main.filter(function (p) { return matches(p, q); });
     var small = state.small.filter(function (p) { return matches(p, q); });
 
+    var tools = TOOLS.filter(function (t) { return toolMatches(t, q); });
+
     $('main-grid').innerHTML = main.map(mainCard).join('');
     $('small-rows').innerHTML = small.map(smallRow).join('');
+    $('tools-grid').innerHTML = tools.map(toolCard).join('');
 
     $('band-main').hidden = main.length === 0;
     $('band-small').hidden = small.length === 0;
-    $('noresults').hidden = main.length + small.length > 0;
+    // Hidden while editing too: the tools list is not editable on the page, so
+    // showing it in edit mode only invites clicking at something that will not
+    // respond.
+    $('band-tools').hidden = tools.length === 0 || state.editing;
+    $('noresults').hidden = main.length + small.length + tools.length > 0;
 
     // Counts always show the real totals, not the filtered ones.
     $('count-main').textContent = state.main.length;

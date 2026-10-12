@@ -124,6 +124,7 @@ h1, h2, h3 {
 
 .band-main { background: var(--cs-color-brand-fill-quiet); }
 .band-small { background: var(--cs-color-information-fill-quiet); }
+.band-tools { background: var(--cs-color-surface-lowered); }
 .band[hidden] { display: none; }
 
 .section {
@@ -132,8 +133,10 @@ h1, h2, h3 {
 }
 .band-main .section { gap: 28px; }
 .band-small .section { gap: 24px; }
+.band-tools .section { gap: 8px; }
 .section-title { font-size: clamp(26px, 3vw, 32px); }
 .section-title-sm { font-size: 25px; }
+.section-note { margin: 0 0 16px; color: var(--cs-color-text-quiet); max-width: 640px; }
 
 .grid {
   display: grid;
@@ -378,6 +381,75 @@ h1, h2, h3 {
 /* On the pale yellow band the quiet brand fill would vanish, so the smaller
    rows get the plain surface instead. */
 .row .learned { background: var(--cs-color-information-fill-quiet); }
+
+/* ---------- Tools I use ----------
+   No screenshots here. Each tool shows its own logo, saved in logos/ as a
+   single color SVG and tinted with that company's brand color. The logo is a
+   mask rather than an <img>, which is what lets one file take any color and
+   keeps it sharp at any size. */
+
+.tools {
+  display: grid;
+  /* Two across on a wide screen. Three columns squeezed the sentences into a
+     column about thirty characters wide, which was painful to read. */
+  /* min() matters. A bare minmax(420px, 1fr) forces every column to be at
+     least 420px even when the screen is 375px wide, which pushed the cards
+     off the right edge and made the whole page scroll sideways on a phone. */
+  grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+  gap: 16px;
+}
+
+.tool {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  background: var(--cs-color-surface-raised);
+  border: 1px solid var(--cs-color-surface-border);
+  border-radius: 6px;
+  transition: box-shadow 150ms ease, transform 150ms ease;
+}
+.tool:hover, .tool:focus-within {
+  box-shadow: 0 0 0 3px var(--cs-color-brand-fill-loud);
+  transform: translateY(-2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tool { transition: none; }
+  .tool:hover, .tool:focus-within { transform: none; }
+}
+
+.tool-logo {
+  flex: 0 0 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  /* A very light wash of the brand color so the tile reads as that tool's
+     without shouting. */
+  background: color-mix(in srgb, var(--tool-color) 10%, #ffffff);
+}
+.tool-mark {
+  width: 28px; height: 28px;
+  background-color: var(--tool-color);
+  -webkit-mask-size: contain; mask-size: contain;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center; mask-position: center;
+}
+
+.tool-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.tool-name { font-family: var(--font-heading); font-weight: 600; font-size: 20px; line-height: 1.2; }
+.tool-what { color: var(--cs-color-text-quiet); font-size: 15px; }
+.tool-how { font-size: 15px; }
+
+/* Which projects this tool shows up in. */
+.tool-used { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.tool-used span {
+  font-size: 12px; font-weight: 600;
+  padding: 2px 8px; border-radius: 999px;
+  background: var(--cs-color-neutral-fill-quiet);
+  color: var(--cs-color-neutral-on-quiet);
+}
 
 /* A second link on a card. Must sit above .stretch (z-index 2) or the
    whole-card link covers it and the click never arrives. */

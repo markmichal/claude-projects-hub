@@ -15,6 +15,8 @@ Open `index.html` through a local server and it runs.
 - `styles.css` all the looks
 - `app.js` all the behavior
 - `projects.js` the project list that ships with the site
+- `tools.js` the "Tools I use" list at the foot of the page
+- `logos/` one single color SVG per tool
 - `config.js` which Supabase project to talk to, and which email may edit
 - `supabase/hub_setup.sql` run once to create the table and the rules
 
@@ -76,6 +78,35 @@ Mark wants **everything he builds listed here**, so offer it whenever a project
 reaches something worth showing. Never write the `learned` note for him; ask.
 He has floated a "projects I'm working on" section for unfinished work and
 deferred it on 2026-10-10, so raise it, do not build it.
+
+## The Tools I use section
+
+`tools.js` holds it, and nothing else does. Deliberately **not** in Supabase and
+**not** editable on the page: it changes rarely, a second table would be one
+more thing to keep in step, and Mark edits it by asking. The band hides itself
+in edit mode so nobody clicks at something that will not respond. Search covers
+it along with the projects.
+
+Every entry has to be backed by real code in one of Mark's project folders,
+checked at the time it was added. Do not add a tool he has only mentioned. The
+list was built on 2026-10-12 from a sweep of every project folder; the honest
+findings worth keeping were that **no site has analytics of any kind** and
+**there is no CI**, publishing is GitHub Pages' own branch publishing.
+
+Deliberately left off, with reasons: Vercel (he researched it for cru-hs-60th
+and chose to stay on Pages), Cru Cornerstone (Cru's own, not third party, and no
+brand logo exists for it), Homebrew and the `gh` CLI (local machine setup), and
+the AI tools listed as recommendations on the Cru Innovation AI Hub, which are
+things he published for his team rather than things he builds with.
+
+Logos are single color SVGs in `logos/`, taken from Simple Icons and used as a
+CSS mask so one file can be painted any color. `contentworkflow.svg` is
+hand-drawn because Bynder's Content Workflow has no Simple Icons entry; it is a
+generic mark, not their real logo. Pale brand colors (Supabase green, React
+cyan, GoDaddy teal) are darkened in `tools.js` so they read on a near white
+tile. To add a tool:
+`curl -sf https://cdn.jsdelivr.net/npm/simple-icons@16.35.0/icons/<slug>.svg -o logos/<slug>.svg`
+and get its color from `https://cdn.simpleicons.org/<slug>`.
 
 ## The two layers of content, and why
 

@@ -35,6 +35,7 @@
       <nav aria-label="Sections" class="sections">
         <a href="#main">Main projects</a>
         <a href="#small">Smaller projects</a>
+        <a href="#tools">Tools I use</a>
       </nav>
       <div class="searchbox">
         <cs-input id="search" type="search" size="s" placeholder="Search projects" with-clear>
@@ -75,7 +76,15 @@
     </section>
   </div>
 
-  <section class="wrap noresults" id="noresults" hidden>No projects match that search. Try a different word.</section>
+  <div class="band band-tools" id="band-tools">
+    <section id="tools" class="wrap section">
+      <h2 class="section-title section-title-sm">Tools I use</h2>
+      <p class="section-note">The other services behind these projects, and what each one actually does for me.</p>
+      <div class="tools" id="tools-grid"></div>
+    </section>
+  </div>
+
+  <section class="wrap noresults" id="noresults" hidden>Nothing matches that search. Try a different word.</section>
 
   <section class="wrap edithelp" id="edithelp" hidden>
     <cs-callout variant="highlight">
@@ -130,6 +139,7 @@
 
 <script src="config.js"></script>
 <script src="projects.js"></script>
+<script src="tools.js"></script>
 <script src="vendor/supabase.js"></script>
 <script src="app.js"></script>
 </body>
