@@ -233,6 +233,17 @@
       return '<span>' + esc(u) + '</span>';
     }).join('');
     var mask = "url('logos/" + esc(t.logo) + "')";
+    // The whole tile is already a link, but with nothing on screen saying so
+    // nobody knew to click it. Showing the address is what makes it obvious.
+    // A plain span, not an <a>: a real link here would sit inside the
+    // whole-tile link, and a link inside a link is broken for screen readers.
+    var link = t.url
+      ? '<div class="tool-link">' +
+          '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none"' +
+          ' stroke="currentColor" stroke-width="2"><path d="M5 11 11 5M6 5h5v5"/></svg>' +
+          '<span class="urlline url-live">' + esc(shownUrl(t.url)) + '</span>' +
+        '</div>'
+      : '';
     return '<div class="tool" style="--tool-color: ' + esc(t.color) + '">' +
       '<div class="tool-logo">' +
         '<span class="tool-mark" aria-hidden="true" style="-webkit-mask-image: ' + mask +
@@ -243,6 +254,7 @@
         '<span class="tool-what">' + esc(t.what) + '</span>' +
         '<span class="tool-how">' + esc(t.how) + '</span>' +
         (used ? '<div class="tool-used">' + used + '</div>' : '') +
+        link +
       '</div>' +
       (t.url
         ? '<a class="stretch" href="' + esc(t.url) + '" target="_blank" rel="noopener"' +

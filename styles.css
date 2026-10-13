@@ -124,7 +124,10 @@ h1, h2, h3 {
 
 .band-main { background: var(--cs-color-brand-fill-quiet); }
 .band-small { background: var(--cs-color-information-fill-quiet); }
-.band-tools { background: var(--cs-color-surface-lowered); }
+/* Pale purple, a different hue from the yellow and blue bands above it.
+   Plain gray was too close to the pale blue of the smaller projects and the
+   two sections ran together. */
+.band-tools { background: var(--cs-color-highlight-fill-quiet); }
 .band[hidden] { display: none; }
 
 .section {
@@ -450,6 +453,18 @@ h1, h2, h3 {
   background: var(--cs-color-neutral-fill-quiet);
   color: var(--cs-color-neutral-on-quiet);
 }
+
+/* The tool's own web address, shown so people know the tile can be clicked.
+   Pushed to the bottom so every tile in a row lines its address up. */
+.tool-link {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: auto; padding-top: 12px; min-width: 0;
+  color: var(--cs-color-text-link);
+  border-top: 1px solid var(--cs-color-surface-border);
+}
+.tool-link svg { flex-shrink: 0; }
+.tool:hover .urlline, .tool:focus-within .urlline { text-decoration: underline; }
+.tool-body { flex-grow: 1; }
 
 /* A second link on a card. Must sit above .stretch (z-index 2) or the
    whole-card link covers it and the click never arrives. */

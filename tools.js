@@ -49,6 +49,8 @@ window.HUB_TOOLS = [
   {
     name: 'GitHub Pages',
     url: 'https://pages.github.com',
+    // A globe, not GitHub Pages' own logo. Theirs is a wordmark, and at 28px
+    // across it was an unreadable grey smudge.
     logo: 'githubpages.svg',
     color: '#222222',
     what: 'Free website hosting built into GitHub. It turns the files in a project into a real web page.',
