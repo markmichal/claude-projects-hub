@@ -174,7 +174,7 @@ window.HUB_PROJECTS = {
       created: '2026-10-06',
       what: 'A board of 20 sound effect buttons, like an airhorn, a rimshot and applause. You can install it as an app on your desktop.',
       why: 'A quick, fun tool for events and meetings. It works offline, and every sound is made by the browser, so there are no files to manage.',
-      learned: 'I wanted to see if I could make a quick app in 10 minutes from my phone during a break at an event. This is what came out.',
+      learned: 'I wanted to see if I could make a quick app from my phone with just one prompt, during a break at an event. This is what came out.',
       status: 'Live',
       statusVariant: 'success',
       url: 'https://flashcards.crutastic.com/soundboard/',
