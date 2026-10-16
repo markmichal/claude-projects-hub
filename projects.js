@@ -168,6 +168,20 @@ window.HUB_PROJECTS = {
   ],
   small: [
     {
+      id: 'sound-machine',
+      title: 'Sound Machine',
+      created: '2026-10-16',
+      what: 'An iPhone style sound board with 12 big photo buttons and real recorded sounds, like applause, a drumroll and a sad trombone.',
+      why: 'A fun tool for events and meetings that fits on one phone screen. Every sound and photo is free to use, with credits.',
+      learned: 'I made an idea parking lot in Notion. I talk an idea through with Claude by voice in the car or on a run and park it there. When I get home, Claude Code picks it up and builds it. Now my ideas turn into action even when I am away from my desk.',
+      status: 'Live',
+      statusVariant: 'success',
+      url: 'https://sounds.crutastic.com',
+      device: 'phone',
+      accent: 'var(--cs-color-pink-60)',
+      shot: 'sound-machine.jpg'
+    },
+    {
       id: 'chs-store',
       title: 'CHS Cru Store sales dashboard',
       created: '2026-10-11',
