@@ -33,7 +33,7 @@ window.HUB_PROJECTS = {
       statusVariant: 'success',
       url: 'https://templates.crutastic.com',
       device: 'laptop',
-      accent: 'var(--cs-color-lemon-50)',
+      accent: 'var(--cs-color-cyan)',
       shot: 'design-templates.jpg'
     },
     {
