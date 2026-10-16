@@ -26,7 +26,7 @@ window.HUB_PROJECTS = {
       id: 'design-templates',
       title: 'Design Templates',
       created: '2026-10-15',
-      what: 'A free gallery of Canva templates from Cru Creative 1. Volunteers tap a design and get their own copy in Canva. Designers add new ones from a simple manager, with no spreadsheet editing.',
+      what: 'A free gallery of Canva templates from Cru Creative 1 Media. Volunteers tap a design and get their own copy in Canva. Designers add new ones from a simple manager, with no spreadsheet editing.',
       why: 'Movements without Canva Enterprise had no easy way to get our designs. Now they can browse by event and make a design their own in a minute.',
       learned: 'This has been a long-term problem, and this fixed it in a couple of hours. AI makes simple solutions possible for problems that were hard to solve before.',
       status: 'Live',
