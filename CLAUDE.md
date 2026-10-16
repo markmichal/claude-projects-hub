@@ -71,7 +71,10 @@ The live site is this repo plus the Supabase table. Nothing else.
 
 Screenshots: capture at 1440x900 with headless Chrome, then
 `sips -s format jpeg -s formatOptions 82 -Z 900`. Chrome never exits on its
-own, so poll for the file and kill it. Anything needing a login has to come
+own, so poll for the file and kill it. A page that loads inside a frame (like
+templates.crutastic.com) finishes after `--screenshot` fires and comes out
+blank: drive Chrome over `--remote-debugging-port` instead and wait about 12
+seconds before capturing. Anything needing a login has to come
 from Mark, either as a file or dropped in through edit mode.
 
 Mark wants **everything he builds listed here**, so offer it whenever a project
