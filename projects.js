@@ -43,7 +43,7 @@ window.HUB_PROJECTS = {
       created: '2026-10-16',
       what: 'Instagram posts for Thrive Studies that make themselves. Claude drafts each month from the real studies, I approve them on one review page, and they post on their own every Monday and Thursday.',
       why: 'The Thrive account sat quiet for a year. Student leaders need steady help leading their groups, and I did not have time to make posts by hand.',
-      learned: '',
+      learned: 'That Claude can help me manage my social media with very low touch, at least the posting.',
       status: 'Live',
       statusVariant: 'success',
       url: 'https://claude.ai/artifact/N7bNXdNPM9BAovq6SjJoZG',
