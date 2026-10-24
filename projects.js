@@ -35,7 +35,7 @@ window.HUB_PROJECTS = {
       urlLabel: 'Open Theme Lab (Cru sign in)',
       device: 'laptop',
       accent: 'var(--cs-color-brand-fill-loud)',
-      shot: ''
+      shot: 'theme-lab.jpg'
     },
     {
       id: 'thrive-instagram',
