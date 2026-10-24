@@ -23,6 +23,21 @@
 window.HUB_PROJECTS = {
   main: [
     {
+      id: 'theme-lab',
+      title: 'Cru Theme Lab',
+      created: '2026-10-22',
+      what: 'A place to see all my Cru branded themes as a slide deck, a wide video and a vertical video. I rank them, archive the ones I do not like, and grab a prompt plus a sample PDF to use one.',
+      why: 'My slide themes were scattered and hit or miss. Ranking them shows Claude what I like, so each new round of themes gets closer, and the best ones can become skills.',
+      learned: 'That I can make and rank themes to help me make better slide decks and videos.',
+      status: 'Live',
+      statusVariant: 'success',
+      url: 'https://claude.ai/artifact/EL3HEvQCFPPndjD93e1D5a',
+      urlLabel: 'Open Theme Lab (Cru sign in)',
+      device: 'laptop',
+      accent: 'var(--cs-color-brand-fill-loud)',
+      shot: ''
+    },
+    {
       id: 'thrive-instagram',
       title: 'Thrive Instagram',
       created: '2026-10-16',
