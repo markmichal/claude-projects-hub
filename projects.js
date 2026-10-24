@@ -23,6 +23,23 @@
 window.HUB_PROJECTS = {
   main: [
     {
+      id: 'thrive-instagram',
+      title: 'Thrive Instagram',
+      created: '2026-10-16',
+      what: 'Instagram posts for Thrive Studies that make themselves. Claude drafts each month from the real studies, I approve them on one review page, and they post on their own every Monday and Thursday.',
+      why: 'The Thrive account sat quiet for a year. Student leaders need steady help leading their groups, and I did not have time to make posts by hand.',
+      learned: '',
+      status: 'Live',
+      statusVariant: 'success',
+      url: 'https://claude.ai/artifact/N7bNXdNPM9BAovq6SjJoZG',
+      urlLabel: 'Open the review page (Cru sign in)',
+      altUrl: 'https://www.instagram.com/thrivestudies/',
+      altLabel: 'See it on Instagram',
+      device: 'laptop',
+      accent: 'var(--cs-color-navy)',
+      shot: 'thrive-instagram.jpg'
+    },
+    {
       id: 'design-templates',
       title: 'Design Templates',
       created: '2026-10-15',
