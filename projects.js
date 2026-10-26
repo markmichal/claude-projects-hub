@@ -23,6 +23,21 @@
 window.HUB_PROJECTS = {
   main: [
     {
+      id: 'workout-app',
+      title: 'Workout App',
+      created: '2026-10-26',
+      what: 'My own workout app on my phone. It shows today\'s session from my Notion plan, logs sets with big buttons, times rest and dead hangs, and works with no signal. The demo runs on sample data.',
+      why: 'Strong did the job but felt stale, and my training plan lives in Notion. Now everything I log goes straight back to Notion, so Claude can coach me from the same numbers.',
+      learned: '',
+      status: 'Live',
+      statusVariant: 'success',
+      url: 'https://workout-demo.mark-michal.workers.dev',
+      urlLabel: 'Open the demo',
+      device: 'phone',
+      accent: 'var(--cs-color-orange)',
+      shot: 'workout-app.jpg'
+    },
+    {
       id: 'theme-lab',
       title: 'Cru Theme Lab',
       created: '2026-10-22',
