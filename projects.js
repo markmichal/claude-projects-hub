@@ -28,7 +28,7 @@ window.HUB_PROJECTS = {
       created: '2026-10-26',
       what: 'My own workout app on my phone. It shows today\'s session from my Notion plan, logs sets with big buttons, times rest and dead hangs, and works with no signal. The demo runs on sample data.',
       why: 'Strong did the job but felt stale, and my training plan lives in Notion. Now everything I log goes straight back to Notion, so Claude can coach me from the same numbers.',
-      learned: '',
+      learned: 'That creating my own personalized apps may be a new norm for me. It\'s so easy and really hits at what I need so much better than using a general app.',
       status: 'Live',
       statusVariant: 'success',
       url: 'https://workout-demo.mark-michal.workers.dev',
