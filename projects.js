@@ -23,6 +23,21 @@
 window.HUB_PROJECTS = {
   main: [
     {
+      id: 'home-base',
+      title: 'Home Base',
+      created: '2026-10-27',
+      what: 'My own phone app for my Idea Parking Lot. I see what\'s parked and what\'s in the Carport, tap a circle when something is built, swipe to park or delete, and add new ideas in seconds.',
+      why: 'My ideas from car chats with Claude land in Notion, but Notion is clunky on a phone. Now I can sort them on the go, and Claude still reads the same list when it\'s time to build.',
+      learned: 'Apps I build can help make me more effective in my work. This makes me wonder how long it will be before 1/2 of the apps I use on my phones are ones that I personally have made.',
+      status: 'Live',
+      statusVariant: 'success',
+      url: 'https://home-base.mark-michal.workers.dev',
+      urlLabel: 'Private app (only I can sign in)',
+      device: 'phone',
+      accent: 'var(--cs-color-brand-fill-loud)',
+      shot: 'home-base.jpg'
+    },
+    {
       id: 'workout-app',
       title: 'Workout App',
       created: '2026-10-26',
