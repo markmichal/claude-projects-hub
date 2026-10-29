@@ -39,7 +39,7 @@ window.HUB_PROJECTS = {
     },
     {
       id: 'workout-app',
-      title: 'Workout App',
+      title: 'Daily',
       created: '2026-10-26',
       what: 'My own workout app on my phone. It shows today\'s session from my Notion plan, logs sets with big buttons, times rest and dead hangs, and works with no signal. The demo runs on sample data.',
       why: 'Strong did the job but felt stale, and my training plan lives in Notion. Now everything I log goes straight back to Notion, so Claude can coach me from the same numbers.',

@@ -43,7 +43,12 @@ Everything lives in `projects.js`. The fields are documented at the top of it.
 - **`node sync.js`** says whether the file and the database differ;
   **`node sync.js --write`** rewrites `projects.js` from the database. Needs no
   keys, reads only what any visitor can. Use it after editing on the site, and
-  any time the two might have drifted. Writing to the database still needs the
+  any time the two might have drifted.
+  **Careful (found 2026-10-29):** `--write` makes the file match the database
+  exactly, so it DROPS every project that lives only in the file. Several recent
+  projects (Home Base, Daily, Theme Lab, Thrive Instagram and more) have no
+  database row yet. Read the plain `node sync.js` output and the diff before
+  writing, and never let it delete projects. Writing to the database still needs the
   service role key, so that direction stays a Claude job.
 
 ## Do not edit the old design artifact
