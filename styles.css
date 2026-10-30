@@ -11,6 +11,13 @@
 
 * { box-sizing: border-box; }
 
+/* The headline's entrance scales it to 26x, and the element is the whole
+   two-line headline, so at that size its box is about 19,000px wide and the
+   page grew a horizontal scrollbar for half a second. Clip sideways overflow
+   at the window. `clip` rather than `hidden` on purpose: hidden would turn
+   this into a scroll container and break the sticky edit bar. */
+html { overflow-x: clip; }
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -496,9 +503,41 @@ h1, h2, h3 {
    page immediately, with nothing hidden and nothing sliding.
    ========================================================================== */
 
-@keyframes hub-settle {
-  from { opacity: 0; transform: scale(1.38) translateY(14px); }
-  to   { opacity: 1; transform: none; }
+/* The headline arrives. It starts at 26x, which puts the E alone across the
+   whole screen, hangs there for a breath, then accelerates in and lands hard
+   with a double bounce. The easing inside the first keyframe is what gives
+   the impact: slow at the top, fastest at the moment it arrives. */
+@keyframes hub-slam {
+  0% {
+    transform: scale(26);
+    animation-timing-function: cubic-bezier(0.75, 0, 0.85, 0);
+  }
+  58% {
+    transform: scale(1.05);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1);
+  }
+  72% { transform: scale(0.955); }
+  86% { transform: scale(1.018); }
+  100% { transform: scale(1); }
+}
+
+/* Opacity runs on its own track. Inside hub-slam it inherited that keyframe's
+   very slow start, so the giant E hung there at almost zero opacity and the
+   whole effect was invisible until it was nearly over. */
+@keyframes hub-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* The whole navy block takes the hit a moment after the headline lands. */
+@keyframes hub-jolt {
+  0%   { transform: translate(0, 0); }
+  12%  { transform: translate(0, 7px); }
+  28%  { transform: translate(-4px, -5px); }
+  44%  { transform: translate(4px, 3px); }
+  62%  { transform: translate(-2px, -2px); }
+  80%  { transform: translate(1px, 1px); }
+  100% { transform: translate(0, 0); }
 }
 @keyframes hub-rise {
   from { opacity: 0; transform: translateY(26px); }
@@ -522,8 +561,22 @@ h1, h2, h3 {
    Clipped, because the headline starts at 1.38x its final size and would
    otherwise push the page sideways while it settles. */
 
-.navy { position: relative; overflow: hidden; }
+/* The navy block opens at full screen height and then collapses to its real
+   height, which is what makes the giant E work. The headline starts at 26x,
+   where the E alone is about 950px tall. Clipped to the normal 400px band it
+   was an abstract white wedge; left unclipped its box is 19,000px wide and
+   the page grew a scrollbar. Clipping it to a block that is briefly the whole
+   window gives both: the E fills the screen, nothing overflows, and the
+   collapse afterwards pulls the rest of the page up from below. */
+.navy { position: relative; overflow: clip; display: flex; flex-direction: column; }
 .navy > * { position: relative; z-index: 1; }
+/* Keeps the colour stripe on the floor of the block while it is tall, so it
+   rides up as the block collapses instead of stranding navy beneath it. */
+.navy .stripe { margin-top: auto; }
+
+/* The drift blobs still need clipping, so they do it themselves rather than
+   relying on the navy block to do it for them. */
+.drift { overflow: hidden; }
 
 /* Soft colour drifting behind the headline. This is the restrained version of
    "something alive up there": no shapes to recognise, just slow movement at
@@ -551,18 +604,34 @@ h1, h2, h3 {
    order someone reads the page. */
 
 .hero h1 {
-  transform-origin: left center;
-  animation: hub-settle 1000ms cubic-bezier(0.16, 0.84, 0.34, 1) both;
+  /* Roughly the middle of the E, so that is the letter left on screen when
+     the headline is at full size. */
+  transform-origin: 0.34em 0.58em;
+  animation: hub-slam 900ms both, hub-fade-in 160ms linear both;
 }
-.hero-sub { animation: hub-rise 760ms cubic-bezier(0.16, 0.84, 0.34, 1) 520ms both; }
-.counts .count { animation: hub-rise 700ms cubic-bezier(0.16, 0.84, 0.34, 1) both; }
-.counts .count:nth-child(1) { animation-delay: 700ms; }
-.counts .count:nth-child(2) { animation-delay: 800ms; }
-.counts .count:nth-child(3) { animation-delay: 900ms; }
+
+/* Everything else is knocked up off the floor by the landing, close behind
+   it rather than politely waiting. */
+.hero-sub { animation: hub-rise 520ms cubic-bezier(0.16, 0.84, 0.34, 1) 560ms both; }
+.counts .count { animation: hub-rise 500ms cubic-bezier(0.16, 0.84, 0.34, 1) both; }
+.counts .count:nth-child(1) { animation-delay: 600ms; }
+.counts .count:nth-child(2) { animation-delay: 660ms; }
+.counts .count:nth-child(3) { animation-delay: 720ms; }
 
 .navy .stripe {
   transform-origin: left center;
-  animation: hub-sweep 900ms cubic-bezier(0.22, 1, 0.36, 1) 1000ms both;
+  animation: hub-sweep 700ms cubic-bezier(0.22, 1, 0.36, 1) 560ms both;
+}
+
+@keyframes hub-open {
+  0%, 52% { min-height: 100vh; }
+  100%    { min-height: 0; }
+}
+
+.navy {
+  animation:
+    hub-open 1150ms cubic-bezier(0.22, 1, 0.36, 1) both,
+    hub-jolt 420ms ease-out 520ms both;
 }
 
 .topbar .brand { animation: hub-rise 600ms ease-out both; }
@@ -578,11 +647,35 @@ h1, h2, h3 {
 /* ---------- Switched off on request ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-  .hero h1, .hero-sub, .counts .count, .navy .stripe,
+  .hero h1, .hero-sub, .counts .count, .navy, .navy .stripe,
   .topbar .brand, .topbar-right, .reveal, .reveal.in {
     animation: none;
     opacity: 1;
     transform: none;
   }
   .drift { display: none; }
+}
+
+/* ---------- Fish ----------
+   See fish.js. The canvas sits inside the Main projects band, behind the
+   cards, so only what shows through the gaps is visible. Removing the fish
+   means deleting fish.js, its script line, and this block. */
+
+/* `clip` rather than `hidden`: hidden would make this a scroll container and
+   the sticky canvas below would never stick. */
+.band-main { position: relative; overflow: clip; }
+.band-main > .section { position: relative; z-index: 1; }
+
+/* The tank is one window tall and sticks, rather than covering the whole
+   band. Spanning the band meant a canvas 9,700px tall, about 100MB of pixels
+   cleared and redrawn every frame for fish that are mostly off screen. The
+   negative margin keeps it out of the layout. */
+.fish-tank {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  margin-bottom: -100vh;
+  z-index: 0;
+  pointer-events: none;
 }

@@ -68,7 +68,7 @@
     if (key) revealed[key] = true;
     // The first cards share the screen with the headline landing, so they wait
     // for it. Anything scrolled to later comes up as soon as it is reached.
-    var base = (Date.now() - loadedAt < 1400) ? 1100 : 0;
+    var base = (Date.now() - loadedAt < 1400) ? 900 : 0;
     el.style.animationDelay = (base + Math.min(stagger, 6) * 70) + 'ms';
     el.classList.add('in');
   }
