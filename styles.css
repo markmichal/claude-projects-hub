@@ -487,3 +487,102 @@ h1, h2, h3 {
 /* The main link on a card that is not clickable as a whole. */
 .real-link { position: relative; z-index: 3; text-decoration: none; }
 .real-link:hover { text-decoration: underline; }
+
+/* ==========================================================================
+   Motion
+   Everything below is decoration. The page has to read correctly with all of
+   it switched off, which is what the reduced motion block at the bottom does:
+   someone who has asked their computer for less movement gets the finished
+   page immediately, with nothing hidden and nothing sliding.
+   ========================================================================== */
+
+@keyframes hub-settle {
+  from { opacity: 0; transform: scale(1.38) translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes hub-rise {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes hub-sweep {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes hub-drift {
+  /* Slow, uneven wandering. The uneven middle steps are what stop it reading
+     as a loop. */
+  0%   { transform: translate(0, 0) scale(1); }
+  25%  { transform: translate(7vw, -12px) scale(1.09); }
+  50%  { transform: translate(13vw, 16px) scale(0.96); }
+  75%  { transform: translate(5vw, 9px) scale(1.05); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+/* ---------- The navy top ----------
+   Clipped, because the headline starts at 1.38x its final size and would
+   otherwise push the page sideways while it settles. */
+
+.navy { position: relative; overflow: hidden; }
+.navy > * { position: relative; z-index: 1; }
+
+/* Soft colour drifting behind the headline. This is the restrained version of
+   "something alive up there": no shapes to recognise, just slow movement at
+   the edge of noticing. Blur is what keeps it from looking like dots. */
+.drift { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.drift span {
+  position: absolute;
+  border-radius: 50%;
+  /* Heavy blur and low opacity on purpose. At full strength this washed the
+     navy out into a muddy gradient; it should read as navy that happens to
+     have depth, not as a colourful background. */
+  filter: blur(72px);
+  opacity: 0.17;
+  will-change: transform;
+  animation: hub-drift linear infinite;
+}
+.drift span:nth-child(1) { left: 4%;  top: 12%; width: 260px; height: 260px; background: var(--cs-color-brand-fill-loud); animation-duration: 34s; }
+.drift span:nth-child(2) { left: 26%; top: 54%; width: 210px; height: 210px; background: var(--cs-color-cyan);            animation-duration: 47s; animation-delay: -8s; }
+.drift span:nth-child(3) { left: 52%; top: 6%;  width: 240px; height: 240px; background: var(--cs-color-purple);          animation-duration: 41s; animation-delay: -19s; }
+.drift span:nth-child(4) { left: 71%; top: 46%; width: 230px; height: 230px; background: var(--cs-color-turquoise);       animation-duration: 53s; animation-delay: -31s; }
+.drift span:nth-child(5) { left: 88%; top: 16%; width: 190px; height: 190px; background: var(--cs-color-orange);          animation-duration: 38s; animation-delay: -12s; }
+
+/* ---------- The entrance ----------
+   The headline lands first, then everything else comes up under it, in the
+   order someone reads the page. */
+
+.hero h1 {
+  transform-origin: left center;
+  animation: hub-settle 1000ms cubic-bezier(0.16, 0.84, 0.34, 1) both;
+}
+.hero-sub { animation: hub-rise 760ms cubic-bezier(0.16, 0.84, 0.34, 1) 520ms both; }
+.counts .count { animation: hub-rise 700ms cubic-bezier(0.16, 0.84, 0.34, 1) both; }
+.counts .count:nth-child(1) { animation-delay: 700ms; }
+.counts .count:nth-child(2) { animation-delay: 800ms; }
+.counts .count:nth-child(3) { animation-delay: 900ms; }
+
+.navy .stripe {
+  transform-origin: left center;
+  animation: hub-sweep 900ms cubic-bezier(0.22, 1, 0.36, 1) 1000ms both;
+}
+
+.topbar .brand { animation: hub-rise 600ms ease-out both; }
+.topbar-right { animation: hub-rise 600ms ease-out 120ms both; }
+
+/* ---------- Cards coming up on scroll ----------
+   The class is only put on a card the first time it is drawn, so retyping in
+   the search box does not set the whole page moving again. */
+
+.reveal { opacity: 0; }
+.reveal.in { animation: hub-rise 680ms cubic-bezier(0.16, 0.84, 0.34, 1) both; }
+
+/* ---------- Switched off on request ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero h1, .hero-sub, .counts .count, .navy .stripe,
+  .topbar .brand, .topbar-right, .reveal, .reveal.in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .drift { display: none; }
+}

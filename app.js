@@ -37,6 +37,103 @@
   function clone(x) { return JSON.parse(JSON.stringify(x || [])); }
   function $(id) { return document.getElementById(id); }
 
+  // ---- movement ------------------------------------------------------------
+
+  // All of this is decoration and all of it is optional. Two rules hold it
+  // together: nothing is ever left invisible if the moving part fails, and
+  // anyone who has asked their computer for less movement gets none of it.
+
+  function prefersLessMotion() {
+    return !!(window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
+  // A card starts hidden and is brought up when it scrolls into view. Without
+  // IntersectionObserver there is nothing to bring it back, so in that case it
+  // is never hidden in the first place.
+  var CAN_REVEAL = ('IntersectionObserver' in window) && !prefersLessMotion();
+  var revealed = {};      // keyed by project or tool, so a card rises once only
+  var revealObserver = null;
+  var observerWorks = false;   // proof the scroll detection is actually running
+  var loadedAt = Date.now();
+
+  // Typing in the search box redraws every card. Without this the whole page
+  // would animate again on each keystroke, which looked broken.
+  function revealClass(key) {
+    return (CAN_REVEAL && !revealed[key]) ? ' reveal' : '';
+  }
+
+  function showNow(el, stagger) {
+    var key = el.getAttribute('data-reveal');
+    if (key) revealed[key] = true;
+    // The first cards share the screen with the headline landing, so they wait
+    // for it. Anything scrolled to later comes up as soon as it is reached.
+    var base = (Date.now() - loadedAt < 1400) ? 1100 : 0;
+    el.style.animationDelay = (base + Math.min(stagger, 6) * 70) + 'ms';
+    el.classList.add('in');
+  }
+
+  function watchReveals() {
+    var items = document.querySelectorAll('.reveal:not(.in)');
+    if (!items.length) return;
+
+    if (!revealObserver) {
+      revealObserver = new IntersectionObserver(function (entries) {
+        // Proof of life, set on ANY callback rather than only when something
+        // comes into view. The observer reports every element it is given as
+        // soon as it is given it, in view or not, so this is true the moment
+        // it is working. Setting it only on a card appearing was wrong: on a
+        // short window no card is on screen at load, nothing reported in, and
+        // the safety net below decided the observer was broken and showed the
+        // whole page at once.
+        observerWorks = true;
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          revealObserver.unobserve(entry.target);
+          var siblings = entry.target.parentNode.children;
+          showNow(entry.target, Array.prototype.indexOf.call(siblings, entry.target));
+        });
+      }, { rootMargin: '0px 0px -40px 0px' });
+    }
+
+    for (var i = 0; i < items.length; i++) revealObserver.observe(items[i]);
+
+    // Safety net, for the case where the observer never fires at all. It must
+    // NOT simply show everything on a timer: that would bring up every card
+    // below the fold a few seconds after loading, which is the opposite of
+    // the point. So it only acts if nothing has been revealed by now, which
+    // means the observer is not working, and a page that hides its own
+    // content is far worse than a page that does not animate.
+    clearTimeout(watchReveals.failsafe);
+    watchReveals.failsafe = setTimeout(function () {
+      if (observerWorks) return;
+      var stuck = document.querySelectorAll('.reveal:not(.in)');
+      for (var j = 0; j < stuck.length; j++) showNow(stuck[j], 0);
+    }, 2500);
+  }
+
+  // Counting up from zero, once, as the box it sits in rises into place.
+  function setCount(el, value) {
+    if (!el) return;
+    if (el.getAttribute('data-rolled') === '1' || prefersLessMotion()) {
+      el.textContent = value;
+      return;
+    }
+    el.setAttribute('data-rolled', '1');
+    el.textContent = '0';
+    setTimeout(function () {
+      var start = null;
+      requestAnimationFrame(function step(now) {
+        if (start === null) start = now;
+        var t = Math.min(1, (now - start) / 900);
+        var eased = 1 - Math.pow(1 - t, 3);   // quick, then settles
+        el.textContent = Math.round(value * eased);
+        if (t < 1) requestAnimationFrame(step);
+        else el.textContent = value;
+      });
+    }, 700);
+  }
+
   // ---- drawing -----------------------------------------------------------
 
   // Browsers treat text put on a page with innerHTML as code. Everything that
@@ -174,7 +271,8 @@
 
   function mainCard(p) {
     var linkable = !state.editing && !!(p.url || '').trim() && !p.altUrl;
-    return '<div class="card-wrap' + (linkable ? ' is-link' : '') + '">' +
+    return '<div class="card-wrap' + (linkable ? ' is-link' : '') + revealClass(p.id) +
+      '" data-reveal="' + esc(p.id) + '">' +
       '<cs-card class="card" appearance="filled-outlined" has-media>' +
         '<div slot="media" class="card-media" style="background: ' + esc(p.accent) + '">' +
           frameHtml(p) +
@@ -200,7 +298,8 @@
 
   function smallRow(p) {
     var linkable = !state.editing && !!(p.url || '').trim();
-    return '<div class="card-wrap' + (linkable ? ' is-link' : '') + '">' +
+    return '<div class="card-wrap' + (linkable ? ' is-link' : '') + revealClass(p.id) +
+      '" data-reveal="' + esc(p.id) + '">' +
       '<div class="row">' +
         '<div class="row-media" style="background: ' + esc(p.accent) + '">' + frameHtml(p) + '</div>' +
         (state.editing ? fieldsHtml(p, 2) :
@@ -244,7 +343,8 @@
           '<span class="urlline url-live">' + esc(shownUrl(t.url)) + '</span>' +
         '</div>'
       : '';
-    return '<div class="tool" style="--tool-color: ' + esc(t.color) + '">' +
+    return '<div class="tool' + revealClass('tool:' + t.name) +
+      '" data-reveal="tool:' + esc(t.name) + '" style="--tool-color: ' + esc(t.color) + '">' +
       '<div class="tool-logo">' +
         '<span class="tool-mark" aria-hidden="true" style="-webkit-mask-image: ' + mask +
           '; mask-image: ' + mask + '"></span>' +
@@ -283,14 +383,16 @@
     $('noresults').hidden = main.length + small.length + tools.length > 0;
 
     // Counts always show the real totals, not the filtered ones.
-    $('count-main').textContent = state.main.length;
-    $('count-small').textContent = state.small.length;
-    $('count-live').textContent = state.main.concat(state.small)
-      .filter(function (p) { return p.status === 'Live'; }).length;
+    setCount($('count-main'), state.main.length);
+    setCount($('count-small'), state.small.length);
+    setCount($('count-live'), state.main.concat(state.small)
+      .filter(function (p) { return p.status === 'Live'; }).length);
 
     $('editbar').hidden = !state.editing;
     $('edithelp').hidden = !state.editing;
     $('owner-dot').hidden = state.editing || !$('signin').hidden;
+
+    if (CAN_REVEAL) watchReveals();
   }
 
   // ---- finding and changing a project ------------------------------------
