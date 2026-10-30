@@ -929,3 +929,79 @@ h1, h2, h3 {
 @media (prefers-reduced-motion: reduce) {
   .bird { display: none; }
 }
+
+/* ---------- The tool ribbon ----------
+   The tools drift past under the hero. Built from the same list and the same
+   logo files as the Tools I use section further down. */
+
+.ribbon {
+  position: relative;
+  overflow: hidden;
+  background: var(--cs-color-surface-default);
+  border-bottom: 1px solid var(--cs-color-surface-border);
+  /* Fades the logos out at both ends rather than letting them hit a hard
+     edge, so it reads as a continuous band rather than a cropped list. */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 90px, #000 calc(100% - 90px), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 90px, #000 calc(100% - 90px), transparent);
+}
+.ribbon[hidden] { display: none; }
+
+.ribbon-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  padding: 14px 0;
+  animation: ribbon-drift 90s linear infinite;
+  will-change: transform;
+}
+.ribbon-copy { display: flex; align-items: center; }
+
+/* Half, because the track holds exactly two copies of the list. At that point
+   the second copy sits where the first started, so the jump back is invisible. */
+@keyframes ribbon-drift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Stop it so the logos can actually be clicked. */
+.ribbon:hover .ribbon-track,
+.ribbon:focus-within .ribbon-track { animation-play-state: paused; }
+
+.ribbon-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 26px;
+  text-decoration: none;
+  color: var(--cs-color-text-quiet);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0.75;
+  transition: opacity 150ms ease, color 150ms ease;
+}
+.ribbon-item:hover, .ribbon-item:focus-visible {
+  opacity: 1;
+  color: var(--cs-color-text-normal);
+}
+
+.ribbon-mark {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  background-color: var(--tool-color);
+  -webkit-mask-size: contain; mask-size: contain;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center; mask-position: center;
+}
+
+@media (max-width: 640px) {
+  .ribbon-item { padding: 0 18px; font-size: 13px; }
+  .ribbon-mark { width: 19px; height: 19px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Still there to read, just not moving. */
+  .ribbon-track { animation: none; }
+  .ribbon { overflow-x: auto; }
+}

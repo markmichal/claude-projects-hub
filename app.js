@@ -363,6 +363,34 @@
     '</div>';
   }
 
+  // The tool ribbon under the hero. Drawn once at startup, deliberately NOT
+  // inside render(): rebuilding it on every keystroke in the search box would
+  // restart the scroll from the beginning each time.
+  function drawRibbon() {
+    var track = $('ribbon-track');
+    var wrap = $('ribbon');
+    if (!track || !wrap || !TOOLS.length) return;
+
+    function item(t) {
+      var mask = "url('logos/" + esc(t.logo) + "')";
+      return '<a class="ribbon-item" href="' + esc(t.url || '#') + '"' +
+        (t.url ? ' target="_blank" rel="noopener"' : '') +
+        ' style="--tool-color: ' + esc(t.color) + '">' +
+        '<span class="ribbon-mark" aria-hidden="true" style="-webkit-mask-image: ' + mask +
+          '; mask-image: ' + mask + '"></span>' +
+        '<span>' + esc(t.name) + '</span>' +
+      '</a>';
+    }
+
+    var one = TOOLS.map(item).join('');
+    // Two copies end to end. The scroll shifts by exactly half the track, so
+    // the second copy is sitting where the first began and the loop has no
+    // seam. The copy is hidden from screen readers so the list is not
+    // announced twice.
+    track.innerHTML = one + '<span class="ribbon-copy" aria-hidden="true">' + one + '</span>';
+    wrap.hidden = false;
+  }
+
   function render() {
     var q = state.query.trim().toLowerCase();
     var main = state.main.filter(function (p) { return matches(p, q); });
@@ -844,6 +872,7 @@
   }
 
   render();
+  drawRibbon();
   wire();
   startSupabase();
 })();
