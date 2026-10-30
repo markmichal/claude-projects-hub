@@ -26,7 +26,13 @@
 
   var BAND = 'band-main';
   var TAU = Math.PI * 2;
-  var COUNT = 160;
+  // Fish per pixel of band height, rather than a flat count. The band is
+  // about 4,900px on a laptop and 12,900px on a phone, where the cards stack,
+  // so a fixed number would look like a shoal on one and a few strays on the
+  // other. This keeps roughly the same number on screen either way.
+  var DENSITY = 480 / 4900;
+  var MIN_FISH = 60;
+  var MAX_FISH = 1500;
 
   // Muted on purpose. These sit on a pale yellow band, and anything with real
   // saturation in it read as clip art rather than as a pencil sketch.
@@ -37,7 +43,7 @@
     'rgba(150, 142, 130, 0.44)'
   ];
   var AQUA = 'rgba(0, 139, 158, 0.55)';
-  var EVERY_NTH_IS_AQUA = 10;
+  var EVERY_NTH_IS_AQUA = 3;
 
   var LINE = 3.8;          // twice the old weight
 
@@ -72,7 +78,7 @@
       bandY: rand(0, bandH),          // position down the WHOLE band
       size: rand(0.6, 1.5),
       dir: Math.random() < 0.5 ? 1 : -1,
-      speed: rand(6, 16),             // px a second: slow. They are drifting.
+      speed: rand(18, 48),            // px a second
 
       // Tail beat, in beats per second. The first version drove this off the
       // raw clock with a large multiplier and ended up flapping 15 to 35
@@ -89,9 +95,14 @@
     };
   }
 
-  function build() {
-    fish.length = 0;
-    for (var i = 0; i < COUNT; i++) fish.push(makeFish(i));
+  function wanted() {
+    return Math.max(MIN_FISH, Math.min(MAX_FISH, Math.round(bandH * DENSITY)));
+  }
+
+  function stock() {
+    var target = wanted();
+    while (fish.length < target) fish.push(makeFish(fish.length));
+    if (fish.length > target) fish.length = target;
   }
 
   function resize() {
@@ -108,16 +119,18 @@
 
     if (!fish.length) {
       bandH = newBandH;
-      build();
+      stock();
       return;
     }
 
-    // The band changes height whenever the search box filters the list. Keep
-    // everyone proportionally where they were rather than bunching them up.
+    // The band changes height whenever the search box filters the list, and
+    // again if the window is resized. Keep everyone proportionally where they
+    // were rather than bunching them at the top, then top up or trim.
     if (newBandH !== bandH) {
       var ratio = newBandH / bandH;
       for (var i = 0; i < fish.length; i++) fish[i].bandY *= ratio;
       bandH = newBandH;
+      stock();
     }
   }
 
