@@ -656,26 +656,276 @@ h1, h2, h3 {
   .drift { display: none; }
 }
 
-/* ---------- Fish ----------
-   See fish.js. The canvas sits inside the Main projects band, behind the
-   cards, so only what shows through the gaps is visible. Removing the fish
-   means deleting fish.js, its script line, and this block. */
+/* A second link on a card. Must sit above .stretch (z-index 2) or the
+   whole-card link covers it and the click never arrives. */
+.alt-link {
+  position: relative;
+  z-index: 3;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cs-color-text-quiet);
+  text-decoration: none;
+}
+.alt-link:hover { color: var(--cs-color-text-link); text-decoration: underline; }
+.alt-link svg { flex-shrink: 0; }
 
-/* `clip` rather than `hidden`: hidden would make this a scroll container and
-   the sticky canvas below would never stick. */
-.band-main { position: relative; overflow: clip; }
-.band-main > .section { position: relative; z-index: 1; }
+/* The main link on a card that is not clickable as a whole. */
+.real-link { position: relative; z-index: 3; text-decoration: none; }
+.real-link:hover { text-decoration: underline; }
 
-/* The tank is one window tall and sticks, rather than covering the whole
-   band. Spanning the band meant a canvas 9,700px tall, about 100MB of pixels
-   cleared and redrawn every frame for fish that are mostly off screen. The
-   negative margin keeps it out of the layout. */
-.fish-tank {
-  position: sticky;
-  top: 0;
-  width: 100%;
-  height: 100vh;
-  margin-bottom: -100vh;
-  z-index: 0;
+/* ==========================================================================
+   Motion
+   Everything below is decoration. The page has to read correctly with all of
+   it switched off, which is what the reduced motion block at the bottom does:
+   someone who has asked their computer for less movement gets the finished
+   page immediately, with nothing hidden and nothing sliding.
+   ========================================================================== */
+
+/* The headline arrives. It starts at 26x, which puts the E alone across the
+   whole screen, hangs there for a breath, then accelerates in and lands hard
+   with a double bounce. The easing inside the first keyframe is what gives
+   the impact: slow at the top, fastest at the moment it arrives. */
+@keyframes hub-slam {
+  0% {
+    transform: scale(26);
+    animation-timing-function: cubic-bezier(0.75, 0, 0.85, 0);
+  }
+  58% {
+    transform: scale(1.05);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1);
+  }
+  72% { transform: scale(0.955); }
+  86% { transform: scale(1.018); }
+  100% { transform: scale(1); }
+}
+
+/* Opacity runs on its own track. Inside hub-slam it inherited that keyframe's
+   very slow start, so the giant E hung there at almost zero opacity and the
+   whole effect was invisible until it was nearly over. */
+@keyframes hub-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* The whole navy block takes the hit a moment after the headline lands. */
+@keyframes hub-jolt {
+  0%   { transform: translate(0, 0); }
+  12%  { transform: translate(0, 7px); }
+  28%  { transform: translate(-4px, -5px); }
+  44%  { transform: translate(4px, 3px); }
+  62%  { transform: translate(-2px, -2px); }
+  80%  { transform: translate(1px, 1px); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes hub-rise {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes hub-sweep {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes hub-drift {
+  /* Slow, uneven wandering. The uneven middle steps are what stop it reading
+     as a loop. */
+  0%   { transform: translate(0, 0) scale(1); }
+  25%  { transform: translate(7vw, -12px) scale(1.09); }
+  50%  { transform: translate(13vw, 16px) scale(0.96); }
+  75%  { transform: translate(5vw, 9px) scale(1.05); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+/* ---------- The navy top ----------
+   Clipped, because the headline starts at 1.38x its final size and would
+   otherwise push the page sideways while it settles. */
+
+/* The navy block opens at full screen height and then collapses to its real
+   height, which is what makes the giant E work. The headline starts at 26x,
+   where the E alone is about 950px tall. Clipped to the normal 400px band it
+   was an abstract white wedge; left unclipped its box is 19,000px wide and
+   the page grew a scrollbar. Clipping it to a block that is briefly the whole
+   window gives both: the E fills the screen, nothing overflows, and the
+   collapse afterwards pulls the rest of the page up from below. */
+.navy { position: relative; overflow: clip; display: flex; flex-direction: column; }
+.navy > * { position: relative; z-index: 1; }
+/* Keeps the colour stripe on the floor of the block while it is tall, so it
+   rides up as the block collapses instead of stranding navy beneath it. */
+.navy .stripe { margin-top: auto; }
+
+/* The drift blobs still need clipping, so they do it themselves rather than
+   relying on the navy block to do it for them. */
+.drift { overflow: hidden; }
+
+/* Soft colour drifting behind the headline. This is the restrained version of
+   "something alive up there": no shapes to recognise, just slow movement at
+   the edge of noticing. Blur is what keeps it from looking like dots. */
+.drift { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.drift span {
+  position: absolute;
+  border-radius: 50%;
+  /* Heavy blur and low opacity on purpose. At full strength this washed the
+     navy out into a muddy gradient; it should read as navy that happens to
+     have depth, not as a colourful background. */
+  filter: blur(72px);
+  opacity: 0.17;
+  will-change: transform;
+  animation: hub-drift linear infinite;
+}
+.drift span:nth-child(1) { left: 4%;  top: 12%; width: 260px; height: 260px; background: var(--cs-color-brand-fill-loud); animation-duration: 34s; }
+.drift span:nth-child(2) { left: 26%; top: 54%; width: 210px; height: 210px; background: var(--cs-color-cyan);            animation-duration: 47s; animation-delay: -8s; }
+.drift span:nth-child(3) { left: 52%; top: 6%;  width: 240px; height: 240px; background: var(--cs-color-purple);          animation-duration: 41s; animation-delay: -19s; }
+.drift span:nth-child(4) { left: 71%; top: 46%; width: 230px; height: 230px; background: var(--cs-color-turquoise);       animation-duration: 53s; animation-delay: -31s; }
+.drift span:nth-child(5) { left: 88%; top: 16%; width: 190px; height: 190px; background: var(--cs-color-orange);          animation-duration: 38s; animation-delay: -12s; }
+
+/* ---------- The entrance ----------
+   The headline lands first, then everything else comes up under it, in the
+   order someone reads the page. */
+
+.hero h1 {
+  /* Roughly the middle of the E, so that is the letter left on screen when
+     the headline is at full size. */
+  transform-origin: 0.34em 0.58em;
+  animation: hub-slam 900ms both, hub-fade-in 160ms linear both;
+}
+
+/* Everything else is knocked up off the floor by the landing, close behind
+   it rather than politely waiting. */
+.hero-sub { animation: hub-rise 520ms cubic-bezier(0.16, 0.84, 0.34, 1) 560ms both; }
+.counts .count { animation: hub-rise 500ms cubic-bezier(0.16, 0.84, 0.34, 1) both; }
+.counts .count:nth-child(1) { animation-delay: 600ms; }
+.counts .count:nth-child(2) { animation-delay: 660ms; }
+.counts .count:nth-child(3) { animation-delay: 720ms; }
+
+.navy .stripe {
+  transform-origin: left center;
+  animation: hub-sweep 700ms cubic-bezier(0.22, 1, 0.36, 1) 560ms both;
+}
+
+@keyframes hub-open {
+  0%, 52% { min-height: 100vh; }
+  100%    { min-height: 0; }
+}
+
+.navy {
+  animation:
+    hub-open 1150ms cubic-bezier(0.22, 1, 0.36, 1) both,
+    hub-jolt 420ms ease-out 520ms both;
+}
+
+.topbar .brand { animation: hub-rise 600ms ease-out both; }
+.topbar-right { animation: hub-rise 600ms ease-out 120ms both; }
+
+/* ---------- Cards coming up on scroll ----------
+   The class is only put on a card the first time it is drawn, so retyping in
+   the search box does not set the whole page moving again. */
+
+.reveal { opacity: 0; }
+.reveal.in { animation: hub-rise 680ms cubic-bezier(0.16, 0.84, 0.34, 1) both; }
+
+/* ---------- Switched off on request ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero h1, .hero-sub, .counts .count, .navy, .navy .stripe,
+  .topbar .brand, .topbar-right, .reveal, .reveal.in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .drift { display: none; }
+}
+
+
+/* ---------- Birds ----------
+   See birds.js. A bird is appended into the card it lands on, so the card's
+   own z-index decides what it passes in front of. Removing the birds means
+   deleting birds.js, its script line, and this block. */
+
+.bird {
+  position: absolute;
+  z-index: 3;
   pointer-events: none;
+  will-change: transform;
+}
+
+.bird.is-flying {
+  animation: bird-fly 1500ms cubic-bezier(0.25, 0.9, 0.3, 1) both;
+}
+.bird.is-leaving {
+  animation: bird-leave 1500ms cubic-bezier(0.6, 0, 0.8, 0.4) both;
+}
+
+@keyframes bird-fly {
+  from { transform: translate(var(--fx, -300px), var(--fy, -120px)) rotate(var(--fr, -8deg)); }
+  to   { transform: translate(0, 0) rotate(0deg); }
+}
+@keyframes bird-leave {
+  from { transform: translate(0, 0) rotate(0deg); }
+  to   { transform: translate(calc(var(--fx, -300px) * -1), var(--fy, -120px)) rotate(calc(var(--fr, -8deg) * -1)); }
+}
+
+.bird-body { transform-origin: 50% 100%; }
+.bird-body[data-facing="left"] .bird-art { transform: scaleX(-1); }
+
+/* Only while in the air. A perched bird holds its wing folded. */
+.bird.is-flying .bird-wing {
+  transform-origin: 100px 86px;   /* the shoulder, in the drawing's own grid */
+  animation: bird-wing 190ms ease-in-out infinite;
+}
+@keyframes bird-wing {
+  0%, 100% { transform: rotate(-18deg) scaleY(0.92); }
+  50%      { transform: rotate(30deg) scaleY(1.06); }
+}
+
+/* Small shifts of weight, so a sitting bird is not a statue. */
+.bird.is-perched .bird-body { animation: bird-settle 3.2s ease-in-out infinite; }
+@keyframes bird-settle {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  40%      { transform: translateY(-1px) rotate(-1.2deg); }
+  70%      { transform: translateY(0.5px) rotate(0.8deg); }
+}
+.bird.is-perched .bird-tail { animation: bird-tail 3.2s ease-in-out infinite; transform-origin: 84px 112px; }
+@keyframes bird-tail {
+  0%, 100% { transform: rotate(0deg); }
+  45%      { transform: rotate(5deg); }
+}
+
+/* What it says. */
+.bird-call {
+  position: absolute;
+  left: 78%;
+  bottom: 72%;
+  white-space: nowrap;
+  padding: 5px 10px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1.5px solid var(--cs-color-neutral-border-normal);
+  color: var(--cs-color-text-normal);
+  font-size: 12px;
+  font-weight: 600;
+  font-style: italic;
+  opacity: 0;
+  transform: translateY(4px) scale(0.9);
+  transform-origin: 0 100%;
+  transition: opacity 220ms ease-out, transform 220ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.bird-call::after {
+  content: "";
+  position: absolute;
+  left: 10px; top: 100%;
+  width: 9px; height: 9px;
+  background: #ffffff;
+  border-right: 1.5px solid var(--cs-color-neutral-border-normal);
+  border-bottom: 1.5px solid var(--cs-color-neutral-border-normal);
+  transform: translateY(-5px) rotate(45deg);
+}
+.bird-call.show { opacity: 1; transform: translateY(0) scale(1); }
+.bird-call[hidden] { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bird { display: none; }
 }
