@@ -9,9 +9,52 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="../showcase.css">
 <style>
-/* Home Base's own navy and Cru yellow, so this page and the app agree. */
-:root { --hb-navy: #1F1F47; --hb-yellow: #FFD000; }
-header h1 span { color: var(--hb-navy); border-bottom: 8px solid var(--hb-yellow); }
+/* Home Base wearing Blackout, one of Mark's thirteen Cru themes. Every colour
+   here is an override of showcase.css's own variables, set on this page only,
+   so the Theme Lab and store pages keep the light look they already had.
+
+   Blackout, read off its own slides: near black and white as the two grounds,
+   Cru yellow as the single accent, square brackets around a headline, a short
+   thick rule above it, letterspaced uppercase kickers, hard edges and no
+   rounded corners. Home Base's own navy stays on the app icon and inside the
+   phone, so the product still looks like itself. */
+:root {
+  --bg: #121212; --surface: #1B1B1B; --fg: #FFFFFF; --muted: #9A9A9A; --line: #2E2E2E;
+  --orange: #FFD100; --orange-ink: #FFD100;
+  --hb-navy: #1F1F47; --hb-yellow: #FFD100;
+}
+body { background: var(--bg); }
+
+/* Blackout squares off every corner the shared sheet rounds. */
+.ba > div, .step, .panel, .film video, .hint { border-radius: 0; }
+
+/* The bar that says what this page is: yellow on black, the theme's own
+   loudest move. */
+.sample-bar { background: var(--hb-yellow); color: #121212; }
+.sample-bar a { color: #121212; }
+
+.eyebrow { color: var(--hb-yellow); }
+header h1 { margin-top: 14px; }
+/* The short thick rule that sits above a Blackout headline. */
+header h1::before { content: ""; display: block; width: 86px; height: 8px;
+  background: var(--hb-yellow); margin-bottom: 16px; }
+header h1 span { color: var(--hb-yellow); border-bottom: 0; }
+
+h2 { position: relative; padding-top: 16px; }
+h2::before { content: ""; position: absolute; top: 0; left: 0; width: 56px; height: 6px; background: var(--hb-yellow); }
+
+/* The before and after pair, which the shared sheet tints red and green.
+   Blackout has no third or fourth colour, so the difference is carried by
+   the yellow edge instead. */
+.ba .before { background: var(--surface); border-color: var(--line); border-left: 5px solid #3C3C3C; }
+.ba .after  { background: var(--surface); border-color: var(--line); border-left: 5px solid var(--hb-yellow); }
+.ba .before h3 { color: #8A8A8A; }
+.ba .after h3 { color: var(--hb-yellow); }
+
+.step-n { border-radius: 0; background: var(--hb-yellow); color: #121212; }
+.hint { background: #1B1B1B; border: 1px solid var(--line); border-left: 5px solid var(--hb-yellow); }
+
+.film video { box-shadow: none; border: 1px solid var(--line); }
 
 .demo-wrap { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 26px; align-items: start; margin-top: 18px; }
 @media (max-width: 720px) { .demo-wrap { grid-template-columns: 1fr; } }
@@ -20,18 +63,18 @@ header h1 span { color: var(--hb-navy); border-bottom: 8px solid var(--hb-yellow
    stylesheet renders it exactly as the real app does, with no chance of its
    rules leaking into this page. */
 .phone { width: 320px; max-width: 100%; aspect-ratio: 320 / 660; background: var(--hb-navy);
-  border-radius: 44px; padding: 10px; box-shadow: 0 26px 60px rgba(31,31,71,.3); }
+  border-radius: 44px; padding: 10px; box-shadow: 0 26px 60px rgba(0,0,0,.5); }
 .phone iframe { width: 100%; height: 100%; border: 0; border-radius: 35px; display: block; background: #f0efee; }
 
 .tryline { font-size: 14px; color: var(--muted); margin: 10px 0 0; }
 .tryline b { color: var(--fg); font-weight: 600; }
 
 .pts { display: flex; flex-direction: column; gap: 12px; }
-.pt { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 15px 17px; }
+.pt { background: var(--surface); border: 1px solid var(--line); padding: 15px 17px; }
 .pt h3 { margin: 0 0 4px; font-size: 16px; }
 .pt p { margin: 0; font-size: 14px; color: var(--muted); }
 .pt .tag { display: inline-block; font: 700 11px var(--body); letter-spacing: .07em; text-transform: uppercase;
-  background: var(--hb-yellow); color: #261d00; padding: 3px 9px; border-radius: 999px; margin-bottom: 7px; }
+  background: var(--hb-yellow); color: #121212; padding: 3px 9px; margin-bottom: 7px; }
 </style>
 </head>
 <body>
@@ -45,7 +88,7 @@ header h1 span { color: var(--hb-navy); border-bottom: 8px solid var(--hb-yellow
 
 <header>
   <p class="eyebrow">Home Base</p>
-  <h1>Thinking it through <span>in the car</span>.</h1>
+  <h1>[Thinking it through <span>in the car</span>.]</h1>
   <p class="lede">A small app on my phone's home screen, holding the little tools I build with Claude that are not worth a whole app of their own. The star of it is the Parking Lot: where an idea goes to get thought through, usually while I am driving.</p>
 </header>
 
@@ -54,7 +97,7 @@ header h1 span { color: var(--hb-navy); border-bottom: 8px solid var(--hb-yellow
     <source src="why.mp4" type="video/mp4">
     Your browser cannot play this video.
   </video>
-  <p class="film-note">34 seconds, no talking. The written version is below.</p>
+  <p class="film-note">44 seconds, no talking, built in the Blackout theme. The written version is below.</p>
 </div>
 
 <div class="ba">
