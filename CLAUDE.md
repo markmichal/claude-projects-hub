@@ -203,4 +203,12 @@ Still true and worth keeping in mind:
   decides for them. Check with
   `curl -s "<supabaseUrl>/rest/v1/hub_projects?select=id" -H "apikey: <anon key from config.js>"`
   before assuming a file edit will show up.
+- **Never copy square brackets out of a Cru theme.** The theme sample slides
+  write placeholder text as `[Bold Title Here.]`, where the brackets only mean
+  "your words go here". They are not part of any theme's design. On 4 Nov a
+  film and a page both shipped with brackets around every headline because the
+  look was copied straight off the samples. Write real, finished words.
+  The Theme Lab's own "Use this theme" button hands over a prompt containing
+  `Topic: [ ]`, `Audience: [ ]`, `Message: [ ]`, which is where the habit comes
+  from, so strip those before using it.
 - No em dashes in any text. Plain, 6th grade wording.
