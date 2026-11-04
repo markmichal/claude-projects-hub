@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home Base demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<style>
+  /* The demo runs in a frame of its own, so the app's stylesheet applies
+     exactly as it does in the real app and cannot touch the page around it.
+     Only the few things below differ: no safe area insets to honour, and the
+     frame is already phone shaped. */
+  main { min-height: 0; padding: 20px 16px 28px; }
+  .home { padding-top: 26px; }
+  body { background: var(--ground); }
+  .demo-note { margin: 10px 0 0; font-size: 12px; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+/* A standing-still copy of Home Base, with made-up ideas.
+
+   The real app reads and writes Mark's Notion. Nothing here talks to
+   anything: the screens are built from the list below and tapping only
+   changes what is on screen. The markup matches the real app's, so the
+   stylesheet it borrows renders it the same way.
+*/
+var ITEMS = [
+  { id: 'a', name: 'Sign-up sheet that texts reminders', status: 'Parked', type: 'App',
+    next: 'Sketch the two screens',
+    summary: 'Leaders keep forgetting the week they signed up for. A sheet that sends a text two days before would fix most of it.' },
+  { id: 'b', name: 'One page for every retreat packing list', status: 'Parked', type: 'Website',
+    next: 'Collect the three lists we already have',
+    summary: 'Every trip rebuilds the same list from scratch. Put them in one place and let leaders copy one.' },
+  { id: 'c', name: 'Turn the welcome email into a short video', status: 'Building', type: 'Content',
+    next: 'Write the 30 second script',
+    summary: 'Nobody reads the email. A short video would land better with students.' },
+  { id: 'd', name: 'Name badges that print from the sign-up list', status: 'Parked', type: 'Tool',
+    next: '',
+    summary: 'Hand writing badges at the door costs us the first twenty minutes of every event.' },
+  { id: 'e', name: 'A better way to hand off a student to a local church', status: 'Carport', type: null,
+    next: 'Talk it through in the car',
+    summary: 'This one is still fuzzy. Something about the gap between the last meeting and the first Sunday.' },
+  { id: 'f', name: 'Ask leaders what they actually use', status: 'Carport', type: 'Other',
+    next: '',
+    summary: 'Half of what we make might never get opened. Worth finding out before building more.' },
+  { id: 'g', name: 'Shared folder for event photos', status: 'Built', type: 'Tool',
+    next: '', summary: 'Done. One folder per event, link in the leader email.' }
+];
+
+var icon = {
+  back: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>',
+  chevron: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>',
+  park: function (c) { return '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="' + c + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>'; },
+  plus: function (c) { return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' + c + '" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>'; },
+  grid: function (c) { return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="' + c + '" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>'; },
+  chart: function (c) { return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="' + c + '" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 20h16M7 16v-5M12 16V6M17 16v-8"/></svg>'; },
+  camera: function (c) { return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="' + c + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>'; },
+  book: function (c) { return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="' + c + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4v16H5zM10 4h4v16h-4zM15.5 5l3.5-1 2 15.5-3.5 1z"/></svg>'; }
+};
+
+var app = document.getElementById('app');
+var view = { screen: 'home', tab: 'lot', item: null };
+var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+  return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); };
+var LOT = ['Parked', 'Building'];
+
+function rowHTML(it, carport) {
+  var next = it.next
+    ? '<span class="next">' + esc(it.next) + '</span>'
+    : '<span class="next none">No next step yet</span>';
+  return '<div class="row">' +
+    '<div class="front">' +
+      '<button class="circle" aria-label="Mark ' + esc(it.name) + ' built"><span></span></button>' +
+      '<button class="main" data-open="' + it.id + '">' +
+        '<span class="title">' + esc(it.name) +
+          (it.status === 'Building' ? '<span class="building">Building</span>' : '') + '</span>' +
+        next +
+      '</button>' +
+      (!carport && it.type ? '<span class="chip t-' + esc(it.type) + '">' + esc(it.type) + '</span>' : '') +
+    '</div></div>';
+}
+
+function screenHome() {
+  var lot = ITEMS.filter(function (i) { return LOT.indexOf(i.status) >= 0; }).length;
+  var car = ITEMS.filter(function (i) { return i.status === 'Carport'; }).length;
+  var day = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+  return '<main class="home">' +
+    '<header><p class="date">' + day + '</p><h1>Home Base</h1></header>' +
+    '<a class="lot-card" data-go="lot" href="#">' +
+      '<div class="top"><div class="badge">' + icon.park('#261d00') + '</div><span>' + icon.chevron + '</span></div>' +
+      '<div style="display:flex;flex-direction:column;gap:4px">' +
+        '<span class="name">Parking Lot</span>' +
+        '<span class="sub">Ideas and builds waiting on you</span></div>' +
+      '<div class="counts">' +
+        '<div><b class="hi">' + lot + '</b><span>Parked, ready</span></div>' +
+        '<div><b>' + car + '</b><span>In the Carport</span></div></div></a>' +
+    '<div class="tiles">' +
+      '<a class="tile" href="https://projects.crutastic.com" target="_blank" rel="noopener"><span class="badge">' + icon.grid('#261d00') + '</span><b>Projects Hub</b><span>Everything I\'ve built</span></a>' +
+      '<span class="tile"><span class="badge">' + icon.chart('#261d00') + '</span><b>Innovation Dashboard</b><span>High School team</span></span>' +
+      '<span class="tile"><span class="badge">' + icon.camera('#261d00') + '</span><b>Design Likes</b><span>Snap designs you like</span></span>' +
+      '<span class="tile"><span class="badge">' + icon.book('#261d00') + '</span><b>My Library</b><span>Stories Claude tells you</span></span>' +
+      '<div class="tile-empty"><span>' + icon.plus('#565652') + '</span><b>Next tool</b><span>Room to grow</span></div>' +
+    '</div>' +
+    '<p class="sync">Synced with Notion just now</p>' +
+    '<p class="demo-note">Sample ideas. Nothing here is saved.</p>' +
+  '</main>';
+}
+
+function screenList() {
+  var carport = view.tab === 'car';
+  var items = ITEMS.filter(function (i) {
+    return carport ? i.status === 'Carport' : LOT.indexOf(i.status) >= 0; });
+  return '<main>' +
+    '<div class="bar"><button class="back" data-go="home">' + icon.back + 'Home</button></div>' +
+    '<div class="title-row"><h1>' + (carport ? 'Carport' : 'Parking Lot') + '</h1>' +
+      '<button class="add-top">' + icon.plus('#261d00') + 'Add</button></div>' +
+    '<div class="tabs" role="tablist">' +
+      '<button role="tab" data-tab="lot" aria-selected="' + (!carport) + '">Parking Lot</button>' +
+      '<button role="tab" data-tab="car" aria-selected="' + carport + '">Carport</button>' +
+    '</div>' +
+    '<div class="list">' + items.map(function (i) { return rowHTML(i, carport); }).join('') + '</div>' +
+    '<p class="hint">' + (carport
+      ? 'Half formed ideas. Talk them through, then park the ones worth building.'
+      : 'Tap the circle when something is built. Swipe a row for Delete.') + '</p>' +
+    '<p class="demo-note">Sample ideas. Nothing here is saved.</p>' +
+  '</main>';
+}
+
+function screenDetail() {
+  var it = ITEMS.filter(function (i) { return i.id === view.item; })[0];
+  return '<main class="detail">' +
+    '<div class="bar"><button class="back" data-go="back">' + icon.back +
+      (view.tab === 'car' ? 'Carport' : 'Parking Lot') + '</button></div>' +
+    '<div class="chips">' +
+      '<span class="chip s-' + esc(it.status) + '">' + esc(it.status) + '</span>' +
+      (it.type ? '<span class="chip t-' + esc(it.type) + '">' + esc(it.type) + '</span>' : '') +
+      '<span class="when">Parked Oct 28</span></div>' +
+    '<h1>' + esc(it.name) + '</h1>' +
+    '<div class="next-box"><div class="lab"><label>Next step</label></div>' +
+      '<input value="' + esc(it.next) + '" placeholder="What is the next thing?" readonly></div>' +
+    '<div class="body"><div class="sec"><h2>Summary</h2><p>' + esc(it.summary) + '</p></div></div>' +
+    '<p class="demo-note">Sample idea. Typing here would save to Notion in the real app.</p>' +
+  '</main>';
+}
+
+function render() {
+  app.outerHTML = view.screen === 'home' ? screenHome()
+    : view.screen === 'list' ? screenList() : screenDetail();
+  app = document.querySelector('main');
+  app.id = 'app';
+}
+
+document.addEventListener('click', function (e) {
+  var go = e.target.closest('[data-go]');
+  if (go) {
+    e.preventDefault();
+    var to = go.dataset.go;
+    if (to === 'home') view.screen = 'home';
+    else if (to === 'lot') { view.screen = 'list'; view.tab = 'lot'; }
+    else if (to === 'back') view.screen = 'list';
+    render(); return;
+  }
+  var tab = e.target.closest('[data-tab]');
+  if (tab) { view.tab = tab.dataset.tab; render(); return; }
+  var open = e.target.closest('[data-open]');
+  if (open) { view.item = open.dataset.open; view.screen = 'detail'; render(); return; }
+  var circle = e.target.closest('.circle');
+  if (circle) { circle.classList.toggle('done'); return; }
+});
+
+/* The hash picks the opening screen. The demo is embedded in a frame on the
+   page around it, and the film's phone shots are taken by loading these
+   straight, so each screen needs an address of its own. */
+function fromHash() {
+  var h = (location.hash || '').replace('#', '');
+  if (h === 'lot' || h === 'car') { view.screen = 'list'; view.tab = h; }
+  else if (h.indexOf('item-') === 0) {
+    var id = h.slice(5);
+    if (ITEMS.some(function (i) { return i.id === id; })) { view.screen = 'detail'; view.item = id; }
+  } else view.screen = 'home';
+}
+fromHash();
+addEventListener('hashchange', function () { fromHash(); render(); });
+
+render();
+</script>
+</body>
+</html>

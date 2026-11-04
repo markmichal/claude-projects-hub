@@ -87,6 +87,36 @@ reaches something worth showing. Never write the `learned` note for him; ask.
 He has floated a "projects I'm working on" section for unfinished work and
 deferred it on 2026-10-10, so raise it, do not build it.
 
+## The "what this is" pages
+
+Four projects only Mark can open, so each has a public page here instead:
+
+- `thrive/` the Thrive review page, with a 49 second film
+- `homebase/` Home Base, with a 32 second film and a tappable demo
+- `themelab/` all thirteen slide themes, with every slide
+- `store/` the Cru Store dashboard, with invented numbers
+
+`showcase.css` is the shared look for the last three. `thrive/` keeps its own
+copy on purpose: it is a working sample with buttons that respond, not a
+showcase, and Mark has already approved how it looks.
+
+Rules these pages follow, and should keep following:
+
+- **A black bar at the top saying plainly what the page is.** "This one is
+  just for me", or for the store page, that every number is made up.
+- **Nothing real that is not already public.** The store page invents every
+  figure but keeps the real product names, since those are public Cru
+  products. Home Base's demo invents every idea. The Theme Lab page shows the
+  real designs, because designs are the thing worth showing and none of them
+  are private.
+- **The ranking on the Theme Lab page is real**, read from the Lab's own
+  database (`board/state`) on 4 Nov 2026. It is a snapshot. Re-read it before
+  trusting it again, and do not invent an order.
+- `homebase/app.css` is a copy of the app's own stylesheet, and
+  `homebase/demo.html` copies its markup. If the app's look changes, copy
+  both again. The demo runs in a frame of its own so the app's CSS cannot
+  touch the page around it.
+
 ## The Tools I use section
 
 `tools.js` holds it, and nothing else does. Deliberately **not** in Supabase and
@@ -166,4 +196,11 @@ Still true and worth keeping in mind:
 ## Rules
 
 - Never push to GitHub without Mark saying so. `git push` is his checkpoint.
+- **A card already in the database cannot be changed from `projects.js`.**
+  Hit on 4 Nov: the store card's link was changed in the file and the live
+  site kept the old one, because `chs-store` has a database row and rows win.
+  `home-base`, `theme-lab` and `thrive-instagram` have no row, so the file
+  decides for them. Check with
+  `curl -s "<supabaseUrl>/rest/v1/hub_projects?select=id" -H "apikey: <anon key from config.js>"`
+  before assuming a file edit will show up.
 - No em dashes in any text. Plain, 6th grade wording.

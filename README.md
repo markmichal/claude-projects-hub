@@ -132,14 +132,23 @@ Every link was tested with curl, which carries no login, not with a browser
 that is already signed in as Mark. A 200 reply is not proof: several of these
 pages load fine and then put up a gate, so the page body was read too.
 
-Open to anyone (13): Daily (the demo build), Thrive Instagram, Design
+Open to anyone (14): Daily (the demo build), Thrive Instagram, Design
 Templates, this hub, Product Development Framework (its manual Doc exports
 anonymously, so that is public too), Flashcards app ("Try it without signing
 in" is on the front screen), the Flashcard slides PDF, GTTC revamp, LaunchWeek,
 Cru Innovation AI Hub (its Enter PIN box only guards editing, not reading),
-Sound Machine, Sound Board, Caption Cleanup.
+Sound Machine, Sound Board, Caption Cleanup, Cru HS Legacy site.
 
-Shut to anyone (4):
+**Cru HS Legacy is open, and the first pass of this audit got it wrong.**
+Its `index.html` does carry a full password overlay, and the Apps Script does
+hold a viewing pin. Reading only the code says the site is gated. It is not:
+the `sitePasswordOn` setting is currently OFF, so the server returns the data
+and the overlay removes itself. The gate markup ships to every visitor either
+way, which is exactly why grepping the page source for the word "password"
+proves nothing. Load the site and look. On 4 Nov 2026 it rendered the whole
+timeline with the stored pin still empty.
+
+Shut to anyone (3):
 
 - **Home Base** redirects to a Cloudflare Access sign in. A stranger sees a
   login screen and nothing else. Agreed fix: a demo with made up ideas, the
@@ -151,14 +160,16 @@ Shut to anyone (4):
 - **CHS Cru Store sales dashboard** has the same artifact problem and also
   holds real sales and profit figures. Agreed fix: a mock with invented
   numbers.
-- **Cru HS Legacy site** asks for a password before anything loads. This one is
-  gated on purpose and no fix has been agreed.
-
 No link at all (1): GoToTheCampus Content Workflow. Agreed on 2 Nov that a
 demo is not worth building, because it writes into Cru's own content system
 and there is nothing a stranger could usefully look at.
 
-Rule of thumb that came out of this: prefer a file published in `files/` or a
+Mark's call on 4 Nov: leave the Legacy password setting as it is. It can be
+switched back on from Site Settings whenever he wants, with no code change.
+
+Two rules of thumb came out of this. First: a page's source tells you what a
+gate COULD do, never whether it is switched on. Load the page with no login
+and look at it. Second: prefer a file published in `files/` or a
 page published under this site over a link that needs a login. An artifact link
 is the worst option, because it looks like it works to Mark and fails for
 everyone else.

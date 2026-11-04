@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CHS Cru Store dashboard: what it is</title>
+<meta name="description" content="A sample of the dashboard Mark uses to keep on top of what the Cru Store sells for High School Ministry. Every number on this page is invented.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../showcase.css">
+<style>
+/* The real dashboard's Cru palette, kept so the sample looks like the thing
+   it is standing in for. Fixed, not theme tokens: a brand does not flip to
+   dark. Yellow marks the one number Mark cares about and nothing else. */
+.dash {
+  --navy: #1F1F47; --graphite: #585652; --yellow: #FFD000; --gray: #DEDEDE;
+  --cerise: #C22C49; --green: #1B7F4D; --amber: #9A6A00; --turq: #007990;
+  background: #FAF9F5; color: var(--navy); border: 1px solid #E4E2DD;
+  border-radius: 16px; padding: 22px; margin-top: 18px;
+}
+.dash h2 { font: 700 19px var(--display); margin: 30px 0 3px; color: var(--navy); }
+.dash h2:first-of-type { margin-top: 0; }
+.dash .sub { font-size: 13.5px; color: var(--graphite); margin: 0 0 14px; max-width: 70ch; }
+.dash-title { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid #E4E2DD; padding-bottom: 14px; }
+.dash-title b { font: 400 25px var(--display); }
+.dash-title span { font-size: 13px; color: var(--graphite); margin-left: auto; }
+
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); gap: 12px; margin-top: 16px; }
+.kpi { background: #fff; border: 1px solid #E4E2DD; border-radius: 12px; padding: 14px 15px; }
+.kpi .n { font: 700 27px/1 var(--display); font-variant-numeric: tabular-nums; }
+.kpi .n.hi { color: #8a6f00; }
+.kpi .l { font-size: 12.5px; color: var(--graphite); margin-top: 5px; line-height: 1.35; }
+.kpi .d { font-size: 12px; font-weight: 600; margin-top: 6px; }
+.kpi .d.up { color: var(--green); } .kpi .d.down { color: var(--cerise); }
+
+.chart { background: #fff; border: 1px solid #E4E2DD; border-radius: 12px; padding: 16px; }
+.chart svg { width: 100%; height: auto; display: block; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12.5px; color: var(--graphite); margin-top: 10px; }
+.legend i { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+
+table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #E4E2DD; border-radius: 12px; overflow: hidden; font-size: 13.5px; }
+th, td { text-align: right; padding: 10px 12px; border-bottom: 1px solid #EFEDE8; white-space: nowrap; }
+th { font: 600 11.5px var(--body); letter-spacing: .06em; text-transform: uppercase; color: var(--graphite); background: #FAF9F5; }
+th:first-child, td:first-child { text-align: left; white-space: normal; }
+tbody tr:last-child td { border-bottom: 0; }
+td.num { font-variant-numeric: tabular-nums; }
+.pill { display: inline-block; font: 600 11.5px var(--body); padding: 3px 9px; border-radius: 999px; }
+.pill.out { background: #FBE4E7; color: var(--cerise); }
+.pill.soon { background: #FDF0D6; color: var(--amber); }
+.pill.ok { background: #E2F4EA; color: var(--green); }
+.tbl-scroll { overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<div class="sample-bar"><div>
+  <b>Every number on this page is made up.</b>
+  <span>The real dashboard is a Claude artifact holding actual Cru Store sales, and Cru keeps artifacts private to people signed in there. This is a sample with invented figures, so you can see what it does.</span>
+</div></div>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">CHS Cru Store sales dashboard</p>
+  <h1>Knowing when to order, <span>before we run out</span>.</h1>
+  <p class="lede">High School Ministry sells a handful of products through the Cru Store: THE FOUR bands, Soularium playing cards, the Reach Your School Playbook and a few books and guides. Every month the store sends a report. For a long time that report was the only thing I had, and reading it was not the same as understanding it.</p>
+</header>
+
+<div class="ba">
+  <div class="before">
+    <h3>Before</h3>
+    <p>I never had a real grasp on my numbers. I was reactive instead of thinking ahead, so I did not know what was going on or what our prices really were.</p>
+    <p>We ran out of product in the store more than once. Getting it back on the shelf took weeks, sometimes months. We lost the sales, we looked inconsistent, and it hurt our relationship with the people buying from us.</p>
+  </div>
+  <div class="after">
+    <h3>Now</h3>
+    <p>It updates itself from each month's report, so I stay in the know without setting time aside for it. I do not have a lot of time to give this.</p>
+    <p>It tells me when it is time to order, and we stop getting behind.</p>
+  </div>
+</div>
+
+<h2>The sample</h2>
+<p>Laid out the way the real one is, with invented numbers. The part I actually open it for is the reorder list further down.</p>
+
+<div class="dash">
+
+  <div class="dash-title">
+    <b>CHS Cru Store sales</b>
+    <span>Sample data &middot; not real figures</span>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="n">$4,180</div><div class="l">Gross sales last month</div><div class="d up">&#9650; 12% vs the month before</div></div>
+    <div class="kpi"><div class="n hi">$2,640</div><div class="l">CHS share, what comes back to us</div></div>
+    <div class="kpi"><div class="n">3</div><div class="l">Items need reordering</div><div class="d down">1 is out of stock right now</div></div>
+    <div class="kpi"><div class="n">61%</div><div class="l">Net margin on items with a cost on file</div></div>
+  </div>
+
+  <h2>What is sitting in the store</h2>
+  <p class="sub">Stock on hand valued at what CHS makes on it, not what it sells for.</p>
+  <div class="kpis">
+    <div class="kpi"><div class="n">18,400</div><div class="l">THE FOUR bands in stock</div><div class="d">$3,120 of CHS share</div></div>
+    <div class="kpi"><div class="n">720</div><div class="l">Soularium decks in stock</div><div class="d">$2,950 of CHS share</div></div>
+    <div class="kpi"><div class="n">$6,070</div><div class="l">What CHS would make if all of it sold</div></div>
+  </div>
+
+  <h2>Sales by month</h2>
+  <p class="sub">Gross sales each month, split into the CHS share and the Cru Store share.</p>
+  <div class="chart">
+    <svg viewBox="0 0 760 240" role="img" aria-label="Bar chart of made-up monthly sales. Gross sales run between about two thousand and five thousand dollars, with a peak in August and September.">
+      <g id="bars"></g>
+      <g id="axis"></g>
+    </svg>
+    <div class="legend">
+      <span><i style="background:#FFD000"></i>CHS share</span>
+      <span><i style="background:#1F1F47"></i>Cru Store share</span>
+    </div>
+  </div>
+
+  <h2>What to reorder</h2>
+  <p class="sub">Stock from the latest report, against how fast each item has been selling. Three months left is the usual point to get an order moving, because that is roughly how long it takes to arrive.</p>
+  <div class="tbl-scroll">
+  <table>
+    <thead><tr>
+      <th>Item</th><th>Status</th><th>In stock</th><th>Sold a month</th>
+      <th>Months left</th><th>Reorder at</th><th>Suggested order</th>
+    </tr></thead>
+    <tbody id="reorder"></tbody>
+  </table>
+  </div>
+
+  <h2>Months of stock left</h2>
+  <p class="sub">How long each item lasts at the pace it has been selling. The dashed line is three months.</p>
+  <div class="chart">
+    <svg viewBox="0 0 760 210" role="img" aria-label="Bar chart of made-up months of stock remaining per item. Two items sit below the three month line.">
+      <g id="runway"></g>
+    </svg>
+  </div>
+
+  <h2>Spending and net</h2>
+  <p class="sub">What we paid suppliers against what came back, for the items with a cost on file.</p>
+  <div class="kpis">
+    <div class="kpi"><div class="n">$14,900</div><div class="l">Spent on stock in the last year</div></div>
+    <div class="kpi"><div class="n">$24,300</div><div class="l">CHS share earned</div></div>
+    <div class="kpi"><div class="n">$0.31</div><div class="l">Net on each band, after the $0.24 it costs</div></div>
+  </div>
+
+</div>
+
+<div class="hint">
+  <div><b>The one that changed how I work.</b> The reorder table is the whole reason this exists. Before it, I found out we were out of something when somebody told me. Now I can see it coming three months out, which is about how long it takes to get product back on the shelf.</div>
+</div>
+
+<h2>How it stays current</h2>
+<div class="steps">
+  <div class="step"><span class="step-n">1</span><h3>The report arrives</h3><p>The Cru Store emails a consignment report each month with what sold.</p></div>
+  <div class="step"><span class="step-n">2</span><h3>It gets filed and read</h3><p>The numbers go into the dashboard's own data, alongside four years of history.</p></div>
+  <div class="step"><span class="step-n">3</span><h3>The maths redoes itself</h3><p>Sales pace, months of stock left and net per item all recalculate.</p></div>
+  <div class="step"><span class="step-n">4</span><h3>I look at one table</h3><p>If nothing is near its reorder point, I close it. That is most months.</p></div>
+</div>
+
+<footer>
+  <p>Part of <a href="../">Mark Michal's Claude projects</a>. Sample figures throughout; the real dashboard is private.</p>
+</footer>
+
+</div>
+
+<script>
+/* Invented numbers, kept in one place so nobody has to wonder which figures
+   on this page are real. None of them are. They are shaped to look like a
+   plausible year for these products, nothing more. */
+var MONTHS = [
+  ['Oct', 1850,  980], ['Nov', 1420,  760], ['Dec', 2240, 1180],
+  ['Jan', 1180,  620], ['Feb', 1390,  730], ['Mar', 1760,  920],
+  ['Apr', 1640,  870], ['May', 2080, 1100], ['Jun', 1310,  690],
+  ['Jul', 1550,  820], ['Aug', 2910, 1540], ['Sep', 2640, 1400]
+];
+var ITEMS = [
+  { name: 'THE FOUR band, black 200mm', status: 'out',  stock: 0,     pace: 1180, at: 3500, order: '10,000 bands' },
+  { name: 'Soularium playing cards',    status: 'soon', stock: 720,   pace: 310,  at: 930,  order: '2,000 decks' },
+  { name: 'THE FOUR band, white 180mm', status: 'soon', stock: 2400,  pace: 890,  at: 2670, order: '8,000 bands' },
+  { name: 'THE FOUR band, navy 200mm',  status: 'ok',   stock: 9800,  pace: 760,  at: 2280, order: '—' },
+  { name: 'Reach Your School Playbook', status: 'ok',   stock: 340,   pace: 22,   at: 66,   order: '—' },
+  { name: 'THE FOUR booklet',           status: 'ok',   stock: 1960,  pace: 140,  at: 420,  order: '—' }
+];
+var LABEL = { out: 'Out of stock', soon: 'Order now', ok: 'Fine' };
+
+function el(tag, attrs, text) {
+  var n = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (var k in attrs) n.setAttribute(k, attrs[k]);
+  if (text != null) n.textContent = text;
+  return n;
+}
+
+/* Monthly bars: CHS share stacked under the Cru Store share. */
+(function () {
+  var g = document.getElementById('bars'), ax = document.getElementById('axis');
+  var W = 760, H = 240, pad = { l: 46, r: 8, t: 10, b: 26 };
+  var max = 3200, bw = (W - pad.l - pad.r) / MONTHS.length;
+  var y = function (v) { return pad.t + (H - pad.t - pad.b) * (1 - v / max); };
+
+  [0, 1000, 2000, 3000].forEach(function (v) {
+    ax.appendChild(el('line', { x1: pad.l, x2: W - pad.r, y1: y(v), y2: y(v), stroke: '#EFEDE8' }));
+    ax.appendChild(el('text', { x: pad.l - 8, y: y(v) + 4, 'text-anchor': 'end',
+      fill: '#585652', 'font-size': 11 }, v ? '$' + (v / 1000) + 'k' : '0'));
+  });
+
+  MONTHS.forEach(function (m, i) {
+    var x = pad.l + i * bw + bw * 0.18, w = bw * 0.64;
+    // m[1] is the gross, m[2] the CHS share of it. The navy bar is the rest.
+    var gross = m[1], chs = m[2];
+    g.appendChild(el('rect', { x: x, y: y(gross), width: w, height: y(0) - y(gross), fill: '#1F1F47', rx: 3 }));
+    g.appendChild(el('rect', { x: x, y: y(chs), width: w, height: y(0) - y(chs), fill: '#FFD000', rx: 3 }));
+    ax.appendChild(el('text', { x: x + w / 2, y: H - 8, 'text-anchor': 'middle',
+      fill: '#585652', 'font-size': 11 }, m[0]));
+  });
+})();
+
+/* The reorder table. */
+(function () {
+  document.getElementById('reorder').innerHTML = ITEMS.map(function (it) {
+    var left = it.pace ? (it.stock / it.pace) : 0;
+    return '<tr>' +
+      '<td>' + it.name + '</td>' +
+      '<td><span class="pill ' + it.status + '">' + LABEL[it.status] + '</span></td>' +
+      '<td class="num">' + it.stock.toLocaleString() + '</td>' +
+      '<td class="num">' + it.pace.toLocaleString() + '</td>' +
+      '<td class="num">' + left.toFixed(1) + '</td>' +
+      '<td class="num">' + it.at.toLocaleString() + '</td>' +
+      '<td class="num">' + it.order + '</td>' +
+    '</tr>';
+  }).join('');
+})();
+
+/* Months of stock left, with the three month line. */
+(function () {
+  var g = document.getElementById('runway');
+  var W = 760, H = 210, pad = { l: 190, r: 40, t: 8, b: 20 };
+  var max = 14, rowH = (H - pad.t - pad.b) / ITEMS.length;
+  var x = function (v) { return pad.l + (W - pad.l - pad.r) * Math.min(v, max) / max; };
+  var tone = { out: '#C22C49', soon: '#9A6A00', ok: '#1B7F4D' };
+
+  ITEMS.forEach(function (it, i) {
+    var left = it.pace ? it.stock / it.pace : 0;
+    var yy = pad.t + i * rowH + rowH * 0.2, h = rowH * 0.6;
+    g.appendChild(el('text', { x: pad.l - 10, y: yy + h / 2 + 4, 'text-anchor': 'end',
+      fill: '#1F1F47', 'font-size': 12 }, it.name));
+    g.appendChild(el('rect', { x: pad.l, y: yy, width: Math.max(x(left) - pad.l, 2), height: h,
+      fill: tone[it.status], rx: 3 }));
+    // A long bar reaches the right edge, so its label goes inside it rather
+    // than off the end of the drawing.
+    var inside = x(left) > W - pad.r - 54;
+    g.appendChild(el('text', {
+      x: inside ? x(left) - 7 : x(left) + 7, y: yy + h / 2 + 4,
+      'text-anchor': inside ? 'end' : 'start',
+      fill: inside ? '#FFFFFF' : '#585652', 'font-size': 11.5
+    }, left.toFixed(1) + ' mo'));
+  });
+
+  g.appendChild(el('line', { x1: x(3), x2: x(3), y1: pad.t, y2: H - pad.b,
+    stroke: '#585652', 'stroke-dasharray': '4 4' }));
+  g.appendChild(el('text', { x: x(3), y: H - 6, 'text-anchor': 'middle',
+    fill: '#585652', 'font-size': 11 }, '3 months'));
+})();
+</script>
+</body>
+</html>

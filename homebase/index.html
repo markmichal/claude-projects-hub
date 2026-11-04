@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home Base: what it is</title>
+<meta name="description" content="A phone app for catching ideas before they go. A 32 second film, and a demo of the real screens with made-up ideas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../showcase.css">
+<style>
+/* Home Base's own navy and Cru yellow, so this page and the app agree. */
+:root { --hb-navy: #1F1F47; --hb-yellow: #FFD000; }
+header h1 span { color: var(--hb-navy); border-bottom: 8px solid var(--hb-yellow); }
+
+.demo-wrap { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 26px; align-items: start; margin-top: 18px; }
+@media (max-width: 720px) { .demo-wrap { grid-template-columns: 1fr; } }
+
+/* A phone around the demo. The demo runs in a frame of its own so the app's
+   stylesheet renders it exactly as the real app does, with no chance of its
+   rules leaking into this page. */
+.phone { width: 320px; max-width: 100%; aspect-ratio: 320 / 660; background: var(--hb-navy);
+  border-radius: 44px; padding: 10px; box-shadow: 0 26px 60px rgba(31,31,71,.3); }
+.phone iframe { width: 100%; height: 100%; border: 0; border-radius: 35px; display: block; background: #f0efee; }
+
+.tryline { font-size: 14px; color: var(--muted); margin: 10px 0 0; }
+.tryline b { color: var(--fg); font-weight: 600; }
+
+.pts { display: flex; flex-direction: column; gap: 12px; }
+.pt { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 15px 17px; }
+.pt h3 { margin: 0 0 4px; font-size: 16px; }
+.pt p { margin: 0; font-size: 14px; color: var(--muted); }
+.pt .tag { display: inline-block; font: 700 11px var(--body); letter-spacing: .07em; text-transform: uppercase;
+  background: var(--hb-yellow); color: #261d00; padding: 3px 9px; border-radius: 999px; margin-bottom: 7px; }
+</style>
+</head>
+<body>
+
+<div class="sample-bar"><div>
+  <b>This one is just for me.</b>
+  <span>The real app is locked to my own sign in, because it holds my actual list. The demo below runs the same screens on made-up ideas.</span>
+</div></div>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Home Base</p>
+  <h1>Catching an idea <span>before it goes</span>.</h1>
+  <p class="lede">A small app that lives on my phone's home screen. One tool so far: a clean front end for the list of ideas I already keep in Notion.</p>
+</header>
+
+<div class="film">
+  <video controls preload="metadata" poster="poster.jpg" playsinline>
+    <source src="why.mp4" type="video/mp4">
+    Your browser cannot play this video.
+  </video>
+  <p class="film-note">32 seconds, no talking. The written version is below.</p>
+</div>
+
+<div class="ba">
+  <div class="before">
+    <h3>The problem</h3>
+    <p>Ideas turn up while I am driving, halfway through a meeting, or almost asleep. Never at a desk.</p>
+    <p>By the time I could write one down properly, it was gone. Not forgotten exactly, just never written anywhere I would look again.</p>
+  </div>
+  <div class="after">
+    <h3>How I work now</h3>
+    <p>Two taps from the home screen and it is down, in the same list Claude reads. An idea caught in the car can be a thing I am building that week.</p>
+  </div>
+</div>
+
+<h2>Try the screens</h2>
+<p>The real app, running on made-up ideas. Tap the Parking Lot card, switch to the Carport, open an idea. Nothing is saved and no real list is touched.</p>
+
+<div class="demo-wrap">
+  <div class="phone">
+    <iframe src="demo.html" title="A demo of Home Base with sample ideas" loading="lazy"></iframe>
+  </div>
+  <div>
+    <div class="pts">
+      <div class="pt"><span class="tag">Why two lists</span>
+        <h3>Carport, then Parking Lot</h3>
+        <p>A half formed thought and a ready one need different homes. Carport is for the fuzzy ones I still need to talk through. The Parking Lot is for the ones ready to build.</p></div>
+      <div class="pt"><span class="tag">Why Notion</span>
+        <h3>One list, not a second one</h3>
+        <p>The app does not store anything of its own. It reads and writes the Idea Parking Lot I already had, so Claude in a chat and Claude in my editor are looking at the same thing.</p></div>
+      <div class="pt"><span class="tag">Why a next step</span>
+        <h3>Every idea carries its next move</h3>
+        <p>"Sketch the two screens" is more use than a title on its own. When I have twenty minutes, I can see which one I could actually start.</p></div>
+      <div class="pt"><span class="tag">Added later</span>
+        <h3>A camera for designs I like</h3>
+        <p>A yellow camera button. Snap a design, say what you like about it out loud, and it saves with the photo. Claude reads those before it makes anything visual for me.</p></div>
+    </div>
+    <p class="tryline"><b>Not in the demo:</b> swiping a row, the quick add box, the camera, and the story library. Those need the real app.</p>
+  </div>
+</div>
+
+<h2>How it is put together</h2>
+<div class="steps">
+  <div class="step"><span class="step-n">1</span><h3>A web page, saved to the home screen</h3><p>No app store. It is a website that behaves like an app once you add it to your phone.</p></div>
+  <div class="step"><span class="step-n">2</span><h3>A relay in the middle</h3><p>A small server holds the Notion key, so the key never sits on the phone where anyone could read it.</p></div>
+  <div class="step"><span class="step-n">3</span><h3>Locked to one person</h3><p>Sign in happens before anything loads, and the relay checks the email again on its own side.</p></div>
+  <div class="step"><span class="step-n">4</span><h3>Notion stays the truth</h3><p>Nothing is stored twice. Change an idea anywhere and every view agrees.</p></div>
+</div>
+
+<div class="hint">
+  <div><b>Why this one matters to me.</b> I build things to take friction out of my week, and losing ideas was the friction I kept hitting. This is the one I open most.</div>
+</div>
+
+<footer>
+  <p>Part of <a href="../">Mark Michal's Claude projects</a>. Sample ideas throughout; the real list is private.</p>
+</footer>
+
+</div>
+</body>
+</html>

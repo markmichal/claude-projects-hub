@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cru Theme Lab: what it is</title>
+<meta name="description" content="Thirteen Cru branded slide themes, ranked so Claude learns what Mark likes. The real Lab is private, so this page shows the designs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../showcase.css">
+<style>
+.themes { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; margin-top: 18px; }
+.t { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+.t-shot { position: relative; border: 0; padding: 0; margin: 0; background: #000; cursor: pointer; display: block; aspect-ratio: 16/9; width: 100%; }
+.t-shot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .35s ease; }
+.t-shot:hover img, .t-shot:focus-visible img { transform: scale(1.04); }
+.t-rank { position: absolute; left: 12px; top: 12px; font: 800 14px var(--display); background: rgba(20,18,16,.82); color: #fff; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; }
+.t-top { position: absolute; right: 12px; top: 12px; font: 700 11px var(--body); letter-spacing: .08em; text-transform: uppercase; background: var(--gold); color: #261d00; padding: 4px 9px; border-radius: 999px; }
+.t-more { position: absolute; right: 12px; bottom: 12px; font: 600 12px var(--body); background: rgba(255,255,255,.93); color: #141210; padding: 5px 11px; border-radius: 999px; }
+.t-body { padding: 15px 17px 17px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.t-body h3 { margin: 0; }
+.t-blurb { margin: 0; font-size: 14px; color: var(--muted); }
+.t-best { margin: 0; font-size: 13px; }
+.t-best b { font-weight: 600; }
+.sw { display: flex; gap: 5px; margin-top: auto; padding-top: 10px; }
+.sw i { width: 20px; height: 20px; border-radius: 5px; border: 1px solid rgba(20,18,16,.14); }
+
+/* Flip through all seven slides of one theme. */
+dialog { border: 0; padding: 0; border-radius: 18px; background: var(--surface); color: var(--fg); max-width: min(1000px, calc(100vw - 28px)); width: 100%; }
+dialog::backdrop { background: rgba(20,18,16,.72); }
+.d { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.d-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; }
+.d-top h2 { margin: 0; font-size: 25px; }
+.d-top p { margin: 3px 0 0; color: var(--muted); font-size: 14px; }
+.x { border: 1px solid var(--line); background: var(--bg); border-radius: 10px; width: 40px; height: 40px; cursor: pointer; font-size: 19px; line-height: 1; flex-shrink: 0; }
+.stage { position: relative; background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.stage img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.nav { position: absolute; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 50%; border: 0; background: rgba(255,255,255,.9); cursor: pointer; font-size: 19px; line-height: 1; }
+.nav.p { left: 11px; } .nav.n { right: 11px; }
+.count { position: absolute; right: 11px; bottom: 10px; font-size: 12px; color: #fff; background: rgba(0,0,0,.55); padding: 3px 9px; border-radius: 6px; }
+.thumbs { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 2px; }
+.thumbs button { border: 2px solid transparent; border-radius: 7px; padding: 0; background: none; cursor: pointer; flex: 0 0 auto; line-height: 0; }
+.thumbs button[aria-current="true"] { border-color: var(--orange); }
+.thumbs img { width: 96px; aspect-ratio: 16/9; object-fit: cover; border-radius: 5px; display: block; }
+@media (max-width: 560px) { .d { padding: 14px; } .thumbs img { width: 72px; } }
+</style>
+</head>
+<body>
+
+<div class="sample-bar"><div>
+  <b>This one is just for me.</b>
+  <span>The real Theme Lab is a Claude artifact, and Cru keeps artifacts private to the people signed in there. So here are the designs themselves.</span>
+</div></div>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Cru Theme Lab</p>
+  <h1>Thirteen slide themes, <span>ranked</span>.</h1>
+  <p class="lede">Every talk, training and student night needs slides. Mine were scattered across old decks and whatever I threw together that week. So I had Claude build thirteen full Cru branded themes, and then I put them in order from favourite to least. The order is the clever part: Claude reads it and the next batch comes back closer to what I actually like.</p>
+</header>
+
+<div class="ba">
+  <div class="before">
+    <h3>Before</h3>
+    <p>Slide themes scattered, hit or miss. Every new deck started from a blank page or from whatever old file I could find, and nothing looked like it belonged to the same ministry.</p>
+  </div>
+  <div class="after">
+    <h3>Now</h3>
+    <p>Thirteen finished themes in one place, in my order. I pick one, grab its sample, and Claude builds the deck in that look. Ranking them teaches Claude my taste, so each new round lands closer.</p>
+  </div>
+</div>
+
+<h2>How it works</h2>
+<div class="steps">
+  <div class="step"><span class="step-n">1</span><h3>Claude builds a batch</h3><p>Each theme is a real seven slide deck: cover, section break, statement, photo, three points, big number, close.</p></div>
+  <div class="step"><span class="step-n">2</span><h3>I put them in order</h3><p>Arrows move a theme up or down. Ones I do not like get archived with a reason, like "too corporate" or "hard to read".</p></div>
+  <div class="step"><span class="step-n">3</span><h3>Claude learns the taste</h3><p>The next batch leans toward what my top three have in common and steers away from the archive reasons.</p></div>
+  <div class="step"><span class="step-n">4</span><h3>A favourite becomes a skill</h3><p>When one is exactly right, it gets saved as a skill. Then "make it in Classroom" works in any chat, for any format.</p></div>
+</div>
+
+<h2>The themes</h2>
+<p>My real order, read out of the Lab on 4 November 2026. Click any one to flip through all seven of its slides.</p>
+<div class="themes" id="themes"></div>
+
+<div class="hint">
+  <div><b>Why the ranking matters more than the themes.</b> Any of these could have been a one off. Putting them in an order turns a pile of designs into something Claude can learn from, and that is the part I would build again.</div>
+</div>
+
+<footer>
+  <p>Part of <a href="../">Mark Michal's Claude projects</a>. The designs are real; the Lab they live in is private.</p>
+</footer>
+
+</div>
+
+<dialog id="dlg">
+  <div class="d">
+    <div class="d-top">
+      <div><h2 id="d-name"></h2><p id="d-sub"></p></div>
+      <button class="x" id="d-x" aria-label="Close">&#10005;</button>
+    </div>
+    <div class="stage">
+      <img id="d-img" alt="">
+      <button class="nav p" id="d-p" aria-label="Previous slide">&#8249;</button>
+      <button class="nav n" id="d-n" aria-label="Next slide">&#8250;</button>
+      <span class="count" id="d-c"></span>
+    </div>
+    <div class="thumbs" id="d-t"></div>
+  </div>
+</dialog>
+
+<script src="themes.js"></script>
+<script>
+(function () {
+  // Sorted here rather than in the file, so the catalog can stay in whatever
+  // order it was copied and the rank number stays the single source of truth.
+  var T = (window.THEMES || []).slice().sort(function (a, b) { return a.rank - b.rank; });
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) {
+    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); };
+  var pad = function (n) { return n < 10 ? '0' + n : String(n); };
+  var shot = function (id, n) { return 'shots/' + id + '/slides/' + pad(n) + '.jpg'; };
+
+  document.getElementById('themes').innerHTML = T.map(function (t) {
+    return '<article class="t">' +
+      '<button class="t-shot" data-id="' + t.id + '" aria-label="See all seven ' + esc(t.name) + ' slides">' +
+        '<img src="' + shot(t.id, 1) + '" alt="The ' + esc(t.name) + ' cover slide" loading="lazy">' +
+        '<span class="t-rank">' + t.rank + '</span>' +
+        (t.rank <= 3 ? '<span class="t-top">Top 3</span>' : '') +
+        '<span class="t-more">All 7 slides</span>' +
+      '</button>' +
+      '<div class="t-body">' +
+        '<h3>' + esc(t.name) + '</h3>' +
+        '<p class="t-blurb">' + esc(t.blurb) + '</p>' +
+        '<p class="t-best"><b>Best for:</b> ' + esc(t.bestFor) + '</p>' +
+        '<div class="sw">' + t.palette.map(function (c) {
+          return '<i style="background:' + c + '"></i>'; }).join('') + '</div>' +
+      '</div></article>';
+  }).join('');
+
+  var dlg = document.getElementById('dlg');
+  var cur = { t: null, i: 1 };
+
+  function paint() {
+    document.getElementById('d-img').src = shot(cur.t.id, cur.i);
+    document.getElementById('d-img').alt = cur.t.name + ', slide ' + cur.i + ' of 7';
+    document.getElementById('d-c').textContent = cur.i + ' / 7';
+    [].forEach.call(document.getElementById('d-t').children, function (b, k) {
+      b.setAttribute('aria-current', String(k + 1 === cur.i));
+    });
+  }
+  function open(id) {
+    cur.t = T.filter(function (x) { return x.id === id; })[0];
+    cur.i = 1;
+    document.getElementById('d-name').textContent = cur.t.name;
+    document.getElementById('d-sub').textContent = 'Ranked ' + cur.t.rank + ' of 13 · ' + cur.t.bestFor;
+    document.getElementById('d-t').innerHTML = [1,2,3,4,5,6,7].map(function (n) {
+      return '<button data-n="' + n + '" aria-label="Slide ' + n + '">' +
+        '<img src="' + shot(id, n) + '" alt="" loading="lazy"></button>';
+    }).join('');
+    paint();
+    dlg.showModal();
+  }
+  function step(d) { cur.i = ((cur.i - 1 + d + 7) % 7) + 1; paint(); }
+
+  document.addEventListener('click', function (e) {
+    var s = e.target.closest('.t-shot');
+    if (s) { open(s.dataset.id); return; }
+    var th = e.target.closest('#d-t button');
+    if (th) { cur.i = +th.dataset.n; paint(); return; }
+  });
+  document.getElementById('d-x').onclick = function () { dlg.close(); };
+  document.getElementById('d-p').onclick = function () { step(-1); };
+  document.getElementById('d-n').onclick = function () { step(1); };
+  dlg.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') step(1);
+  });
+})();
+</script>
+</body>
+</html>
