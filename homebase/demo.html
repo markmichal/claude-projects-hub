@@ -59,7 +59,6 @@ var icon = {
   grid: function (c) { return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="' + c + '" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>'; },
   chart: function (c) { return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="' + c + '" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 20h16M7 16v-5M12 16V6M17 16v-8"/></svg>'; },
   camera: function (c) { return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="' + c + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>'; },
-  book: function (c) { return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="' + c + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4v16H5zM10 4h4v16h-4zM15.5 5l3.5-1 2 15.5-3.5 1z"/></svg>'; }
 };
 
 var app = document.getElementById('app');
@@ -102,7 +101,6 @@ function screenHome() {
       '<a class="tile" href="https://projects.crutastic.com" target="_blank" rel="noopener"><span class="badge">' + icon.grid('#261d00') + '</span><b>Projects Hub</b><span>Everything I\'ve built</span></a>' +
       '<span class="tile"><span class="badge">' + icon.chart('#261d00') + '</span><b>Innovation Dashboard</b><span>High School team</span></span>' +
       '<span class="tile"><span class="badge">' + icon.camera('#261d00') + '</span><b>Design Likes</b><span>Snap designs you like</span></span>' +
-      '<span class="tile"><span class="badge">' + icon.book('#261d00') + '</span><b>My Library</b><span>Stories Claude tells you</span></span>' +
       '<div class="tile-empty"><span>' + icon.plus('#565652') + '</span><b>Next tool</b><span>Room to grow</span></div>' +
     '</div>' +
     '<p class="sync">Synced with Notion just now</p>' +
