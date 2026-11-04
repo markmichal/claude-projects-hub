@@ -126,6 +126,43 @@ python3 -m http.server 8000
 
 Then open http://localhost:8000 in a browser. Press Ctrl+C in the terminal to stop.
 
+## Can a stranger actually use each link? (re-checked 4 Nov 2026)
+
+Every link was tested with curl, which carries no login, not with a browser
+that is already signed in as Mark. A 200 reply is not proof: several of these
+pages load fine and then put up a gate, so the page body was read too.
+
+Open to anyone (13): Daily (the demo build), Thrive Instagram, Design
+Templates, this hub, Product Development Framework (its manual Doc exports
+anonymously, so that is public too), Flashcards app ("Try it without signing
+in" is on the front screen), the Flashcard slides PDF, GTTC revamp, LaunchWeek,
+Cru Innovation AI Hub (its Enter PIN box only guards editing, not reading),
+Sound Machine, Sound Board, Caption Cleanup.
+
+Shut to anyone (4):
+
+- **Home Base** redirects to a Cloudflare Access sign in. A stranger sees a
+  login screen and nothing else. Agreed fix: a demo with made up ideas, the
+  same pattern as the Daily demo.
+- **Cru Theme Lab** is a Claude artifact. Cru has public artifact sharing
+  switched off for the whole workspace, so this can never open for an outsider
+  and it is not a setting Mark can change. Agreed fix, and Mark's priority: a
+  static copy published here.
+- **CHS Cru Store sales dashboard** has the same artifact problem and also
+  holds real sales and profit figures. Agreed fix: a mock with invented
+  numbers.
+- **Cru HS Legacy site** asks for a password before anything loads. This one is
+  gated on purpose and no fix has been agreed.
+
+No link at all (1): GoToTheCampus Content Workflow. Agreed on 2 Nov that a
+demo is not worth building, because it writes into Cru's own content system
+and there is nothing a stranger could usefully look at.
+
+Rule of thumb that came out of this: prefer a file published in `files/` or a
+page published under this site over a link that needs a login. An artifact link
+is the worst option, because it looks like it works to Mark and fails for
+everyone else.
+
 ## House rules
 
 - Never `git push` without Mark saying so.
