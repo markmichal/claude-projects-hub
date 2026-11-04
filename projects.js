@@ -76,8 +76,12 @@ window.HUB_PROJECTS = {
       learned: 'That Claude can help me manage my social media with very low touch, at least the posting.',
       status: 'Live',
       statusVariant: 'success',
-      url: 'https://claude.ai/artifact/N7bNXdNPM9BAovq6SjJoZG',
-      urlLabel: 'Open the review page (Cru sign in)',
+      // The real review page is a Claude artifact and Cru has public artifact
+      // sharing switched off, so no visitor could ever open it. The card now
+      // points at a static walkthrough of it instead. Mark's own link to the
+      // live page is in the ThriveInstagram README.
+      url: 'thrive/',
+      urlLabel: 'See how the review page works',
       altUrl: 'https://www.instagram.com/thrivestudies/',
       altLabel: 'See it on Instagram',
       device: 'laptop',

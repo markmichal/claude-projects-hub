@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thrive Post Review: a walkthrough</title>
+<meta name="description" content="A sample of the private page Mark uses to approve a month of Thrive Studies Instagram posts.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* The real review page's look, rebuilt as a static sample. Nothing here talks
+   to a database; the buttons only change what is on screen. */
+:root {
+  --bg: #F6F4F1; --surface: #FFFFFF; --fg: #141210; --muted: #6B645C; --line: #E4DFD8;
+  --orange: #F08220; --orange-ink: #B85A0C; --ok: #1E8A55; --ok-bg: #E2F4EA;
+  --warn: #B4332B; --warn-bg: #FBE7E4; --wait-bg: #FDEBD8; --posted-bg: #ECEAE6;
+  --display: "Sora", "Avenir Next", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 400 15px/1.5 var(--body); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px 64px; }
+a { color: var(--orange-ink); }
+
+/* Says plainly what this is, before anything else. */
+.sample-bar { background: var(--fg); color: #fff; font-size: 14px; }
+.sample-bar div { max-width: 980px; margin: 0 auto; padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; }
+.sample-bar b { font-weight: 600; }
+.sample-bar a { color: var(--orange); }
+
+header { padding-top: 28px; }
+header h1 { font: 800 clamp(26px, 5vw, 38px)/1.05 var(--display); letter-spacing: -0.02em; margin: 0; }
+header h1 span { color: var(--orange); }
+header p { color: var(--muted); margin: 8px 0 0; max-width: 62ch; }
+
+/* The walkthrough. */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin: 26px 0 8px; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.step-n { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--orange); color: #141210; font: 700 14px var(--display); margin-bottom: 8px; }
+.step h3 { font: 700 16px var(--display); margin: 0 0 4px; }
+.step p { margin: 0; font-size: 14px; color: var(--muted); }
+
+/* A pointer that explains the part of the page right below it. */
+.hint { display: flex; gap: 10px; align-items: flex-start; margin: 30px 0 0; padding: 12px 14px; background: #fff7ec; border: 1px solid #f3dcbe; border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; font-size: 14px; }
+.hint .step-n { margin: 0; flex-shrink: 0; width: 22px; height: 22px; font-size: 12px; }
+
+.plan { margin-top: 10px; }
+.plan h2, .posts-h { font: 800 22px/1.1 var(--display); margin: 0; }
+.plan > p { color: var(--muted); margin: 6px 0 0; max-width: 62ch; }
+.plan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 14px; }
+.pm { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.pm-top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.pm-month { font: 800 18px var(--display); }
+.pm-path { font: 600 11px var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--orange-ink); }
+.pm-state { margin-left: auto; font: 600 12px var(--body); padding: 2px 9px; border-radius: 999px; background: var(--posted-bg); color: var(--muted); }
+.pm-state.drafted { background: var(--wait-bg); color: var(--orange-ink); }
+.pm-series { font: 700 16px var(--display); }
+.pm-why { font-size: 14px; color: var(--muted); }
+.pm textarea { font: 400 14px var(--body); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-height: 58px; resize: vertical; }
+
+.posts-h { margin-top: 10px; }
+.bar { position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 0; margin-top: 14px; }
+.tab { font: 600 14px var(--body); border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+.tab[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.tab .n { font-variant-numeric: tabular-nums; color: var(--orange-ink); margin-left: 6px; }
+.tab[aria-pressed="true"] .n { color: var(--orange); }
+.summary { margin: 16px 0 0; font-size: 14px; color: var(--muted); }
+.summary b { color: var(--fg); }
+
+.list { display: flex; flex-direction: column; gap: 18px; margin-top: 12px; }
+.post { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+.post img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; display: block; background: var(--posted-bg); }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: baseline; }
+.date { font: 700 15px var(--display); }
+.kind { font: 600 11px var(--body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.study { color: var(--muted); font-size: 14px; }
+.chip { margin-left: auto; font: 600 12px var(--body); padding: 3px 10px; border-radius: 999px; }
+.chip.pending { background: var(--wait-bg); color: var(--orange-ink); }
+.chip.approved { background: var(--ok-bg); color: var(--ok); }
+.chip.changes { background: var(--warn-bg); color: var(--warn); }
+.caption { white-space: pre-wrap; margin: 12px 0 0; overflow-wrap: anywhere; }
+.note-shown { margin-top: 12px; padding: 10px 12px; background: var(--warn-bg); border-radius: 8px; font-size: 14px; }
+.note-shown b { color: var(--warn); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+button.act { font: 600 14px var(--body); border-radius: 8px; padding: 9px 16px; cursor: pointer; border: 1px solid var(--line); background: var(--surface); color: var(--fg); }
+button.act.yes { background: var(--orange); border-color: var(--orange); color: #141210; }
+button:focus-visible, .tab:focus-visible, textarea:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: 18px; background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-weight: 600; font-size: 14px; z-index: 20; }
+.toast[hidden] { display: none; }
+
+footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+
+@media (max-width: 640px) {
+  .post { grid-template-columns: 1fr; }
+  .chip { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="sample-bar">
+  <div>
+    <b>This is a sample.</b>
+    <span>The real page is private. Everything here is on screen only, nothing saves.</span>
+    <a href="https://projects.crutastic.com">Back to the projects hub</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <h1>Thrive <span>Post Review</span></h1>
+    <p>Thrive Studies posts to Instagram twice a week. Claude writes the whole month, makes the images, and puts them here. Mark looks them over in one sitting. This page shows how that works.</p>
+  </header>
+
+  <div class="steps">
+    <div class="step"><span class="step-n">1</span><h3>Claude drafts the month</h3><p>On the 10th it picks the next series, writes eight posts, makes the images and sends an email saying they are ready.</p></div>
+    <div class="step"><span class="step-n">2</span><h3>Mark reviews them here</h3><p>Every post shows its picture and its caption, in the order they will go out.</p></div>
+    <div class="step"><span class="step-n">3</span><h3>Approve, or ask for a fix</h3><p>Approve the good ones. For the rest, say what to change in plain words. Claude reads the note and redoes it.</p></div>
+    <div class="step"><span class="step-n">4</span><h3>Approved posts go out</h3><p>Mondays and Thursdays at 6pm Eastern, posted automatically. Nothing unapproved is ever published.</p></div>
+  </div>
+
+  <div class="hint"><span class="step-n">A</span><div><b>Steering what comes next.</b> Each month has a box. Type an idea or ask for a different series, and Claude uses it when it drafts that month. This is the only planning Mark has to do.</div></div>
+
+  <section class="plan">
+    <h2>The next six months</h2>
+    <p>One study series a month. Sample months shown.</p>
+    <div class="plan-grid">
+      <div class="pm">
+        <div class="pm-top"><span class="pm-month">January</span><span class="pm-path">Walk</span><span class="pm-state drafted">Drafted</span></div>
+        <span class="pm-series">Growing With God</span>
+        <span class="pm-why">Four studies, eight posts. New year, fresh start.</span>
+        <textarea placeholder="Anything unique this month?">Lean into new year habits for the first two posts.</textarea>
+      </div>
+      <div class="pm">
+        <div class="pm-top"><span class="pm-month">February</span><span class="pm-path">Walk</span><span class="pm-state">Planned</span></div>
+        <span class="pm-series">Relationships</span>
+        <span class="pm-why">Valentine's Day falls mid month.</span>
+        <textarea placeholder="Anything unique this month?"></textarea>
+      </div>
+      <div class="pm">
+        <div class="pm-top"><span class="pm-month">March</span><span class="pm-path">Run</span><span class="pm-state">Planned</span></div>
+        <span class="pm-series">Power Up</span>
+        <span class="pm-why">Easter lands at the end of the month.</span>
+        <textarea placeholder="Anything unique this month?"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <div class="hint"><span class="step-n">B</span><div><b>The month's posts.</b> Picture on the left, the exact caption that will be posted on the right. The tab counts how many are still waiting.</div></div>
+
+  <h2 class="posts-h">Posts to review</h2>
+  <nav class="bar" aria-label="Months">
+    <button class="tab" type="button" aria-pressed="true">December<span class="n" id="waiting-n">2</span></button>
+    <button class="tab" type="button" aria-pressed="false">January<span class="n">8</span></button>
+  </nav>
+  <p class="summary" id="summary"></p>
+
+  <div class="hint" style="margin-top:18px"><span class="step-n">C</span><div><b>Try it.</b> The buttons below work on this sample page. Nothing is saved and no real post changes.</div></div>
+
+  <div class="list" id="list">
+      <article class="post" data-key="M3W1A">
+        <img src="img/1a-new-question.jpg" alt="Real Question post. Photo of a small green sprout growing out of an old, cracked tree stump. Text: Is a fresh start actually possible? Explore it together in the New study. thrivestudies.com">
+        <div>
+          <div class="meta">
+            <span class="date">Thu, Dec 10</span>
+            <span class="kind">Real question</span>
+            <span class="study">WALK: The Jesus Series &middot; New</span>
+            <span class="chip approved">Approved</span>
+          </div>
+          <p class="caption">Is a fresh start actually possible?
+
+Maybe it&#x27;s something you said. Maybe it&#x27;s a reputation that won&#x27;t go away. A lot of students wonder if they can ever really start over. The New study looks at the day Jesus told a man, &quot;Your sins are forgiven,&quot; and then proved he had the power to say it.
+
+What would a fresh start mean to you? Tell us below.
+
+Free studies at the link in bio.
+
+#ThriveStudies</p>
+          
+          <div class="actions">
+            <button class="act yes" type="button" data-do="approved">Approve</button>
+            <button class="act" type="button" data-do="changes">Needs changes</button>
+          </div>
+        </div>
+      </article>
+      <article class="post" data-key="M3W1B">
+        <img src="img/1b-christmas-game-tip.jpg" alt="Leader Tip post with red, green, and gold ornaments hanging in the corner. Photo of a green sprout growing from a tree stump. Text: Christmas game for your group. Two truths and a Christmas lie. 1, Everyone thinks of three Christmas memories or traditions. 2, Two are true. One is made up. 3, The group guesses which one is the lie. More ideas like this in the Idea Box at thrivestudies.com">
+        <div>
+          <div class="meta">
+            <span class="date">Mon, Dec 14</span>
+            <span class="kind">Leader tip</span>
+            <span class="study">WALK: The Jesus Series &middot; New</span>
+            <span class="chip changes">Changes requested</span>
+          </div>
+          <p class="caption">Need a fun opener before Christmas break? Try this.
+
+Everyone shares three Christmas memories or family traditions. Two are true, one is made up. The group guesses the fake. You&#x27;ll learn more about your group in ten minutes than you have all semester.
+
+Save this for your last group before break.
+
+Free studies at the link in bio.
+
+#ThriveStudies</p>
+          <div class="note-shown"><b>Your note:</b> Love the game, but can the opener work for a group that has not done the study yet?</div>
+          <div class="actions">
+            <button class="act yes" type="button" data-do="approved">Approve</button>
+            <button class="act" type="button" data-do="changes">Needs changes</button>
+          </div>
+        </div>
+      </article>
+      <article class="post" data-key="M3W2A">
+        <img src="img/2a-teacher-quote.jpg" alt="From the Study post with red, green, gold, and white Christmas lights in the corner. Photo of a rock climber on a cliff against a dark sky. Text: A teacher is only as good as the trust his students give him. Explore it together in the Teacher study. thrivestudies.com">
+        <div>
+          <div class="meta">
+            <span class="date">Thu, Dec 17</span>
+            <span class="kind">From the study</span>
+            <span class="study">WALK: The Jesus Series &middot; Teacher</span>
+            <span class="chip pending">Waiting on you</span>
+          </div>
+          <p class="caption">Everyone wants you to listen to them. Who actually deserves your trust?
+
+The Teacher study looks at the end of Jesus&#x27; most famous sermon, where he says the wise person builds on his words like a house on rock. Then it asks: is he worth that kind of trust?
+
+Who do you trust most for advice? Tell us below.
+
+Free studies at the link in bio.
+
+#ThriveStudies</p>
+          
+          <div class="actions">
+            <button class="act yes" type="button" data-do="approved">Approve</button>
+            <button class="act" type="button" data-do="changes">Needs changes</button>
+          </div>
+        </div>
+      </article>
+      <article class="post" data-key="M3W3B">
+        <img src="img/3b-payment-spotlight.jpg" alt="Study Spotlight post with New Year&#x27;s confetti in the corner. Photo of a bill tucked into a check folder, fading into white. Text: The Jesus Series, WALK, study 3 of 4. Payment. Why did Jesus have to die? Because Jesus is God, his death can pay for my sins. Free small group Bible studies at thrivestudies.com">
+        <div>
+          <div class="meta">
+            <span class="date">Mon, Dec 28</span>
+            <span class="kind">Study spotlight</span>
+            <span class="study">WALK: The Jesus Series &middot; Payment</span>
+            <span class="chip approved">Approved</span>
+          </div>
+          <p class="caption">Why did Jesus have to die? It&#x27;s one of the biggest questions in the Christian faith, and a lot of students have never heard a clear answer.
+
+Payment is study 3 in the Jesus series. It walks your group through it, one question at a time.
+
+Get it free. Link in bio.
+
+#ThriveStudies</p>
+          
+          <div class="actions">
+            <button class="act yes" type="button" data-do="approved">Approve</button>
+            <button class="act" type="button" data-do="changes">Needs changes</button>
+          </div>
+        </div>
+      </article>
+      <article class="post" data-key="M3W4A">
+        <img src="img/4a-resurrection-question.jpg" alt="Real Question post with a round &quot;Happy New Year 2027&quot; badge in the corner. Photo of a glowing heartbeat line on a dark blue background. Text: Did Jesus really come back from the dead? Explore it together in the Resurrection study. thrivestudies.com">
+        <div>
+          <div class="meta">
+            <span class="date">Thu, Dec 31</span>
+            <span class="kind">Real question</span>
+            <span class="study">WALK: The Jesus Series &middot; Resurrection</span>
+            <span class="chip pending">Waiting on you</span>
+          </div>
+          <p class="caption">Did Jesus really come back from the dead? It&#x27;s okay to ask.
+
+A lot of people hear it and think, &quot;That sounds crazy.&quot; The Resurrection study looks at what really happened, who saw it, and why it matters for your grades, your friends, and your fears today.
+
+A new year is a good time to wrestle with the big questions together.
+
+What would you say to a friend who thinks it sounds crazy? Tell us below.
+
+Free studies at the link in bio.
+
+#ThriveStudies</p>
+          
+          <div class="actions">
+            <button class="act yes" type="button" data-do="approved">Approve</button>
+            <button class="act" type="button" data-do="changes">Needs changes</button>
+          </div>
+        </div>
+      </article>
+  </div>
+
+  <footer>
+    <p>Built with Claude Code. The posts and captions above are real drafts for <a href="https://www.instagram.com/thrivestudies/" target="_blank" rel="noopener">@thrivestudies</a>; the approvals and notes on this page are made up for the sample.</p>
+  </footer>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function () {
+  'use strict';
+  var LABEL = { approved: 'Approved', changes: 'Changes requested', pending: 'Waiting on you' };
+  var toast = document.getElementById('toast');
+  var hideTimer = null;
+
+  function say(text) {
+    toast.textContent = text;
+    toast.hidden = false;
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(function () { toast.hidden = true; }, 2600);
+  }
+
+  function count() {
+    var waiting = document.querySelectorAll('.chip.pending').length;
+    document.getElementById('waiting-n').textContent = waiting;
+    document.getElementById('summary').innerHTML = waiting
+      ? '<b>' + waiting + '</b> of 5 still waiting on you.'
+      : '<b>All caught up.</b> Everything here has an answer.';
+  }
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-do]');
+    if (!btn) return;
+    var card = btn.closest('.post');
+    var want = btn.getAttribute('data-do');
+    var chip = card.querySelector('.chip');
+
+    chip.className = 'chip ' + want;
+    chip.textContent = LABEL[want];
+
+    if (want === 'changes') {
+      var existing = card.querySelector('.note-shown');
+      if (!existing) {
+        var box = document.createElement('div');
+        box.className = 'note-shown';
+        box.innerHTML = '<b>On the real page:</b> a box opens here for you to type what to fix. Claude reads it and redoes the post.';
+        card.querySelector('.caption').after(box);
+      }
+      say('Marked for changes. Sample only, nothing saved.');
+    } else {
+      say('Approved. Sample only, nothing saved.');
+    }
+    count();
+  });
+
+  count();
+})();
+</script>
+</body>
+</html>
