@@ -230,7 +230,7 @@ window.HUB_PROJECTS = {
       learned: 'My first website build. I learned I could make a whole site, and change it later, just by talking to Claude instead of editing it myself.',
       status: 'Live',
       statusVariant: 'success',
-      url: 'https://markmichal.github.io/Cruinnovation-ai-hub/',
+      url: 'https://cruglobal.github.io/Cruinnovation-ai-hub/',
       device: 'laptop',
       accent: 'var(--cs-color-cyan)',
       shot: 'ai-hub.jpg'
