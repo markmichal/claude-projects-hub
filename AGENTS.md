@@ -19,7 +19,5 @@ Mark's personal site that lists every project he and Claude have built, live at 
 - Don't use Google sign in here (his content filter blocks Google auth). Email and password only.
 
 ## At the end of every work session
-1. Write new decisions into NOTES.md (with the date).
-2. Save a copy of the chat: `python3 ~/Projects/project-kit/save-chat.py ~/Projects/claude-projects-hub` (`chats/` is in .gitignore, so it stays on this Mac).
-3. Make a save point: `git add -A && git commit -m "<what changed and why>"`. Don't push unless Mark says so.
-4. Back up: `~/Projects/project-kit/backup-projects.sh ~/Projects/claude-projects-hub` (copies only what the save point tracks).
+Follow the routine in ~/AI Projects/AGENTS.md (one place for every project). For this project:
+- Write new decisions into NOTES.md (with the date).
