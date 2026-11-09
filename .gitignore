@@ -2,3 +2,22 @@
 node_modules/
 .env
 .env.local
+
+# Project kit (2026-11-09): keep secrets, private files, big media and chat copies
+# out of save points and GitHub. This repo is public.
+.env*
+!.env.example
+*.pem
+*.key
+*credentials*.json
+*service-account*.json
+.claude/settings.local.json
+node_modules/
+dist/
+build/
+*.zip
+*.mp4
+*.mov
+downloads/
+chats/
+.DS_Store
