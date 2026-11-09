@@ -23,6 +23,21 @@
 window.HUB_PROJECTS = {
   main: [
     {
+      id: 'slideshow-creator',
+      title: 'Slideshow Creator',
+      created: '2026-11-04',
+      what: 'My own slideshow maker on my Mac. I pick photos, swap in the short moving clips from iPhone Live Photos, choose a song and a look, add titles, and it builds a finished video in about two minutes.',
+      why: 'It started as a birthday video for my daughter and turned into a tool I can use for years. Family photos never leave my Mac, so nothing private gets uploaded.',
+      learned: '',
+      status: 'In use',
+      statusVariant: 'information',
+      url: '',
+      urlLabel: 'Runs only on my Mac (private family photos)',
+      device: 'laptop',
+      accent: 'var(--cs-color-cerise)',
+      shot: 'slideshow-creator.jpg'
+    },
+    {
       id: 'home-base',
       title: 'Home Base',
       created: '2026-10-27',

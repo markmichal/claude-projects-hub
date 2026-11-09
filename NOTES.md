@@ -15,6 +15,7 @@ From the hub's own card for itself: "So I can find the things I have made, and s
 - 2026-10-12: "Tools I use" section added, kept in `tools.js` only. Vercel, Cru Cornerstone, Homebrew, the gh CLI and the AI Hub's recommended tools are left off on purpose (reasons below).
 - 2026-10-29: Page brought to life (hero entrance, counting numbers, cards on scroll, birds that perch, tool ribbon). `sync.js --write` found to drop file-only projects: never let it delete.
 - 2026-11-04: Access audit re-checked against the live links (in README.md). Public "what this is" pages for the projects nobody else can open (Home Base, Theme Lab, Cru Store with made-up numbers, Thrive). Mark's call: leave the Legacy site password setting as it is. Bracket rule written down.
+- 2026-11-09: Slideshow Creator card added (Mark's ask: "add Kate's birthday video"). Named for the tool, not Kate; no family photos or child's name on this public site. Screenshot is the app's home page with Kate's project card hidden. No public link (runs only on his Mac). `learned` left empty for Mark. File only, no database row yet.
 
 ## Ideas for later
 - A "projects I'm working on" section for unfinished work (Mark floated it, deferred 2026-10-10; raise it, don't build it).
