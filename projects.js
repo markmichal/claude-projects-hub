@@ -122,14 +122,14 @@ window.HUB_PROJECTS = {
     },
     {
       id: 'pdf-framework',
-      title: 'Product Development Framework',
+      title: 'Ministry Product Framework',
       created: '2026-10-09',
       what: 'A one page guide to how Cru Campus Ministry builds products, with the roles and the steps.',
       why: 'So a team can see the whole process at once instead of hunting through slide decks.',
       learned: 'Connected Claude to ChatGPT to make better images, and built a chat bot that answers questions straight from the document.',
       status: 'Live',
       statusVariant: 'success',
-      url: 'https://productdevelopment.crutastic.com',
+      url: 'https://mpf.crutastic.com',
       device: 'laptop',
       accent: 'var(--cs-color-green)',
       shot: 'pdf-framework.jpg'
