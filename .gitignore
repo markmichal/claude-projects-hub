@@ -21,3 +21,8 @@ build/
 downloads/
 chats/
 .DS_Store
+# Showcase films are part of the public site, so they are allowed in.
+!homebase/why.mp4
+!thrive/how-it-works.mp4
+!slideshow/why.mp4
+!templates/intro.mp4
