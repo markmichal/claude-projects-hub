@@ -16,6 +16,9 @@ From the hub's own card for itself: "So I can find the things I have made, and s
 - 2026-10-29: Page brought to life (hero entrance, counting numbers, cards on scroll, birds that perch, tool ribbon). `sync.js --write` found to drop file-only projects: never let it delete.
 - 2026-11-04: Access audit re-checked against the live links (in README.md). Public "what this is" pages for the projects nobody else can open (Home Base, Theme Lab, Cru Store with made-up numbers, Thrive). Mark's call: leave the Legacy site password setting as it is. Bracket rule written down.
 - 2026-11-09: Slideshow Creator card added (Mark's ask: "add Kate's birthday video"). Named for the tool, not Kate; no family photos or child's name on this public site. Screenshot is the app's home page with Kate's project card hidden. No public link (runs only on his Mac). `learned` left empty for Mark. File only, no database row yet.
+- 2026-11-11: **Link system (Mark's design).** Every card's links live in `links.js`, which beats the url fields in `projects.js` and the database. A project people can't open gets a demo: a "Demo" tag in the top right of its colored box, the colored box opens the demo, and the first link is "Open the demo". Then the real thing: "Open the app" / "Open the site" / "Open the dashboard", with "(private)" when only Mark gets in or "(login)" when it needs a sign in. Open projects just say "Open the site" or "Open the app". A plain sign in anyone can make (Flashcards) gets no note and no demo. Design Templates' live site is marked "(login)" for now because it may get one.
+- 2026-11-11: New demo pages `templates/` (the gallery closed on 2026-11-10; uses its intro video with "Creative 1 Media" taken out: the label at 0:15 now reads "Created by Cru", and the small "From Cru Creative 1 Media" line on the gallery page at 1:13 to 1:19 now reads "From Cru") and `slideshow/` (46 second film plus the real screens, shown with a made-up sample project so no family photo is ever public; film source is in `~/AI Projects/slideshow-creator/explainer-film`). Mark: no "Creative 1 Media" anywhere on this site, say "created by Cru".
+- 2026-11-11: "Product Development Framework" is now "Ministry Product Framework" (mpf.crutastic.com), with new wording and a new screenshot. Its database row still had the old title and text, so it must be changed there too (edit mode, or the service key).
 
 ## Ideas for later
 - A "projects I'm working on" section for unfinished work (Mark floated it, deferred 2026-10-10; raise it, don't build it).
@@ -120,12 +123,14 @@ deferred it on 2026-10-10, so raise it, do not build it.
 
 ## The "what this is" pages
 
-Four projects only Mark can open, so each has a public page here instead:
+Projects only Mark can open (or that are closed), so each has a public page here instead:
 
 - `thrive/` the Thrive review page, with a 49 second film
 - `homebase/` Home Base, with a 32 second film and a tappable demo
 - `themelab/` all thirteen slide themes, with every slide
 - `store/` the Cru Store dashboard, with invented numbers
+- `templates/` Design Templates, with its intro video (Creative 1 Media taken out)
+- `slideshow/` Slideshow Creator, with a 46 second film and screens from a made-up sample project
 
 `showcase.css` is the shared look for the last three. `thrive/` keeps its own
 copy on purpose: it is a working sample with buttons that respond, not a

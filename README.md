@@ -133,7 +133,7 @@ that is already signed in as Mark. A 200 reply is not proof: several of these
 pages load fine and then put up a gate, so the page body was read too.
 
 Open to anyone (14): Daily (the demo build), Thrive Instagram, Design
-Templates, this hub, Product Development Framework (its manual Doc exports
+Templates, this hub, Ministry Product Framework (its manual Doc exports
 anonymously, so that is public too), Flashcards app ("Try it without signing
 in" is on the front screen), the Flashcard slides PDF, GTTC revamp, LaunchWeek,
 Cru Innovation AI Hub (its Enter PIN box only guards editing, not reading),

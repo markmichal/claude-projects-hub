@@ -13,6 +13,8 @@ Mark's personal site that lists every project he and Claude have built, live at 
 - The live site is this repo plus the Supabase table. Never edit the old design artifact (claude.ai/artifact/SdEyAkCNo1qmriT51Birus) or `design/Main.dc.html`; they're reference only.
 - `learned` is Mark's own words. Never write it for him; ask, or leave it empty.
 - Mark wants everything he builds listed here, so offer it when a project reaches something worth showing. The "projects I'm working on" section was deferred (2026-10-10): raise it, don't build it.
+- Card links: `links.js` only (demo, then the real thing marked private or login). See NOTES.md, 2026-11-11.
+- Never show real family photos (Slideshow Creator) anywhere on this site. Use made-up samples.
 - Tools I use: `tools.js` only (not Supabase, not editable on the page), and only tools backed by real code in one of Mark's project folders.
 - Showcase pages (`homebase/`, `themelab/`, `store/`, `thrive/`): a black bar on top saying plainly what the page is, and nothing real that isn't already public. Details in NOTES.md.
 - Never copy square brackets out of a Cru theme's sample text. Write real, finished words.

@@ -162,19 +162,6 @@
     return u.replace(/^https?:\/\//i, '').replace(/\/$/, '');
   }
 
-  // A second link, for when the main one does not suit everybody. Used by the
-  // slide deck: the card opens a PDF anyone can read, and this opens the live
-  // deck for people signed in at Cru. It sits above the whole-card link, or
-  // the card would swallow the click.
-  function altLinkHtml(p) {
-    if (!p.altUrl) return '';
-    return '<a class="alt-link" href="' + esc(tidyUrl(p.altUrl)) + '" target="_blank" rel="noopener">' +
-      '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none"' +
-      ' stroke="currentColor" stroke-width="2"><path d="M5 11 11 5M6 5h5v5"/></svg>' +
-      esc(p.altLabel || 'Another way in') +
-    '</a>';
-  }
-
   function matches(p, q) {
     if (!q) return true;
     return [p.title, p.what, p.why, p.url].join(' ').toLowerCase().indexOf(q) !== -1;
@@ -244,38 +231,80 @@
     '</div>';
   }
 
+  // ---- links (links.js) ----------------------------------------------------
+  // Every card's way in comes from links.js when it has an entry there: an
+  // optional demo, then the real thing marked "(private)" or "(login)". That
+  // file beats the url fields in projects.js and the database on purpose, so
+  // the links live in one place. Without an entry, the old fields still work.
+  var LINKS = window.HUB_LINKS || {};
+  var ARROW = '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none"' +
+    ' stroke="var(--cs-color-text-link)" stroke-width="2"><path d="M5 11 11 5M6 5h5v5"/></svg>';
+
+  function linkSet(p) {
+    var L = LINKS[p.id], list = [];
+    if (!L) {
+      if ((p.url || '').trim()) list.push({ label: p.urlLabel || shownUrl(p.url), url: p.url });
+      if (p.altUrl) list.push({ label: p.altLabel || 'Another way in', url: p.altUrl });
+      return { demo: '', list: list, none: list.length ? '' : 'Link coming soon' };
+    }
+    if (L.demo) list.push({ label: 'Open the demo', url: L.demo });
+    (L.links || []).forEach(function (l) {
+      list.push({ label: l.label + (l.note ? ' (' + l.note + ')' : ''), url: l.url });
+    });
+    return { demo: L.demo || '', list: list, none: L.none || (list.length ? '' : 'Link coming soon') };
+  }
+
+  // The whole card is one big link only when there is exactly one way in and
+  // no demo. Otherwise every link is its own real link, and the colored box
+  // opens the demo (or the first link).
+  function wholeCardUrl(p) {
+    var s = linkSet(p);
+    return (!s.demo && s.list.length === 1) ? s.list[0].url : '';
+  }
+
   function linkHtml(p) {
-    var live = !!(p.url || '').trim();
-    var label = esc(p.urlLabel || shownUrl(p.url));
-    // Cards with a second link are not clickable as a whole, so this one has
-    // to be a real link rather than a label the card sits under.
-    var inner = (live && p.altUrl)
-      ? '<a class="urlline url-live real-link" href="' + esc(tidyUrl(p.url)) + '"' +
-        ' target="_blank" rel="noopener">' + label + '</a>'
-      : '<span class="urlline ' + (live ? 'url-live' : 'url-none') + '">' + label + '</span>';
-    return '<div class="card-link">' +
-      '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none"' +
-      ' stroke="var(--cs-color-text-link)" stroke-width="2"><path d="M5 11 11 5M6 5h5v5"/></svg>' +
-      inner +
-    '</div>' + altLinkHtml(p);
+    var s = linkSet(p);
+    if (!s.list.length) {
+      return '<div class="card-link"><span class="urlline url-none">' + esc(s.none) + '</span></div>';
+    }
+    if (wholeCardUrl(p)) {
+      return '<div class="card-link">' + ARROW +
+        '<span class="urlline url-live">' + esc(s.list[0].label) + '</span></div>';
+    }
+    return '<div class="card-links">' + s.list.map(function (l) {
+      return '<a class="card-link-a real-link" href="' + esc(tidyUrl(l.url)) + '" target="_blank" rel="noopener">' +
+        ARROW + '<span class="urlline url-live">' + esc(l.label) + '</span></a>';
+    }).join('') + '</div>';
+  }
+
+  // The colored box: a "Demo" tag in its top right corner when there is a
+  // demo, and a click anywhere on it opens the demo.
+  function mediaLinkHtml(p) {
+    if (state.editing || wholeCardUrl(p)) return '';
+    var s = linkSet(p);
+    var url = s.demo || (s.list[0] && s.list[0].url) || '';
+    if (!url) return '';
+    return '<a class="media-link" href="' + esc(tidyUrl(url)) + '" target="_blank" rel="noopener"' +
+      ' aria-label="' + esc((s.demo ? 'Open the demo of ' : 'Open ') + p.title) + '"></a>' +
+      (s.demo ? '<span class="demo-tag" aria-hidden="true">Demo</span>' : '');
   }
 
   // The whole card is a link, unless we are editing. Editing a card you cannot
   // click into would be impossible.
   function stretchHtml(p) {
-    var url = tidyUrl(p.url);
-    if (state.editing || !url || p.altUrl) return '';
+    var url = tidyUrl(wholeCardUrl(p));
+    if (state.editing || !url) return '';
     return '<a class="stretch" href="' + esc(url) + '" target="_blank" rel="noopener"' +
-           ' aria-label="Open ' + esc(p.title) + ' at ' + esc(shownUrl(p.url)) + '"></a>';
+           ' aria-label="Open ' + esc(p.title) + ' at ' + esc(shownUrl(url)) + '"></a>';
   }
 
   function mainCard(p) {
-    var linkable = !state.editing && !!(p.url || '').trim() && !p.altUrl;
+    var linkable = !state.editing && !!wholeCardUrl(p);
     return '<div class="card-wrap' + (linkable ? ' is-link' : '') + revealClass(p.id) +
       '" data-reveal="' + esc(p.id) + '">' +
       '<cs-card class="card" appearance="filled-outlined" has-media>' +
         '<div slot="media" class="card-media" style="background: ' + esc(p.accent) + '">' +
-          frameHtml(p) +
+          frameHtml(p) + mediaLinkHtml(p) +
         '</div>' +
         (state.editing ? fieldsHtml(p, 3) :
           '<div class="card-body">' +
@@ -297,11 +326,11 @@
   }
 
   function smallRow(p) {
-    var linkable = !state.editing && !!(p.url || '').trim();
+    var linkable = !state.editing && !!wholeCardUrl(p);
     return '<div class="card-wrap' + (linkable ? ' is-link' : '') + revealClass(p.id) +
       '" data-reveal="' + esc(p.id) + '">' +
       '<div class="row">' +
-        '<div class="row-media" style="background: ' + esc(p.accent) + '">' + frameHtml(p) + '</div>' +
+        '<div class="row-media" style="background: ' + esc(p.accent) + '">' + frameHtml(p) + mediaLinkHtml(p) + '</div>' +
         (state.editing ? fieldsHtml(p, 2) :
           '<div class="row-body">' +
             '<span class="row-title">' + esc(p.title) + '</span>' +
@@ -309,8 +338,7 @@
             '<span>' + esc(p.what) + '</span>' +
             '<span class="row-why">' + esc(p.why) + '</span>' +
             learnedHtml(p) +
-            '<span class="urlline ' + (linkable ? 'url-live' : 'url-none') + '">' +
-              esc(p.urlLabel || shownUrl(p.url)) + '</span>' +
+            linkHtml(p) +
           '</div>') +
       '</div>' +
       stretchHtml(p) +

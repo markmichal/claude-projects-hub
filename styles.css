@@ -495,6 +495,30 @@ h1, h2, h3 {
 .real-link { position: relative; z-index: 3; text-decoration: none; }
 .real-link:hover { text-decoration: underline; }
 
+/* Cards with more than one way in (links.js): a stack of real links. */
+.card-links {
+  display: flex; flex-direction: column; gap: 10px;
+  padding-top: 14px; min-width: 0;
+  border-top: 1px solid var(--cs-color-surface-border);
+}
+.card-link-a { display: flex; align-items: center; gap: 8px; min-width: 0; align-self: flex-start; max-width: 100%; }
+.card-link-a svg { flex-shrink: 0; }
+.row-body .card-link, .row-body .card-links { border-top: 0; padding-top: 4px; }
+
+/* The colored box opens the demo, and says so with a tag in its corner. */
+.card-media, .row-media { position: relative; }
+.media-link { position: absolute; inset: 0; z-index: 3; border-radius: inherit; }
+.media-link:focus-visible { outline: 3px solid var(--cs-color-focus); outline-offset: -3px; }
+.media-link:hover ~ .demo-tag { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,0,0,.25); }
+.demo-tag {
+  position: absolute; top: 16px; right: 16px; z-index: 4; pointer-events: none;
+  background: #fff; color: #141210; border-radius: 999px; padding: 5px 12px;
+  font: 700 12px/1 var(--cs-font-family-body, Inter, system-ui, sans-serif);
+  letter-spacing: .08em; text-transform: uppercase;
+  box-shadow: 0 3px 10px rgba(0,0,0,.18); transition: transform 150ms ease, box-shadow 150ms ease;
+}
+.row-media .demo-tag { top: 8px; right: 8px; padding: 4px 8px; font-size: 10px; }
+
 /* ==========================================================================
    Motion
    Everything below is decoration. The page has to read correctly with all of

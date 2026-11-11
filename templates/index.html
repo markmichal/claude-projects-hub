@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Templates: what it is</title>
+<meta name="description" content="A free gallery of Cru's Canva templates, so volunteers and students without a Canva Enterprise account can still use on-brand designs. A 2 minute film and how it works.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../showcase.css">
+<style>
+/* The gallery's own Cru yellow, so the demo looks like the thing it stands for. */
+:root { --orange: #FFD000; --orange-ink: #8A6A00; }
+.sample-bar { background: #141210; }
+.sample-bar a { color: #FFD000; }
+header h1 span { color: #141210; background: linear-gradient(transparent 62%, #FFD000 62%); }
+.step-n { background: #FFD000; }
+.hint { background: #FFF8D6; border-color: #F2E3A0; border-left-color: #FFD000; }
+
+.show { display: grid; grid-template-columns: minmax(0, 280px) minmax(0, 1fr); gap: 26px; align-items: start; margin-top: 18px; }
+@media (max-width: 720px) { .show { grid-template-columns: 1fr; } .show img { max-width: 260px; } }
+.show img { width: 100%; border-radius: 18px; box-shadow: 0 18px 40px rgba(20,18,16,.14); display: block; }
+.pts { display: flex; flex-direction: column; gap: 12px; }
+.pt { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 15px 17px; }
+.pt h3 { margin: 0 0 4px; font-size: 16px; }
+.pt p { margin: 0; font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="sample-bar"><div>
+  <b>This is a demo page.</b>
+  <span>The real gallery is closed while it gets ready for everyone. This page shows what it is and how it works.</span>
+</div></div>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Design Templates</p>
+  <h1>Great designs. Free. <span>For every movement.</span></h1>
+  <p class="lede">A gallery of Cru's Canva templates. Anyone can tap a design and get their own copy in Canva, even with a free account. No Canva Enterprise seat needed.</p>
+</header>
+
+<div class="film">
+  <video controls preload="metadata" poster="poster.jpg" playsinline>
+    <source src="intro.mp4" type="video/mp4">
+    Your browser cannot play this video.
+  </video>
+  <p class="film-note">2 minutes 20 seconds, music and no talking. The written version is below.</p>
+</div>
+
+<div class="ba">
+  <div class="before">
+    <h3>The problem</h3>
+    <p>Cru makes beautiful, on-brand designs in Canva. But Canva Enterprise costs a lot, so each staff team gets one account, and only that one person can get to the designs.</p>
+    <p>Most movements are led by volunteers and students with no account at all. So they make their own, and a lot of the time it is not on brand.</p>
+  </div>
+  <div class="after">
+    <h3>The fix</h3>
+    <p>Canva has a template link. Anyone can open it and get their own copy. We used to share these in a Google Doc full of links, which was hard to search.</p>
+    <p>Now they live in one gallery. Pick your event, find the poster, post or flyer, and tap Use this template. The original never changes.</p>
+  </div>
+</div>
+
+<h2>What a design looks like</h2>
+<p>Every design is a card with its pictures, what kind it is, and one big button.</p>
+
+<div class="show">
+  <img src="d-card.jpg" alt="A gallery card for a Fall Getaway social post, with a Use this template button" loading="lazy">
+  <div class="pts">
+    <div class="pt"><h3>Pick your event</h3><p>Designs are grouped by event, newest first, with filters for posters, social posts and flyers, and a search box.</p></div>
+    <div class="pt"><h3>Tap Use this template</h3><p>Canva opens a copy that is yours. Change the words, the photos, even the language.</p></div>
+    <div class="pt"><h3>For designers, three minutes</h3><p>A simple manager page: paste the Canva link, drop in a picture, save. No spreadsheet editing.</p></div>
+  </div>
+</div>
+
+<h2>How it is put together</h2>
+<div class="steps">
+  <div class="step"><span class="step-n">1</span><h3>A plain web page</h3><p>Hosted for free on GitHub Pages, with nothing to install.</p></div>
+  <div class="step"><span class="step-n">2</span><h3>A Google Sheet behind it</h3><p>The list of designs lives in a Sheet, read by a small Google script.</p></div>
+  <div class="step"><span class="step-n">3</span><h3>A manager for designers</h3><p>Adding a design is a form, not a spreadsheet. It shows up for everyone right away.</p></div>
+  <div class="step"><span class="step-n">4</span><h3>An open and closed switch</h3><p>The gallery can be closed with one setting while it gets ready, without taking the site down.</p></div>
+</div>
+
+<div class="hint">
+  <div><b>Why this one matters to me.</b> This was a long-term problem, and it got fixed in a couple of hours. More of our ministries get great designs, especially the ones with the fewest resources.</div>
+</div>
+
+<footer>
+  <p>Part of <a href="../">Mark Michal's Claude projects</a>.</p>
+</footer>
+
+</div>
+</body>
+</html>

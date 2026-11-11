@@ -35,7 +35,7 @@ window.HUB_TOOLS = [
     color: '#8A5A46',
     what: 'The way a program, rather than a person, sends a question to Claude and gets an answer back.',
     how: 'It runs inside three of my projects: writing flash cards from a photo or a prompt, answering questions about the framework manual, and turning messy notes into tidy spreadsheet rows.',
-    used: ['Flashcards app', 'Product Development Framework', 'Cru HS Legacy site']
+    used: ['Flashcards app', 'Ministry Product Framework', 'Cru HS Legacy site']
   },
   {
     name: 'GitHub',
@@ -55,7 +55,7 @@ window.HUB_TOOLS = [
     color: '#222222',
     what: 'Free website hosting built into GitHub. It turns the files in a project into a real web page.',
     how: 'It puts all my sites on the web at no cost. There is no server to run or pay for.',
-    used: ['Claude Projects Hub', 'Flashcards app', 'Product Development Framework', 'Cru HS Legacy site', 'LaunchWeek site', 'GTTC revamp']
+    used: ['Claude Projects Hub', 'Flashcards app', 'Ministry Product Framework', 'Cru HS Legacy site', 'LaunchWeek site', 'GTTC revamp']
   },
   {
     name: 'GoDaddy',
@@ -82,7 +82,7 @@ window.HUB_TOOLS = [
     color: '#1A62C4',
     what: 'Google’s way of running your own small programs inside Sheets, Docs and Drive.',
     how: 'It is the hidden half of two of my sites. It reads and writes the spreadsheet, checks the entry PIN, and keeps my API keys somewhere visitors cannot see them.',
-    used: ['Cru HS Legacy site', 'Product Development Framework']
+    used: ['Cru HS Legacy site', 'Ministry Product Framework']
   },
   {
     name: 'Google Sheets',
@@ -108,8 +108,8 @@ window.HUB_TOOLS = [
     logo: 'googledocs.svg',
     color: '#1A62C4',
     what: 'A word processor you can share and edit with other people.',
-    how: 'The Product Development manual lives in a Doc. The question answering assistant reads that Doc, so updating the Doc updates what it knows.',
-    used: ['Product Development Framework']
+    how: 'The Ministry Product Framework manual lives in a Doc. The question answering assistant reads that Doc, so updating the Doc updates what it knows.',
+    used: ['Ministry Product Framework']
   },
   {
     name: 'Content Workflow by Bynder',
