@@ -76,7 +76,7 @@ window.HUB_LINKS = {
     links: [{ label: 'Open the site', url: 'https://highschoollegacy.crutastic.com' }]
   },
   'ai-hub': {
-    links: [{ label: 'Open the site', url: 'https://cruglobal.github.io/Cruinnovation-ai-hub/' }]
+    links: [{ label: 'Open the site (login)', url: 'https://aihub.crutastic.com' }]
   },
   'sound-machine': {
     links: [{ label: 'Open the app', url: 'https://sounds.crutastic.com' }]
